@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6CDEC8F925580D0A00FBB946 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEC8F825580D0A00FBB946 /* main.swift */; };
+		6CDEC90E255C380700FBB946 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEC90D255C380700FBB946 /* main.swift */; };
+		6CDEC916255C3A9C00FBB946 /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEC915255C3A9C00FBB946 /* Plane.swift */; };
+		6CDEC919255C3C8100FBB946 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEC918255C3C8100FBB946 /* Line.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		6CDEC8F325580D0A00FBB946 /* CopyFiles */ = {
+		6CDEC908255C380700FBB946 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -23,12 +25,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6CDEC8F525580D0A00FBB946 /* Plane */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Plane; sourceTree = BUILT_PRODUCTS_DIR; };
-		6CDEC8F825580D0A00FBB946 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		6CDEC90A255C380700FBB946 /* Distance */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Distance; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CDEC90D255C380700FBB946 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		6CDEC915255C3A9C00FBB946 /* Plane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
+		6CDEC918255C3C8100FBB946 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		6CDEC8F225580D0A00FBB946 /* Frameworks */ = {
+		6CDEC907255C380700FBB946 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -38,65 +42,67 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6CDEC8EC25580D0A00FBB946 = {
+		6CDEC901255C380700FBB946 = {
 			isa = PBXGroup;
 			children = (
-				6CDEC8F725580D0A00FBB946 /* Plane */,
-				6CDEC8F625580D0A00FBB946 /* Products */,
+				6CDEC90C255C380700FBB946 /* Distance */,
+				6CDEC90B255C380700FBB946 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		6CDEC8F625580D0A00FBB946 /* Products */ = {
+		6CDEC90B255C380700FBB946 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6CDEC8F525580D0A00FBB946 /* Plane */,
+				6CDEC90A255C380700FBB946 /* Distance */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6CDEC8F725580D0A00FBB946 /* Plane */ = {
+		6CDEC90C255C380700FBB946 /* Distance */ = {
 			isa = PBXGroup;
 			children = (
-				6CDEC8F825580D0A00FBB946 /* main.swift */,
+				6CDEC90D255C380700FBB946 /* main.swift */,
+				6CDEC915255C3A9C00FBB946 /* Plane.swift */,
+				6CDEC918255C3C8100FBB946 /* Line.swift */,
 			);
-			path = Plane;
+			path = Distance;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6CDEC8F425580D0A00FBB946 /* Plane */ = {
+		6CDEC909255C380700FBB946 /* Distance */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6CDEC8FC25580D0A00FBB946 /* Build configuration list for PBXNativeTarget "Plane" */;
+			buildConfigurationList = 6CDEC911255C380700FBB946 /* Build configuration list for PBXNativeTarget "Distance" */;
 			buildPhases = (
-				6CDEC8F125580D0A00FBB946 /* Sources */,
-				6CDEC8F225580D0A00FBB946 /* Frameworks */,
-				6CDEC8F325580D0A00FBB946 /* CopyFiles */,
+				6CDEC906255C380700FBB946 /* Sources */,
+				6CDEC907255C380700FBB946 /* Frameworks */,
+				6CDEC908255C380700FBB946 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = Plane;
-			productName = Plane;
-			productReference = 6CDEC8F525580D0A00FBB946 /* Plane */;
+			name = Distance;
+			productName = Distance;
+			productReference = 6CDEC90A255C380700FBB946 /* Distance */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		6CDEC8ED25580D0A00FBB946 /* Project object */ = {
+		6CDEC902255C380700FBB946 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1210;
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
-					6CDEC8F425580D0A00FBB946 = {
+					6CDEC909255C380700FBB946 = {
 						CreatedOnToolsVersion = 12.1;
 					};
 				};
 			};
-			buildConfigurationList = 6CDEC8F025580D0A00FBB946 /* Build configuration list for PBXProject "Plane" */;
+			buildConfigurationList = 6CDEC905255C380700FBB946 /* Build configuration list for PBXProject "Distance" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -104,29 +110,31 @@
 				en,
 				Base,
 			);
-			mainGroup = 6CDEC8EC25580D0A00FBB946;
-			productRefGroup = 6CDEC8F625580D0A00FBB946 /* Products */;
+			mainGroup = 6CDEC901255C380700FBB946;
+			productRefGroup = 6CDEC90B255C380700FBB946 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6CDEC8F425580D0A00FBB946 /* Plane */,
+				6CDEC909255C380700FBB946 /* Distance */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		6CDEC8F125580D0A00FBB946 /* Sources */ = {
+		6CDEC906255C380700FBB946 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CDEC8F925580D0A00FBB946 /* main.swift in Sources */,
+				6CDEC919255C3C8100FBB946 /* Line.swift in Sources */,
+				6CDEC916255C3A9C00FBB946 /* Plane.swift in Sources */,
+				6CDEC90E255C380700FBB946 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		6CDEC8FA25580D0A00FBB946 /* Debug */ = {
+		6CDEC90F255C380700FBB946 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -187,7 +195,7 @@
 			};
 			name = Debug;
 		};
-		6CDEC8FB25580D0A00FBB946 /* Release */ = {
+		6CDEC910255C380700FBB946 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -241,7 +249,7 @@
 			};
 			name = Release;
 		};
-		6CDEC8FD25580D0A00FBB946 /* Debug */ = {
+		6CDEC912255C380700FBB946 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -250,7 +258,7 @@
 			};
 			name = Debug;
 		};
-		6CDEC8FE25580D0A00FBB946 /* Release */ = {
+		6CDEC913255C380700FBB946 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -262,25 +270,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6CDEC8F025580D0A00FBB946 /* Build configuration list for PBXProject "Plane" */ = {
+		6CDEC905255C380700FBB946 /* Build configuration list for PBXProject "Distance" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6CDEC8FA25580D0A00FBB946 /* Debug */,
-				6CDEC8FB25580D0A00FBB946 /* Release */,
+				6CDEC90F255C380700FBB946 /* Debug */,
+				6CDEC910255C380700FBB946 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6CDEC8FC25580D0A00FBB946 /* Build configuration list for PBXNativeTarget "Plane" */ = {
+		6CDEC911255C380700FBB946 /* Build configuration list for PBXNativeTarget "Distance" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6CDEC8FD25580D0A00FBB946 /* Debug */,
-				6CDEC8FE25580D0A00FBB946 /* Release */,
+				6CDEC912255C380700FBB946 /* Debug */,
+				6CDEC913255C380700FBB946 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 6CDEC8ED25580D0A00FBB946 /* Project object */;
+	rootObject = 6CDEC902255C380700FBB946 /* Project object */;
 }
