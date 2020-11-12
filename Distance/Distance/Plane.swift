@@ -21,20 +21,26 @@ func distanceToPlane(from point:simd_float3, to plane:Plane) -> Float {
 
 func positionOnPlane(from point:simd_float3, to plane:Plane) -> simd_float3 {
     let vector = point - plane.position
-    let dotValue = dot(vector, normalize(plane.normal))
-    let tarPoint = point - dotValue * normalize(plane.normal)
+    let normalizedNormal = normalize(plane.normal)
+    
+    let dotValue = dot(vector, normalizedNormal)
+    let tarPoint = point - dotValue * normalizedNormal
     return tarPoint
 }
-
+func isPointOnPlane(point:simd_float3, plane:Plane) -> Bool {
+    let vector = point - plane.position
+    let dotValue = dot(vector, plane.normal)
+    return dotValue < Float.leastNonzeroMagnitude
+}
 func pointToPlaneTest() {
     let plane = Plane(position: simd_float3(1, 1, 1), normal: simd_float3(0, 0, 3))
-    let pointC = simd_float3(5, 5, 5)
+    let pointC = simd_float3(5000000000, 5, 1)
 
     let distance = distanceToPlane(from: pointC, to: plane)
     let tarPoint = positionOnPlane(from: pointC, to: plane)
 
     print("距离\(distance), 投影点\(tarPoint)")
-
+    print(isPointOnPlane(point: pointC, plane:plane))
     if (abs(distance) < Float.leastNonzeroMagnitude) {
         print("点在平面上")
     } else {

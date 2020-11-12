@@ -14,26 +14,45 @@ struct Line {
 }
 
 func distanceToLine(from point:simd_float3, to line:Line) -> Float {
-    let position = positionOnLine(from: point, to: line)
-    return distance(position, point)
+//    let position = positionOnLine(from: point, to: line)
+//    return distance(position, point)
+    let vector = point - line.position
+    let normalizedDirection = normalize(line.direction)
+    let dotValue = dot(vector, normalizedDirection)
+    let tarPoint = line.position + dotValue * normalizedDirection
+    
+    let disVector = point - tarPoint
+    if disVector.x < Float.leastNonzeroMagnitude, disVector.y < Float.leastNonzeroMagnitude  {
+        return 0
+    }
+    
+    return dot(vector, normalize(disVector))
 }
 
 func positionOnLine(from point:simd_float3, to line:Line) -> simd_float3 {
-    let vectorAC = point - line.position
-    let dotValue = dot(vectorAC, normalize(line.direction))
-    let tarPoint = point + dotValue * normalize(line.direction)
+    let vector = point - line.position
+    let normalizedDirection = normalize(line.direction)
+    let dotValue = dot(vector, normalizedDirection)
+    let tarPoint = line.position + dotValue * normalizedDirection
     return tarPoint
+}
+
+func isPointOnLine(point:simd_float3, line:Line) -> Bool {
+    let normalizedVector = normalize(point - line.position)
+    let normalizedDirection = normalize(line.direction)
+    let dotValue = dot(normalizedVector, normalizedDirection)
+    return abs(dotValue - 1) < Float.leastNonzeroMagnitude
 }
 
 func pointToLineTest() {
     let line = Line(position: simd_float3(1, 1, 1), direction: simd_float3(1, 1, 1))
-    let pointC = simd_float3(2, 2, 2)
+    let pointC = simd_float3(2, 4, 2)
 
     let distance = distanceToLine(from: pointC, to: line)
     let tarPoint = positionOnLine(from: pointC, to: line)
 
     print("距离\(distance), 投影点\(tarPoint)")
-
+    print(isPointOnLine(point: pointC, line: line))
     if (abs(distance) < Float.leastNonzeroMagnitude) {
         print("点在直线上")
     } else {
