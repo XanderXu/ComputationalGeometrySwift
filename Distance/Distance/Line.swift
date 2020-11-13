@@ -22,7 +22,7 @@ func distanceToLine(from point:simd_float3, to line:Line) -> Float {
     let tarPoint = line.position + dotValue * normalizedDirection
     
     let disVector = point - tarPoint
-    if disVector.x < Float.leastNonzeroMagnitude, disVector.y < Float.leastNonzeroMagnitude  {
+    if abs(disVector.x) < Float.leastNonzeroMagnitude, abs(disVector.y) < Float.leastNonzeroMagnitude  {
         return 0
     }
     
@@ -38,7 +38,11 @@ func positionOnLine(from point:simd_float3, to line:Line) -> simd_float3 {
 }
 
 func isPointOnLine(point:simd_float3, line:Line) -> Bool {
-    let normalizedVector = normalize(point - line.position)
+    let vector = point - line.position
+    if abs(vector.x) < Float.leastNonzeroMagnitude, abs(vector.y) < Float.leastNonzeroMagnitude  {
+        return true
+    }
+    let normalizedVector = normalize(vector)
     let normalizedDirection = normalize(line.direction)
     let dotValue = dot(normalizedVector, normalizedDirection)
     return abs(dotValue - 1) < Float.leastNonzeroMagnitude
