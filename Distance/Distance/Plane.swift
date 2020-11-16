@@ -30,7 +30,7 @@ func positionOnPlane(from point:simd_float3, to plane:Plane) -> simd_float3 {
 func isPointOnPlane(point:simd_float3, plane:Plane) -> Bool {
     let vector = point - plane.position
     let dotValue = dot(vector, plane.normal)
-    return dotValue < Float.leastNonzeroMagnitude
+    return dotValue < Float.toleranceThreshold
 }
 func pointToPlaneTest() {
     let plane = Plane(position: simd_float3(1, 1, 1), normal: simd_float3(0, 0, 3))
