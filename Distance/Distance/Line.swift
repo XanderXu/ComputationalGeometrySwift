@@ -28,7 +28,10 @@ func distanceToLine(from point:simd_float3, to line:Line) -> Float {
     
     return dot(vector, normalize(disVector))
 }
-
+func distanceSquaredToLine(from point:simd_float3, to line:Line) -> Float {
+    let position = positionOnLine(from: point, to: line)
+    return distance_squared(position, point)
+}
 func positionOnLine(from point:simd_float3, to line:Line) -> simd_float3 {
     let vector = point - line.position
     let normalizedDirection = normalize(line.direction)
@@ -67,11 +70,12 @@ func pointToLineTest() {
     let pointC = simd_float3(2000000, 2000000, 2000010)
 
     let distance = distanceToLine(from: pointC, to: line)
+    let distanceSquared = distanceSquaredToLine(from: pointC, to: line)
     let tarPoint = positionOnLine(from: pointC, to: line)
-
-    print("距离\(distance), 投影点\(tarPoint)")
+    
+    print("距离\(distance),距离平方\(distanceSquared), 投影点\(tarPoint)")
     print(isPointOnLine(point: pointC, line: line),isPointOnLine2(point: pointC, line: line),isPointOnLine3(point: pointC, line: line))
-    if (abs(distance) < Float.leastNonzeroMagnitude) {
+    if (distanceSquared < Float.toleranceThreshold) {
         print("点在直线上")
     } else {
         print("点不在直线上")
