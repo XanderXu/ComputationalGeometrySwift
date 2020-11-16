@@ -77,3 +77,37 @@ func pointToLineTest() {
         print("点不在直线上")
     }
 }
+func isLineParallel(line1:Line, line2:Line) -> Bool {
+    let crossValue = cross(line1.direction, line2.direction)
+    if crossValue.x < Float.leastNonzeroMagnitude, crossValue.y < Float.leastNonzeroMagnitude, crossValue.z < Float.leastNonzeroMagnitude {
+        return true
+    }
+    return false
+}
+func isSameLine(line1:Line, line2:Line) -> Bool {
+    if !isLineParallel(line1: line1, line2: line2) {
+        return false
+    }
+    let vector = line1.position - line2.position
+    let crossValue = cross(vector, line1.direction)
+    if crossValue.x < Float.leastNonzeroMagnitude, crossValue.y < Float.leastNonzeroMagnitude, crossValue.z < Float.leastNonzeroMagnitude {
+        return true
+    }
+    return false
+}
+func distanceToLine(from line1:Line, to line2:Line) -> Float {
+    let crossValue = cross(line1.direction, line2.direction)
+    let vector = line1.position - line2.position
+    if crossValue.x < Float.leastNonzeroMagnitude, crossValue.y < Float.leastNonzeroMagnitude, crossValue.z < Float.leastNonzeroMagnitude {
+        // 平行
+        let newVector = dot(vector, normalize(line1.direction)) * line1.direction
+        let dis = vector + newVector
+        
+        return length(dis)
+    }
+    let distanceVector = normalize(crossValue)
+    
+    let dis = dot(distanceVector, vector)
+    
+    return abs(dis)
+}
