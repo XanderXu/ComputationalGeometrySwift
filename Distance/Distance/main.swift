@@ -8,6 +8,6 @@
 import Foundation
 import simd
 
-pointToPlaneTest()
+Line.pointToLineTest()
 
 
