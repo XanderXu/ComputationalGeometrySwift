@@ -101,7 +101,7 @@ struct Line {
         return false
     }
     static func distanceBetween(line1:Line, line2:Line) -> Float {
-        let crossValue = cross(line1.direction, line2.direction)
+        let crossValue = cross(line2.direction, line1.direction)
         let vector = line1.position - line2.position
         if crossValue.tooLittleToBeNormalized() {
             // 平行
@@ -112,5 +112,33 @@ struct Line {
         let dis = dot(distanceVector, vector)
         
         return abs(dis)
+    }
+    static func footPoints(line1:Line, line2:Line) -> (simd_float3, simd_float3)? {
+        let crossValue = cross(line2.direction, line1.direction)
+        let vector = line1.position - line2.position
+        if crossValue.tooLittleToBeNormalized() {
+            // 平行
+            return nil
+        }
+        let distanceVector = normalize(crossValue)
+        
+        let dis = dot(distanceVector, vector)
+        
+        let movePoint = line2.position + dis * distanceVector
+        
+        let projectionOnLine1 = projectionOnLine(from: movePoint, to: line1)
+        let projectionVector = projectionOnLine1 - movePoint
+        
+        let squared = length_squared(projectionVector)
+        
+        if squared < Float.toleranceThresholdLittle {
+            // 垂足是 line2.position
+            return (movePoint,line2.position)
+        }
+        let x1:Float = squared / dot(line2.direction, projectionVector)
+        let footPoint1 = movePoint + x1 * line2.direction
+        let footPoint2 = footPoint1 - dis * distanceVector
+        
+        return (footPoint1, footPoint2)
     }
 }

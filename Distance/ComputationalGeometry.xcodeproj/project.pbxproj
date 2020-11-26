@@ -27,7 +27,7 @@
 
 /* Begin PBXFileReference section */
 		6CD02D4C2562CB9600E90615 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		6CDEC90A255C380700FBB946 /* Distance */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Distance; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CDEC90A255C380700FBB946 /* ComputationalGeometry */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComputationalGeometry; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CDEC90D255C380700FBB946 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		6CDEC915255C3A9C00FBB946 /* Plane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
 		6CDEC918255C3C8100FBB946 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
@@ -47,7 +47,7 @@
 		6CDEC901255C380700FBB946 = {
 			isa = PBXGroup;
 			children = (
-				6CDEC90C255C380700FBB946 /* Distance */,
+				6CDEC90C255C380700FBB946 /* ComputationalGeometry */,
 				6CDEC90B255C380700FBB946 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -55,12 +55,12 @@
 		6CDEC90B255C380700FBB946 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6CDEC90A255C380700FBB946 /* Distance */,
+				6CDEC90A255C380700FBB946 /* ComputationalGeometry */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6CDEC90C255C380700FBB946 /* Distance */ = {
+		6CDEC90C255C380700FBB946 /* ComputationalGeometry */ = {
 			isa = PBXGroup;
 			children = (
 				6CDEC90D255C380700FBB946 /* main.swift */,
@@ -68,15 +68,15 @@
 				6CDEC915255C3A9C00FBB946 /* Plane.swift */,
 				6CDEC918255C3C8100FBB946 /* Line.swift */,
 			);
-			path = Distance;
+			path = ComputationalGeometry;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6CDEC909255C380700FBB946 /* Distance */ = {
+		6CDEC909255C380700FBB946 /* ComputationalGeometry */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6CDEC911255C380700FBB946 /* Build configuration list for PBXNativeTarget "Distance" */;
+			buildConfigurationList = 6CDEC911255C380700FBB946 /* Build configuration list for PBXNativeTarget "ComputationalGeometry" */;
 			buildPhases = (
 				6CDEC906255C380700FBB946 /* Sources */,
 				6CDEC907255C380700FBB946 /* Frameworks */,
@@ -86,9 +86,9 @@
 			);
 			dependencies = (
 			);
-			name = Distance;
+			name = ComputationalGeometry;
 			productName = Distance;
-			productReference = 6CDEC90A255C380700FBB946 /* Distance */;
+			productReference = 6CDEC90A255C380700FBB946 /* ComputationalGeometry */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -105,7 +105,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6CDEC905255C380700FBB946 /* Build configuration list for PBXProject "Distance" */;
+			buildConfigurationList = 6CDEC905255C380700FBB946 /* Build configuration list for PBXProject "ComputationalGeometry" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -118,7 +118,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6CDEC909255C380700FBB946 /* Distance */,
+				6CDEC909255C380700FBB946 /* ComputationalGeometry */,
 			);
 		};
 /* End PBXProject section */
@@ -274,7 +274,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6CDEC905255C380700FBB946 /* Build configuration list for PBXProject "Distance" */ = {
+		6CDEC905255C380700FBB946 /* Build configuration list for PBXProject "ComputationalGeometry" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6CDEC90F255C380700FBB946 /* Debug */,
@@ -283,7 +283,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6CDEC911255C380700FBB946 /* Build configuration list for PBXNativeTarget "Distance" */ = {
+		6CDEC911255C380700FBB946 /* Build configuration list for PBXNativeTarget "ComputationalGeometry" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6CDEC912255C380700FBB946 /* Debug */,
