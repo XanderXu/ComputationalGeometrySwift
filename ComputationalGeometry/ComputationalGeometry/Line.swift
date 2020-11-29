@@ -124,21 +124,31 @@ struct Line {
         
         let dis = dot(distanceVector, vector)
         
-        let movePoint = line2.position + dis * distanceVector
+        let movePoint2 = line2.position + dis * distanceVector
         
-        let projectionOnLine1 = projectionOnLine(from: movePoint, to: line1)
-        let projectionVector = projectionOnLine1 - movePoint
+        let projectionOnLine1 = projectionOnLine(from: movePoint2, to: line1)
+        let projectionVector = projectionOnLine1 - movePoint2
         
         let squared = length_squared(projectionVector)
         
         if squared < Float.toleranceThresholdLittle {
             // 垂足是 line2.position
-            return (movePoint,line2.position)
+            return (movePoint2,line2.position)
         }
         let x1:Float = squared / dot(line2.direction, projectionVector)
-        let footPoint1 = movePoint + x1 * line2.direction
-        let footPoint2 = footPoint1 - dis * distanceVector
+        let footPoint2 = movePoint2 + x1 * line2.direction
+        let footPoint1 = footPoint2 - dis * distanceVector
         
         return (footPoint1, footPoint2)
+    }
+    static func pointToLineTest2() {
+        let line1 = Line(position: simd_float3(0, 0, 0), direction: simd_float3(0, 0, 1))
+        let line2 = Line(position: simd_float3(50000, 50000, 50000), direction: simd_float3(1, 1, 1))
+        let disBetween = distanceBetween(line1: line1, line2: line2)
+        print("distanceBetween\(disBetween)")
+        if let (foot1, foot2) = footPoints(line1: line1, line2: line2) {
+            print(foot1, foot2)
+            
+        }
     }
 }
