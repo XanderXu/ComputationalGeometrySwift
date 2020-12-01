@@ -12,6 +12,14 @@ struct Line {
     var position = simd_float3.zero
     var direction = simd_float3.zero
     
+    static func projectionOnLine(from point:simd_float3, to line:Line) -> simd_float3 {
+        let vector = point - line.position
+        let normalizedDirection = normalize(line.direction)
+        let dotValue = dot(vector, normalizedDirection)
+        let tarPoint = line.position + dotValue * normalizedDirection
+        return tarPoint
+    }
+    
     static func distanceBetween(point:simd_float3, line:Line) -> Float{
         let position = projectionOnLine(from: point, to: line)
         return distance(position, point)
@@ -35,14 +43,6 @@ struct Line {
         let normalizedDis = normalize(disVector)
         
         return dot(vector, normalizedDis)
-    }
-    
-    static func projectionOnLine(from point:simd_float3, to line:Line) -> simd_float3 {
-        let vector = point - line.position
-        let normalizedDirection = normalize(line.direction)
-        let dotValue = dot(vector, normalizedDirection)
-        let tarPoint = line.position + dotValue * normalizedDirection
-        return tarPoint
     }
     
     static func isPointOnLine(point:simd_float3, line:Line) -> Bool {
@@ -150,5 +150,36 @@ struct Line {
             print(foot1, foot2)
             
         }
+    }
+    static func estimateLine(from points:[simd_float3]) -> Line? {
+        if points.count < 2 {
+            return nil
+        }
+        var direction = simd_float3.zero
+        var position = simd_float3.zero
+        var second = points.last!
+        for vector in points {
+            direction.x += (second.z + vector.z) * (second.y - vector.y)
+            direction.y += (second.x + vector.x) * (second.z - vector.z)
+            direction.z += (second.y + vector.y) * (second.x - vector.x)
+            second = vector
+            
+            position += (vector / Float(points.count))
+        }
+        direction = normalize(direction)
+        return Line(position: position, direction: direction)
+    }
+    static func pointToLineTest3() {
+        let points = [
+            simd_float3.zero,
+            simd_float3(1, 0, 0),
+            simd_float3(3, -1, 0.1),
+            simd_float3(-30, 10, 0.1),
+            simd_float3(40, -5, -0.9),
+        ]
+        
+        let line = estimateLine(from: points)
+        
+        print(line as Any)
     }
 }
