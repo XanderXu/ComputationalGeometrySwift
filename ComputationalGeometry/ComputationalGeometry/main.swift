@@ -8,6 +8,7 @@
 import Foundation
 import simd
 
-Line.pointToLineTest3()
+//Line.pointToLineTest3()
+Plane.pointToPlaneTest2()
 
 

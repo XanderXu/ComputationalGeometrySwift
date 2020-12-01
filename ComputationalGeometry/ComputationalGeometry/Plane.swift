@@ -120,16 +120,18 @@ struct Plane {
             // 平行
             return nil
         }
-        let direction = normalize(crossValue)
-        let a:Float = 1, b:Float = 1
-        var position = a * plane1.normal + b * plane2.normal
-        let vector1 = plane1.position - position
-        let vector2 = plane2.position - position
+        // Goldman(1990)
+        let p0 = simd_float3.zero, n0 = normalize(crossValue)
+        let p1 = plane1.position, n1 = normalize(plane1.normal)
+        let p2 = plane2.position, n2 = normalize(plane2.normal)
         
-        dot(vector1, plane1.normal) == 0
-        dot(vector2, plane2.normal) == 0
+        let cross20 = cross(n2, n0), cross01 = cross(n0, n1), cross12 = cross(n1, n2)
+        let dot0 = dot(p0, n0), dot1 = dot(p1, n1), dot2 = dot(p2, n2)
+        let dotCross012 = dot0 * cross12, dotCross120 = dot1 * cross20, dotCross210 = dot2 * cross01
         
-        return Line(position: position, direction: direction)
+        let position = (dotCross012 + dotCross120 + dotCross210) / dot(n0, cross12)
+        
+        return Line(position: position, direction: n0)
     }
     static func estimatePlane(from points:[simd_float3]) -> Plane? {
         if points.count < 3 {
@@ -162,6 +164,12 @@ struct Plane {
         let plane = estimatePlane(from: points)
         
         print(plane as Any)
+        
+        let plane1 = Plane(position: simd_float3(1, 2, 1), normal: simd_float3(2, 1, 3))
+        let plane2 = Plane(position: simd_float3(1, 3, 1), normal: simd_float3(3, 3, 1))
+        
+        let line = crossLine(plane1: plane1, plane2: plane2)
+        print(line as Any)
     }
 }
 
