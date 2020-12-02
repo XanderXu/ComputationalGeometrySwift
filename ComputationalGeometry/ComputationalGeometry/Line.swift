@@ -124,19 +124,19 @@ struct Line {
         
         let dis = dot(distanceVector, vector)
         
-        let movePoint2 = line2.position + dis * distanceVector
+        let point2OnPlane = line2.position + dis * distanceVector
         
-        let projectionOnLine1 = projectionOnLine(from: movePoint2, to: line1)
-        let projectionVector = projectionOnLine1 - movePoint2
+        let projectionOnLine1 = projectionOnLine(from: point2OnPlane, to: line1)
+        let projectionVector = projectionOnLine1 - point2OnPlane
         
         let squared = length_squared(projectionVector)
         
         if squared < Float.toleranceThresholdLittle {
             // 垂足是 line2.position
-            return (movePoint2,line2.position)
+            return (point2OnPlane,line2.position)
         }
         let x1:Float = squared / dot(line2.direction, projectionVector)
-        let footPoint2 = movePoint2 + x1 * line2.direction
+        let footPoint2 = point2OnPlane + x1 * line2.direction
         let footPoint1 = footPoint2 - dis * distanceVector
         
         return (footPoint1, footPoint2)
