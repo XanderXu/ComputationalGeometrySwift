@@ -156,8 +156,8 @@ struct Line {
             return nil
         }
         var direction = simd_float3.zero
-        var position = points.first!
-        let first = position
+        var position = points.first! / Float(points.count)
+        let first = points.first!
         for i in 1..<points.count {
             let vector = points[i]
             direction.x += abs(first.x - vector.x)
@@ -173,17 +173,43 @@ struct Line {
         direction = normalize(direction)
         return Line(position: position, direction: direction)
     }
+    static func estimateLineSVD(from points:[simd_float3]) -> Line? {
+        if points.count < 2 {
+            return nil
+        }
+        var source = [Float]()
+        var position = simd_float3.zero
+        for point in points {
+            position += (point / Float(points.count))
+        }
+        for point in points {
+            source.append(point.x - position.x)
+            source.append(point.y - position.y)
+            source.append(point.z - position.z)
+        }
+        
+        let ss = Matrix(source: source, rowCount: points.count, columnCount:3)
+        let svdResult = Matrix.svd(a: ss)
+        let vt = svdResult.vt
+        let offset = 0
+        
+        let direction = simd_float3(vt[0+offset], vt[1+offset], vt[2+offset])
+        return Line(position: position, direction: direction)
+    }
     static func pointToLineTest3() {
         let points = [
 //            simd_float3.zero,
             simd_float3(-1, 0, 1000),
             simd_float3(3, 0.1, 1000.1),
             simd_float3(30, 5, 1000),
-            simd_float3(-40, -1, 1000.5),
+            simd_float3(-40, -1, 1000.2),
         ]
         
         let line = estimateLine(from: points)
         //(0.9945316, 0.10403323, 0.0091611175)))
         print(line as Any)
+        let line2 = estimateLineSVD(from: points)
+        print(line2 as Any)
+        
     }
 }
