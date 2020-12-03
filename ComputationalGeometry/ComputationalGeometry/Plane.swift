@@ -120,12 +120,12 @@ struct Plane {
             // 平行
             return nil
         }
-        // Goldman(1990)
-        let p0 = simd_float3.zero, n0 = normalize(crossValue)
-        let p1 = plane1.position, n1 = normalize(plane1.normal)
-        let p2 = plane2.position, n2 = normalize(plane2.normal)
+        // Goldman(1990), 法线无需归一化
+        let p0 = simd_float3.zero, n0 = crossValue
+        let p1 = plane1.position, n1 = plane1.normal
+        let p2 = plane2.position, n2 = plane2.normal
         
-        let cross20 = cross(n2, n0), cross01 = cross(n0, n1), cross12 = cross(n1, n2)
+        let cross20 = cross(n2, n0), cross01 = cross(n0, n1), cross12 = crossValue
         let dot0 = dot(p0, n0), dot1 = dot(p1, n1), dot2 = dot(p2, n2)
         let dotCross012 = dot0 * cross12, dotCross120 = dot1 * cross20, dotCross210 = dot2 * cross01
         
@@ -148,11 +148,20 @@ struct Plane {
             
             position += (vector / Float(points.count))
         }
+        if normal.tooLittleToBeNormalized() {
+            return nil
+        }
         normal = normalize(normal)
         return Plane(position: position, normal: normal)
     }
     
     static func pointToPlaneTest2() {
+//        let points = [
+//            simd_float3(2, 1, 100.1),
+//            simd_float3(2, -1, 100),
+//            simd_float3(0, 1, 100.2),
+//            simd_float3(0, -1, 100),
+//        ]
         let points = [
             simd_float3.zero,
             simd_float3(1, 0, 0),
@@ -162,7 +171,7 @@ struct Plane {
         ]
         
         let plane = estimatePlane(from: points)
-        
+        //(-0.038009703, -0.10452669, -0.9937954)
         print(plane as Any)
         
         let plane1 = Plane(position: simd_float3(1, 2, 1), normal: simd_float3(2, 1, 3))

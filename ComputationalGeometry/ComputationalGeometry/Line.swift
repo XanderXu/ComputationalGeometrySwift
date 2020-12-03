@@ -156,30 +156,34 @@ struct Line {
             return nil
         }
         var direction = simd_float3.zero
-        var position = simd_float3.zero
-        var second = points.last!
-        for vector in points {
-            direction.x += (second.z + vector.z) * (second.y - vector.y)
-            direction.y += (second.x + vector.x) * (second.z - vector.z)
-            direction.z += (second.y + vector.y) * (second.x - vector.x)
-            second = vector
+        var position = points.first!
+        let first = position
+        for i in 1..<points.count {
+            let vector = points[i]
+            direction.x += abs(first.x - vector.x)
+            direction.y += abs(first.y - vector.y)
+            direction.z += abs(first.z - vector.z)
             
             position += (vector / Float(points.count))
+        }
+        
+        if direction.tooLittleToBeNormalized() {
+            return nil
         }
         direction = normalize(direction)
         return Line(position: position, direction: direction)
     }
     static func pointToLineTest3() {
         let points = [
-            simd_float3.zero,
-            simd_float3(1, 0, 0),
-            simd_float3(3, -1, 0.1),
-            simd_float3(-30, 10, 0.1),
-            simd_float3(40, -5, -0.9),
+//            simd_float3.zero,
+            simd_float3(-1, 0, 1000),
+            simd_float3(3, 0.1, 1000.1),
+            simd_float3(30, 5, 1000),
+            simd_float3(-40, -1, 1000.5),
         ]
         
         let line = estimateLine(from: points)
-        
+        //(0.9945316, 0.10403323, 0.0091611175)))
         print(line as Any)
     }
 }
