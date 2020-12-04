@@ -160,9 +160,9 @@ struct Line {
         let first = points.first!
         for i in 1..<points.count {
             let vector = points[i]
-            direction.x += abs(first.x - vector.x)
-            direction.y += abs(first.y - vector.y)
-            direction.z += abs(first.z - vector.z)
+            direction.x += (first.x - vector.x)
+            direction.y += (first.y - vector.y)
+            direction.z += (first.z - vector.z)
             
             position += (vector / Float(points.count))
         }
@@ -177,23 +177,23 @@ struct Line {
         if points.count < 2 {
             return nil
         }
-        var source = [Float]()
+        var source:[Float] = Array(repeating: 0, count: points.count*3)
         var position = simd_float3.zero
         for point in points {
             position += (point / Float(points.count))
         }
-        for point in points {
-            source.append(point.x - position.x)
-            source.append(point.y - position.y)
-            source.append(point.z - position.z)
+        for (row,point) in points.enumerated() {
+            source[row] = point.x - position.x
+            source[row+points.count] = point.y - position.y
+            source[row+2*points.count] = point.z - position.z
         }
-        
+        // source 中数据顺序为[x0,x1,x2.....y0,y1,y2.....z0,z1,z3....]，竖向按列依次填充到 rowCount行*3列 的矩阵中
         let ss = Matrix(source: source, rowCount: points.count, columnCount:3)
         let svdResult = Matrix.svd(a: ss)
         let vt = svdResult.vt
         let offset = 0
         
-        let direction = simd_float3(vt[0+offset], vt[1+offset], vt[2+offset])
+        let direction = simd_float3(vt[offset], vt[offset+vt.columnCount], vt[offset+2*vt.columnCount])
         return Line(position: position, direction: direction)
     }
     static func pointToLineTest3() {

@@ -189,10 +189,10 @@ extension Matrix: CustomStringConvertible {
     /// A textual representation of this instance.
     public var description: String {
         var returnString = ""
-        for y in 0 ..< rowCount {
+        for y in 0 ..< columnCount {
             var str = ""
-            for x in 0 ..< columnCount {
-                str += String(format: "%.2f ", self[y, x])
+            for x in 0 ..< rowCount {
+                str += String(format: "%.2f ", self[x, y])
             }
             returnString += str + "\n"
         }

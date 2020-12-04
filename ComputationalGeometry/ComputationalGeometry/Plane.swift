@@ -133,6 +133,13 @@ struct Plane {
         
         return Line(position: position, direction: n0)
     }
+    static func pointToPlaneTest2() {
+        let plane1 = Plane(position: simd_float3(1, 2, 1), normal: simd_float3(2, 1, 3))
+        let plane2 = Plane(position: simd_float3(1, 3, 1), normal: simd_float3(3, 3, 1))
+        
+        let line = crossLine(plane1: plane1, plane2: plane2)
+        print(line as Any)
+    }
     static func estimatePlane(from points:[simd_float3]) -> Plane? {
         if points.count < 3 {
             return nil
@@ -158,26 +165,26 @@ struct Plane {
         if points.count < 3 {
             return nil
         }
-        var source = [Float]()
+        var source:[Float] = Array(repeating: 0, count: points.count*3)
         var position = simd_float3.zero
         for point in points {
             position += (point / Float(points.count))
         }
-        for point in points {
-            source.append(point.x - position.x)
-            source.append(point.y - position.y)
-            source.append(point.z - position.z)
+        for (row,point) in points.enumerated() {
+            source[row] = point.x - position.x
+            source[row+points.count] = point.y - position.y
+            source[row+2*points.count] = point.z - position.z
         }
-        
+        // source 中数据顺序为[x0,x1,x2.....y0,y1,y2.....z0,z1,z3....]，竖向按列依次填充到 rowCount行*3列 的矩阵中
         let ss = Matrix(source: source, rowCount: points.count, columnCount:3)
         let svdResult = Matrix.svd(a: ss)
         let vt = svdResult.vt
-        let offset = vt.columnCount * (vt.rowCount - 1)
+        let offset = (vt.rowCount - 1)
         
-        let normal = simd_float3(vt[0+offset], vt[1+offset], vt[2+offset])
+        let normal = simd_float3(vt[offset], vt[offset+vt.columnCount], vt[offset+2*vt.columnCount])
         return Plane(position: position, normal: normal)
     }
-    static func pointToPlaneTest2() {
+    static func pointToPlaneTest3() {
 //        let points = [
 //            simd_float3(2, 1, 0),
 //            simd_float3(2, -1, 0),
@@ -194,18 +201,13 @@ struct Plane {
         let points = [
             simd_float3(1, 10, 0),
             simd_float3(3, 10, -10),
-            simd_float3(-30, 10, 10),
+            simd_float3(-30, 11, 10),
             simd_float3(40, 10, -50),
         ]
         let plane = estimatePlane(from: points)
         //(-0.038009703, -0.10452669, -0.9937954)
         print(plane as Any)
         
-//        let plane1 = Plane(position: simd_float3(1, 2, 1), normal: simd_float3(2, 1, 3))
-//        let plane2 = Plane(position: simd_float3(1, 3, 1), normal: simd_float3(3, 3, 1))
-//
-//        let line = crossLine(plane1: plane1, plane2: plane2)
-//        print(line as Any)
         let plane2 = estimatePlaneSVD(from: points)
         print(plane2 as Any)
         
