@@ -176,11 +176,11 @@ extension Matrix {
     public subscript(row: Int, column: Int) -> Float {
         get {
             assert(indexIsValid(row: row, column: column), "Index out of range")
-            return dataRef.data[(row * columnCount) + column]
+            return dataRef.data[(column * rowCount) + row]
         }
         set {
             assert(indexIsValid(row: row, column: column), "Index out of range")
-            dataRef.data[(row * columnCount) + column] = newValue
+            dataRef.data[(column * rowCount) + row] = newValue
         }
     }
 }
@@ -189,10 +189,10 @@ extension Matrix: CustomStringConvertible {
     /// A textual representation of this instance.
     public var description: String {
         var returnString = ""
-        for y in 0 ..< columnCount {
+        for y in 0 ..< rowCount {
             var str = ""
-            for x in 0 ..< rowCount {
-                str += String(format: "%.2f ", self[x, y])
+            for x in 0 ..< columnCount {
+                str += String(format: "%.2f ", self[y, x])
             }
             returnString += str + "\n"
         }
