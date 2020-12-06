@@ -107,14 +107,19 @@ struct Plane {
         }
         return false
     }
-    static func crossPoint(line:Line, plane:Plane) -> simd_float3? {
+    static func intersectionPoint(line:Line, plane:Plane) -> simd_float3? {
+        let vector = line.position - plane.position
+        let distance = dot(vector, normalize(plane.normal))
+        
         let dotValue = dot(line.direction, -normalize(plane.normal))
         if dotValue < Float.leastNormalMagnitude {
+            // 平行
             return nil
         }
-        return line.position + dotValue * line.direction
+        let x = distance / dotValue
+        return line.position +  x * line.direction
     }
-    static func crossLine(plane1:Plane, plane2:Plane) -> Line? {
+    static func intersectionLine(plane1:Plane, plane2:Plane) -> Line? {
         let crossValue = cross(plane1.normal, plane2.normal)
         if crossValue.tooLittleToBeNormalized() {
             // 平行
@@ -137,7 +142,7 @@ struct Plane {
         let plane1 = Plane(position: simd_float3(1, 2, 1), normal: simd_float3(2, 1, 3))
         let plane2 = Plane(position: simd_float3(1, 3, 1), normal: simd_float3(3, 3, 1))
         
-        let line = crossLine(plane1: plane1, plane2: plane2)
+        let line = intersectionLine(plane1: plane1, plane2: plane2)
         print(line as Any)
     }
     static func estimatePlane(from points:[simd_float3]) -> Plane? {
