@@ -28,7 +28,27 @@ struct Sphere {
     static func isPointOnSphere(point:simd_float3, sphere:Sphere) -> Bool {
         return abs(distance_squared(sphere.position, point) - sphere.radius * sphere.radius) < Float.toleranceThresholdLittle
     }
-    
+    static func isIntersection(line:Line, sphere:Sphere) -> Bool {
+        let vector = line.position - sphere.position
+        let s = dot(line.direction, vector)
+        let discriminant = s * s - 4*(length_squared(vector) - sphere.radius * sphere.radius)
+        
+        return discriminant >= 0
+    }
+    static func intersectionPoint(line:Line, sphere:Sphere) -> (simd_float3, simd_float3)? {
+        let vector = line.position - sphere.position
+        let s = dot(line.direction, vector)
+        let discriminant = s * s - 4*(length_squared(vector) - sphere.radius * sphere.radius)
+        if discriminant < 0 {
+            return nil
+        }
+        let t1 = (-s + sqrtf(discriminant))/2
+        let t2 = (-s - sqrtf(discriminant))/2
+        
+        let point1 = line.position + t1 * line.direction
+        let point2 = line.position + t2 * line.direction
+        return (point1, point2)
+    }
     static func isIntersection(sphere1:Sphere, sphere2:Sphere) -> Bool {
         let radius = sphere1.radius + sphere2.radius
         
