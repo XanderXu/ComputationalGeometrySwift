@@ -30,20 +30,25 @@ struct Sphere {
     }
     static func isIntersection(line:Line, sphere:Sphere) -> Bool {
         let vector = line.position - sphere.position
-        let s = dot(line.direction, vector)
-        let discriminant = s * s - 4*(length_squared(vector) - sphere.radius * sphere.radius)
+        let a = length_squared(line.direction)
+        let b = dot(line.direction, vector)
+        let c = length_squared(vector) - sphere.radius * sphere.radius
         
+        let discriminant = b * b - 4 * a * c
         return discriminant >= 0
     }
     static func intersectionPoint(line:Line, sphere:Sphere) -> (simd_float3, simd_float3)? {
         let vector = line.position - sphere.position
-        let s = dot(line.direction, vector)
-        let discriminant = s * s - 4*(length_squared(vector) - sphere.radius * sphere.radius)
+        let a = length_squared(line.direction)
+        let b = dot(line.direction, vector)
+        let c = length_squared(vector) - sphere.radius * sphere.radius
+        
+        let discriminant = b * b - 4 * a * c
         if discriminant < 0 {
             return nil
         }
-        let t1 = (-s + sqrtf(discriminant))/2
-        let t2 = (-s - sqrtf(discriminant))/2
+        let t1 = (-b + sqrtf(discriminant))/(2*a)
+        let t2 = (-b - sqrtf(discriminant))/(2*a)
         
         let point1 = line.position + t1 * line.direction
         let point2 = line.position + t2 * line.direction
