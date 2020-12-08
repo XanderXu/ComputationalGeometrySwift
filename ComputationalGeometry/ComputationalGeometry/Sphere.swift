@@ -78,21 +78,21 @@ struct Sphere {
         return (point1, point2)
     }
     static func isVolumeIntersection(sphere1:Sphere, sphere2:Sphere) -> Bool {
-        let radius = sphere1.radius + sphere2.radius
+        let radiusFar = sphere1.radius + sphere2.radius
         
-        return distance_squared(sphere1.position, sphere2.position) <= radius * radius
+        return distance_squared(sphere1.position, sphere2.position) <= radiusFar * radiusFar
     }
     static func isSurfaceIntersection(sphere1:Sphere, sphere2:Sphere) -> Bool {
-        let radius1 = sphere1.radius + sphere2.radius
-        let radius2 = sphere1.radius - sphere2.radius//正负无所谓，后面只需要平方值
+        let radiusFar = sphere1.radius + sphere2.radius
+        let radiusNear = sphere1.radius - sphere2.radius//正负无所谓，后面只需要平方值
         
         let distanceSquared = distance_squared(sphere1.position, sphere2.position)
-        return (distanceSquared <= radius1 * radius1) && (distanceSquared >= radius2 * radius2)
+        return (distanceSquared <= radiusFar * radiusFar) && (distanceSquared >= radiusNear * radiusNear)
     }
     static func isContain(sphere1:Sphere, sphere2:Sphere) -> Bool {
-        let radius2 = sphere1.radius - sphere2.radius//正负无所谓，后面只需要平方值
+        let radiusNear = sphere1.radius - sphere2.radius//正负无所谓，后面只需要平方值
         let distanceSquared = distance_squared(sphere1.position, sphere2.position)
-        return distanceSquared <= radius2 * radius2
+        return distanceSquared <= radiusNear * radiusNear
     }
     static func isSame(sphere1:Sphere, sphere2:Sphere) -> Bool {
         if distance_squared(sphere1.position, sphere2.position) < Float.toleranceThresholdLittle && abs(sphere1.radius - sphere2.radius) <= Float.leastNormalMagnitude {
@@ -103,8 +103,15 @@ struct Sphere {
     }
     
     static func intersectionCircle(sphere1:Sphere, sphere2:Sphere) -> (simd_float3, Float)? {
+        if !isSurfaceIntersection(sphere1: sphere1, sphere2: sphere2) {
+            return nil
+        }
         let x = 0.5 * ((sphere1.radius * sphere1.radius - sphere2.radius * sphere2.radius) / distance_squared(sphere1.position, sphere2.position) + 1)
         
-        return nil
+        let vector = x * (sphere2.position - sphere1.position)
+        let position = sphere1.position + vector
+        
+        let radius = sqrtf(sphere1.radius * sphere1.radius - length_squared(vector))
+        return (position, radius)
     }
 }

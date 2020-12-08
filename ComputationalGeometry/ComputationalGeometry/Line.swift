@@ -151,41 +151,7 @@ struct Line {
             
         }
     }
-    static func estimateLine(from points:[simd_float3]) -> Line? {
-        if points.count < 2 {
-            return nil
-        }
-        var position = simd_float3.zero
-        for point in points {
-            position += (point / Float(points.count))
-        }
-        var totalDistribution = simd_float3.zero
-        for point in points {
-            totalDistribution += abs(point - position)
-        }
-        if totalDistribution.tooLittleToBeNormalized() {
-            return nil
-        }
-        totalDistribution = normalize(totalDistribution)
-        let direction1 = simd_float3(totalDistribution.x, totalDistribution.y, totalDistribution.z)
-        let direction2 = simd_float3(totalDistribution.x, -totalDistribution.y, totalDistribution.z)
-        let direction3 = simd_float3(totalDistribution.x, totalDistribution.y, -totalDistribution.z)
-        let direction4 = simd_float3(totalDistribution.x, -totalDistribution.y, -totalDistribution.z)
-        var t1:Float = 0, t2:Float = 0, t3:Float = 0, t4:Float = 0
-        
-        for point in points {
-            let vector = point - position
-            t1 += abs(dot(vector, direction1))
-            t2 += abs(dot(vector, direction2))
-            t3 += abs(dot(vector, direction3))
-            t4 += abs(dot(vector, direction4))
-        }
-        let max12 = t1 > t2 ? direction1 : direction2
-        let max34 = t3 > t4 ? direction3 : direction4
-        let direction = max(t1, t2) > max(t3, t4) ? max12 : max34
-        
-        return Line(position: position, direction: direction)
-    }
+    
     static func estimateLineSVD(from points:[simd_float3]) -> Line? {
         if points.count < 2 {
             return nil
@@ -226,9 +192,7 @@ struct Line {
             simd_float3(40, -1, 100.2),
         ]
         
-        let line = estimateLine(from: points)
-        //(0.9945316, 0.10403323, 0.0091611175)))
-        print(line as Any)
+        
         let line2 = estimateLineSVD(from: points)
         print(line2 as Any)
         
