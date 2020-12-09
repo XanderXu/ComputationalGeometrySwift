@@ -15,10 +15,16 @@ extension simd_float3 {
     func tooLittleToBeNormalized() -> Bool {
         return length_squared(self) < Float.toleranceThresholdLittle
     }
-    func tooBigToBeNormalized() -> Bool {
-        return length_squared(self) > Float.toleranceThresholdBig
+    
+    func isAlmostParallel(to vector:simd_float3) -> Bool {
+        return almostParallelRelative(to: vector).isParallel
     }
-    func canBeNormalizedAccurately() -> Bool {
-        return !(tooLittleToBeNormalized() || tooBigToBeNormalized())
+    func almostParallelRelative(to vector:simd_float3, tol:Float = Float.toleranceThresholdLittle) -> (isParallel:Bool, crossValue:simd_float3) {
+        let lengthS1 = length_squared(self)
+        let lengthS2 = length_squared(vector)
+        let crossValue = cross(self, vector)
+        let isParallel = length_squared(crossValue)/lengthS1/lengthS2 < tol * tol
+        
+        return (isParallel:isParallel, crossValue:crossValue)
     }
 }

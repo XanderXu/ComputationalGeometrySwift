@@ -32,20 +32,23 @@ struct Plane {
         return dotValue < Float.toleranceThresholdLittle
     }
     // 返回值为：投影点坐标，距离，是否在平面上
-    static func matrixRelationship(point:simd_float3, plane:Plane) -> (simd_float3, Float, Bool) {
+    static func matrixRelationship(point:simd_float3, plane:Plane) -> (projectionPoint:simd_float3, distance:Float, isOnPlane:Bool) {
         let vector = point - plane.position
-        let yAxisVector = cross(plane.normal, vector)
         
-        if yAxisVector.tooLittleToBeNormalized() {
+        let yResult = plane.normal.almostParallelRelative(to: vector)
+        let yAxisVector = yResult.crossValue
+        if yResult.isParallel {
             // 点在平面上的投影点，距离平面原点太近，即 vector 与 plane.normal 几乎共线。
             let distance2 = distance(point, plane.position)
             
-            return (plane.position, distance2, distance2 < Float.toleranceThresholdLittle)
+            return (projectionPoint:plane.position, distance:distance2, isOnPlane:distance2 < Float.toleranceThresholdLittle)
         }
-        let xAxisVector = cross(yAxisVector, plane.normal)
-        if xAxisVector.tooLittleToBeNormalized() {
+        let xResult = yAxisVector.almostParallelRelative(to: plane.normal)
+        
+        let xAxisVector = xResult.crossValue
+        if xResult.isParallel {
             // 点与平面原点距离过近
-            return (plane.position, 0, true)
+            return (projectionPoint:plane.position, distance:0, isOnPlane:true)
         }
         let xAxis = simd_float4(normalize(xAxisVector), 0)
         let yAxis = simd_float4(normalize(yAxisVector), 0)
@@ -68,7 +71,7 @@ struct Plane {
         
         let localDistance = localP.z
         
-        return (projectP2, localDistance, localDistance < Float.toleranceThresholdLittle)
+        return (projectionPoint:projectP2, distance:localDistance, isOnPlane:localDistance < Float.toleranceThresholdLittle)
     }
     static func pointToPlaneTest() {
         let plane = Plane(position: simd_float3(1, 3, 1), normal: simd_float3(0, 0, 3))
@@ -88,11 +91,7 @@ struct Plane {
         }
     }
     static func isParallel(plane1:Plane, plane2:Plane) -> Bool {
-        let crossValue = cross(plane1.normal, plane2.normal)
-        if crossValue.tooLittleToBeNormalized() {
-            return true
-        }
-        return false
+        return plane1.normal.isAlmostParallel(to: plane2.normal)
     }
     static func isSame(plane1:Plane, plane2:Plane) -> Bool {
         if !isParallel(plane1:plane1, plane2:plane2) {
@@ -120,8 +119,9 @@ struct Plane {
         return line.position +  x * line.direction
     }
     static func intersectionLine(plane1:Plane, plane2:Plane) -> Line? {
-        let crossValue = cross(plane1.normal, plane2.normal)
-        if crossValue.tooLittleToBeNormalized() {
+        let result = plane1.normal.almostParallelRelative(to: plane2.normal)
+        let crossValue = result.crossValue
+        if result.isParallel {
             // 平行
             return nil
         }

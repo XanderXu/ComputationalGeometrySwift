@@ -83,45 +83,43 @@ struct Line {
         }
     }
     static func isParallel(line1:Line, line2:Line) -> Bool {
-        let crossValue = cross(line1.direction, line2.direction)
-        if crossValue.tooLittleToBeNormalized() {
-            return true
-        }
-        return false
+        return line1.direction.isAlmostParallel(to: line2.direction)
     }
     static func isSame(line1:Line, line2:Line) -> Bool {
         if !isParallel(line1: line1, line2: line2) {
             return false
         }
         let vector = line1.position - line2.position
-        let crossValue = cross(vector, line1.direction)
-        if crossValue.tooLittleToBeNormalized() {
-            return true
+        if vector.tooLittleToBeNormalized() {//防止接近0的向量被判定为平行
+            return false
+        } else {
+            return vector.isAlmostParallel(to: line1.direction)
         }
-        return false
     }
     static func distanceBetween(line1:Line, line2:Line) -> Float {
-        let crossValue = cross(line2.direction, line1.direction)
-        let vector = line1.position - line2.position
-        if crossValue.tooLittleToBeNormalized() {
+        let parallelResult = line2.direction.almostParallelRelative(to: line1.direction)
+        let crossValue = parallelResult.crossValue
+        if parallelResult.isParallel {
             // 平行
             return distanceBetween(point:line1.position, line:line2)
         }
         let distanceVector = normalize(crossValue)
         
+        let vector = line1.position - line2.position
         let dis = dot(distanceVector, vector)
         
         return abs(dis)
     }
     static func footPoints(line1:Line, line2:Line) -> (simd_float3, simd_float3)? {
-        let crossValue = cross(line2.direction, line1.direction)
-        let vector = line1.position - line2.position
-        if crossValue.tooLittleToBeNormalized() {
+        let parallelResult = line2.direction.almostParallelRelative(to: line1.direction)
+        let crossValue = parallelResult.crossValue
+        if parallelResult.isParallel {
             // 平行
             return nil
         }
         let distanceVector = normalize(crossValue)
         
+        let vector = line1.position - line2.position
         let dis = dot(distanceVector, vector)
         
         let point2OnPlane = line2.position + dis * distanceVector
