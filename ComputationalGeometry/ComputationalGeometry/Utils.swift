@@ -27,4 +27,15 @@ extension simd_float3 {
         
         return (isParallel:isParallel, crossValue:crossValue)
     }
+    func isAlmostPerpendicular(to vector:simd_float3) -> Bool {
+        return almostPerpendicular(to: vector).isPerpendicular
+    }
+    func almostPerpendicular(to vector:simd_float3, tol:Float = Float.toleranceThresholdLittle) -> (isPerpendicular:Bool, dotValue:Float) {
+        let lengthS1 = length_squared(self)
+        let lengthS2 = length_squared(vector)
+        let dotValue = dot(self, vector)
+        let isPerpendicular = dotValue * dotValue / lengthS1 / lengthS2 < tol
+        
+        return (isPerpendicular:isPerpendicular, dotValue:dotValue)
+    }
 }
