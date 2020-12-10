@@ -2,7 +2,7 @@
 //  Sphere.swift
 //  ComputationalGeometry
 //
-//  Created by 许海峰 on 2020/12/4.
+//  Created by CoderXu on 2020/12/4.
 //
 
 import Foundation
@@ -25,6 +25,9 @@ struct Sphere {
         return target
     }
     
+    static func isPointInsideSphere(point:simd_float3, sphere:Sphere) -> Bool {
+        return distance_squared(sphere.position, point) < sphere.radius * sphere.radius
+    }
     static func isPointOnSphere(point:simd_float3, sphere:Sphere) -> Bool {
         return abs(distance_squared(sphere.position, point) - sphere.radius * sphere.radius) < Float.toleranceThresholdLittle
     }

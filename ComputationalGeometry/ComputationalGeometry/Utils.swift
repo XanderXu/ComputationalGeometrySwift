@@ -9,7 +9,6 @@ import Foundation
 import simd
 extension Float {
     static let toleranceThresholdLittle:Float = 0.0001
-    static let toleranceThresholdBig:Float = 100000000
 }
 extension simd_float3 {
     func tooLittleToBeNormalized() -> Bool {
@@ -23,7 +22,8 @@ extension simd_float3 {
         let lengthS1 = length_squared(self)
         let lengthS2 = length_squared(vector)
         let crossValue = cross(self, vector)
-        let isParallel = length_squared(crossValue)/lengthS1/lengthS2 < tol * tol
+        // (sinx)^2 = (1-cos2x)/2
+        let isParallel = length_squared(crossValue)/lengthS1/lengthS2 < tol
         
         return (isParallel:isParallel, crossValue:crossValue)
     }
