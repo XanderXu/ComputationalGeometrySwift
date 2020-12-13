@@ -117,4 +117,25 @@ struct Sphere {
         let radius = sqrtf(sphere1.radius * sphere1.radius - length_squared(vector))
         return (position, radius)
     }
+    static func estimateSphereSVD(from points:[simd_float3]) -> Sphere? {
+        if points.count < 3 {
+            return nil
+        }
+        var source:[Float] = Array(repeating: 0, count: points.count*3)
+        var position = simd_float3.zero
+        for point in points {
+            position += (point / Float(points.count))
+        }
+        for (row,point) in points.enumerated() {
+            source[row] = point.x - position.x
+            source[row+points.count] = point.y - position.y
+            source[row+2*points.count] = point.z - position.z
+        }
+        // source 中数据顺序为[x0,x1,x2.....y0,y1,y2.....z0,z1,z3....]，竖向按列依次填充到 rowCount行*3列 的矩阵中
+        let ss = Matrix(source: source, rowCount: points.count, columnCount:3)
+        let svdResult = Matrix.svd(a: ss)
+        let radius = svdResult.sigma[0]
+        let sphere = Sphere(position: position, radius: radius)
+        return sphere
+    }
 }

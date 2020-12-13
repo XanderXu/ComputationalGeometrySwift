@@ -151,13 +151,17 @@ struct Plane {
         }
         var normal = simd_float3.zero
         var position = simd_float3.zero
+        // 从最后一个顶点开始，避免在循环中做 if 判断
         var second = points.last!
         for vector in points {
+            // 边向量乘积相加
             normal.x += (second.z + vector.z) * (second.y - vector.y)
             normal.y += (second.x + vector.x) * (second.z - vector.z)
             normal.z += (second.y + vector.y) * (second.x - vector.x)
+            // 下一个顶点
             second = vector
             
+            // 顺便求中心点，做为平面位置
             position += (vector / Float(points.count))
         }
         if normal.tooLittleToBeNormalized() {
@@ -209,7 +213,7 @@ struct Plane {
             simd_float3(-30, 11, 10),
             simd_float3(40, 10, -50),
         ]
-        let plane = estimatePlane(from: points)
+        let plane = estimatePlane(from: points.shuffled())
         //(-0.038009703, -0.10452669, -0.9937954)
         print(plane as Any)
         
