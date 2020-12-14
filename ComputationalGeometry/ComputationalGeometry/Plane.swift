@@ -100,19 +100,17 @@ struct Plane {
         return isPointOnPlane(point: plane1.position, plane: plane2)
     }
     static func isParallel(line:Line, plane:Plane) -> Bool {
-        let dotValue = dot(line.direction, plane.normal)
-        if dotValue < Float.leastNormalMagnitude {
-            return true
-        }
-        return false
+        // 与法线垂直就是平行
+        return line.direction.isAlmostPerpendicular(to: plane.normal)
     }
     static func intersectionPoint(line:Line, plane:Plane) -> simd_float3? {
         let vector = line.position - plane.position
         let distance = dot(vector, normalize(plane.normal))
         
-        let dotValue = dot(line.direction, -normalize(plane.normal))
-        if dotValue < Float.leastNormalMagnitude {
-            // 平行
+        let result = line.direction.almostPerpendicular(to: -normalize(plane.normal))
+        let dotValue = result.dotValue
+        if result.isPerpendicular {
+            // 与法线垂直
             return nil
         }
         let x = distance / dotValue
