@@ -10,6 +10,10 @@
 		6C4EE2F325789CD300A28B88 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4EE2F025789CD300A28B88 /* Matrix.swift */; };
 		6C4EE2F425789CD300A28B88 /* MatrixMultiply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4EE2F125789CD300A28B88 /* MatrixMultiply.swift */; };
 		6C4EE2F525789CD300A28B88 /* MatrixSVD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4EE2F225789CD300A28B88 /* MatrixSVD.swift */; };
+		6C521D6F2588A15C008DBDD6 /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C521D6E2588A15C008DBDD6 /* Ray.swift */; };
+		6C521D722588A2BA008DBDD6 /* Segment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C521D712588A2BA008DBDD6 /* Segment.swift */; };
+		6C521D752588A349008DBDD6 /* Triangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C521D742588A349008DBDD6 /* Triangle.swift */; };
+		6C521D782588A3E4008DBDD6 /* Polygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C521D772588A3E4008DBDD6 /* Polygon.swift */; };
 		6C5BB7EE257A378300C36817 /* Sphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5BB7ED257A378300C36817 /* Sphere.swift */; };
 		6CD02D4D2562CB9600E90615 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD02D4C2562CB9600E90615 /* Utils.swift */; };
 		6CDEC90E255C380700FBB946 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEC90D255C380700FBB946 /* main.swift */; };
@@ -33,6 +37,10 @@
 		6C4EE2F025789CD300A28B88 /* Matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		6C4EE2F125789CD300A28B88 /* MatrixMultiply.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixMultiply.swift; sourceTree = "<group>"; };
 		6C4EE2F225789CD300A28B88 /* MatrixSVD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixSVD.swift; sourceTree = "<group>"; };
+		6C521D6E2588A15C008DBDD6 /* Ray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ray.swift; sourceTree = "<group>"; };
+		6C521D712588A2BA008DBDD6 /* Segment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Segment.swift; sourceTree = "<group>"; };
+		6C521D742588A349008DBDD6 /* Triangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triangle.swift; sourceTree = "<group>"; };
+		6C521D772588A3E4008DBDD6 /* Polygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
 		6C5BB7ED257A378300C36817 /* Sphere.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sphere.swift; sourceTree = "<group>"; };
 		6CD02D4C2562CB9600E90615 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		6CDEC90A255C380700FBB946 /* ComputationalGeometry */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComputationalGeometry; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,6 +95,10 @@
 				6CDEC915255C3A9C00FBB946 /* Plane.swift */,
 				6CDEC918255C3C8100FBB946 /* Line.swift */,
 				6C5BB7ED257A378300C36817 /* Sphere.swift */,
+				6C521D6E2588A15C008DBDD6 /* Ray.swift */,
+				6C521D712588A2BA008DBDD6 /* Segment.swift */,
+				6C521D742588A349008DBDD6 /* Triangle.swift */,
+				6C521D772588A3E4008DBDD6 /* Polygon.swift */,
 			);
 			path = ComputationalGeometry;
 			sourceTree = "<group>";
@@ -149,13 +161,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CDEC919255C3C8100FBB946 /* Line.swift in Sources */,
+				6C521D722588A2BA008DBDD6 /* Segment.swift in Sources */,
 				6C4EE2F325789CD300A28B88 /* Matrix.swift in Sources */,
 				6C4EE2F425789CD300A28B88 /* MatrixMultiply.swift in Sources */,
 				6CDEC916255C3A9C00FBB946 /* Plane.swift in Sources */,
 				6CDEC90E255C380700FBB946 /* main.swift in Sources */,
 				6C4EE2F525789CD300A28B88 /* MatrixSVD.swift in Sources */,
+				6C521D752588A349008DBDD6 /* Triangle.swift in Sources */,
+				6C521D782588A3E4008DBDD6 /* Polygon.swift in Sources */,
 				6C5BB7EE257A378300C36817 /* Sphere.swift in Sources */,
 				6CD02D4D2562CB9600E90615 /* Utils.swift in Sources */,
+				6C521D6F2588A15C008DBDD6 /* Ray.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

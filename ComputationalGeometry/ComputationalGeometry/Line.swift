@@ -9,8 +9,8 @@ import Foundation
 import simd
 //定义直线
 struct Line {
-    var position = simd_float3.zero
-    var direction = simd_float3.zero
+    let position:simd_float3
+    let direction:simd_float3
     
     static func projectionOnLine(from point:simd_float3, to line:Line) -> simd_float3 {
         let vector = point - line.position
@@ -47,12 +47,11 @@ struct Line {
     
     static func isPointOnLine(point:simd_float3, line:Line) -> Bool {
         let tarPoint = projectionOnLine(from: point, to: line)
-        return distance_squared(tarPoint, point) < Float.toleranceThresholdLittle
+        return tarPoint.isAlmostSamePoint(to: point)
     }
     static func isPointOnLine2(point:simd_float3, line:Line) -> Bool {
         let vector = point - line.position
-        let crossValue = cross(vector, line.direction)
-        return length_squared(crossValue) < Float.toleranceThresholdLittle
+        return vector.isAlmostParallel(to: line.direction)
     }
     /// 精度不够高
     static func isPointOnLine3(point:simd_float3, line:Line) -> Bool {
@@ -125,14 +124,14 @@ struct Line {
         let point2OnPlane = line2.position + dis * distanceVector
         
         let projectionOnLine1 = projectionOnLine(from: point2OnPlane, to: line1)
-        let projectionVector = projectionOnLine1 - point2OnPlane
-        
-        let squared = length_squared(projectionVector)
-        
-        if squared < Float.toleranceThresholdLittle {
+        let result = projectionOnLine1.almostSamePoint(to: point2OnPlane)
+        if result.isSame {
             // 垂足是 line2.position
             return (point2OnPlane,line2.position)
         }
+        let projectionVector = projectionOnLine1 - point2OnPlane
+        let squared = result.distanceSquared
+        
         let x1:Float = squared / dot(line2.direction, projectionVector)
         let footPoint2 = point2OnPlane + x1 * line2.direction
         let footPoint1 = footPoint2 - dis * distanceVector

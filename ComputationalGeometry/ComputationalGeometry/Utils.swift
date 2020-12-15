@@ -15,6 +15,14 @@ extension simd_float3 {
         return length_squared(self) < Float.toleranceThresholdLittle
     }
     
+    func isAlmostSamePoint(to point:simd_float3) -> Bool {
+        return almostSamePoint(to: point).isSame
+    }
+    func almostSamePoint(to point:simd_float3, tol:Float = Float.toleranceThresholdLittle) -> (isSame:Bool, distanceSquared:Float) {
+        let distanceSquared = distance_squared(self, point)
+        return (isSame:distanceSquared < tol * tol, distanceSquared:distanceSquared)
+    }
+    
     func isAlmostParallel(to vector:simd_float3) -> Bool {
         return almostParallelRelative(to: vector).isParallel
     }

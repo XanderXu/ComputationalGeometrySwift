@@ -9,8 +9,8 @@ import Foundation
 import simd
 //定义平面
 struct Plane {
-    var position = simd_float3.zero
-    var normal = simd_float3.zero
+    var position:simd_float3
+    var normal:simd_float3
     
     static func distanceBetween(point:simd_float3, plane:Plane) -> Float {
         let vector = point - plane.position
@@ -28,8 +28,7 @@ struct Plane {
     }
     static func isPointOnPlane(point:simd_float3, plane:Plane) -> Bool {
         let vector = point - plane.position
-        let dotValue = dot(vector, plane.normal)
-        return dotValue < Float.toleranceThresholdLittle
+        return vector.isAlmostPerpendicular(to: plane.normal)
     }
     // 返回值为：投影点坐标，距离，是否在平面上
     static func matrixRelationship(point:simd_float3, plane:Plane) -> (projectionPoint:simd_float3, distance:Float, isOnPlane:Bool) {

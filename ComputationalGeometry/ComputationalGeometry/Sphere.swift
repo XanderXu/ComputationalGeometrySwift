@@ -9,8 +9,9 @@ import Foundation
 import simd
 //定义球体
 struct Sphere {
-    var position = simd_float3.zero
-    var radius = Float.zero
+    let position:simd_float3
+    let radius:Float
+    
     static func distanceBetween(point:simd_float3, sphere:Sphere) -> Float {
         let distanceCenter = distance(point, sphere.position)
         return distanceCenter - sphere.radius
@@ -29,7 +30,7 @@ struct Sphere {
         return distance_squared(sphere.position, point) < sphere.radius * sphere.radius
     }
     static func isPointOnSphere(point:simd_float3, sphere:Sphere) -> Bool {
-        return abs(distance_squared(sphere.position, point) - sphere.radius * sphere.radius) < Float.toleranceThresholdLittle
+        return abs(distance_squared(sphere.position, point) - sphere.radius * sphere.radius) < Float.toleranceThresholdLittle * Float.toleranceThresholdLittle
     }
     static func isIntersection(line:Line, sphere:Sphere) -> Bool {
         let vector = line.position - sphere.position
@@ -98,7 +99,7 @@ struct Sphere {
         return distanceSquared <= radiusNear * radiusNear
     }
     static func isSame(sphere1:Sphere, sphere2:Sphere) -> Bool {
-        if distance_squared(sphere1.position, sphere2.position) < Float.toleranceThresholdLittle && abs(sphere1.radius - sphere2.radius) <= Float.leastNormalMagnitude {
+        if sphere1.position.isAlmostSamePoint(to: sphere2.position) && abs(sphere1.radius - sphere2.radius) <= Float.leastNormalMagnitude {
             return true
         }
         
