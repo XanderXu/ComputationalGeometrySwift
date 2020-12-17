@@ -12,23 +12,23 @@ struct Ray {
     let position:simd_float3
     let direction:simd_float3
     
-    static func nearestPointOnLine(from point:simd_float3, to line:Line) -> simd_float3 {
-        let vector = point - line.position
-        let normalizedDirection = normalize(line.direction)
+    static func nearestPointOnRay(from point:simd_float3, to ray:Ray) -> simd_float3 {
+        let vector = point - ray.position
+        let normalizedDirection = normalize(ray.direction)
         let dotValue = dot(vector, normalizedDirection)
         if dotValue <= 0 {
-            return line.position
+            return ray.position
         }
-        let tarPoint = line.position + dotValue * normalizedDirection
+        let tarPoint = ray.position + dotValue * normalizedDirection
         return tarPoint
     }
     
-    static func distanceBetween(point:simd_float3, line:Line) -> Float{
-        let position = nearestPointOnLine(from: point, to: line)
+    static func distanceBetween(point:simd_float3, ray:Ray) -> Float{
+        let position = nearestPointOnRay(from: point, to: ray)
         return distance(position, point)
     }
-    static func distanceSquaredBetween(point:simd_float3, line:Line) -> Float {
-        let position = nearestPointOnLine(from: point, to: line)
+    static func distanceSquaredBetween(point:simd_float3, ray:Ray) -> Float {
+        let position = nearestPointOnRay(from: point, to: ray)
         return distance_squared(position, point)
     }
 }
