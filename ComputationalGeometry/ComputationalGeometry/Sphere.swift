@@ -17,9 +17,13 @@ struct Sphere {
         return distanceCenter - sphere.radius
     }
     
-    static func projectionOnSphere(from point:simd_float3, to sphere:Sphere) -> simd_float3 {
+    static func projectionOnSphere(from point:simd_float3, to sphere:Sphere) -> simd_float3? {
         let vector = point - sphere.position
         let length = simd_length(vector)
+        if length < Float.leastNormalMagnitude {
+            // 点与球心重合，未定义
+            return nil
+        }
         let factor = sphere.radius / length
         let target = sphere.position + factor * vector
         
