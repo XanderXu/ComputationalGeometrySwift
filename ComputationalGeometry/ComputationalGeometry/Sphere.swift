@@ -30,7 +30,7 @@ struct Sphere {
         return distance_squared(sphere.position, point) < sphere.radius * sphere.radius
     }
     static func isPointOnSphere(point:simd_float3, sphere:Sphere) -> Bool {
-        return abs(distance_squared(sphere.position, point) - sphere.radius * sphere.radius) < Float.toleranceThresholdLittle * Float.toleranceThresholdLittle
+        return abs(distance_squared(sphere.position, point) - sphere.radius * sphere.radius) < Float.toleranceThreshold * Float.toleranceThreshold
     }
     static func isIntersection(line:Line, sphere:Sphere) -> Bool {
         let vector = line.position - sphere.position

@@ -40,7 +40,7 @@ struct Plane {
             // 点在平面上的投影点，距离平面原点太近，即 vector 与 plane.normal 几乎共线。
             let distance2 = distance(point, plane.position)
             
-            return (projectionPoint:plane.position, distance:distance2, isOnPlane:distance2 < Float.toleranceThresholdLittle)
+            return (projectionPoint:plane.position, distance:distance2, isOnPlane:distance2 < Float.toleranceThreshold)
         }
         let xResult = yAxisVector.almostParallelRelative(to: plane.normal)
         
@@ -70,7 +70,7 @@ struct Plane {
         
         let localDistance = localP.z
         
-        return (projectionPoint:projectP2, distance:localDistance, isOnPlane:localDistance < Float.toleranceThresholdLittle)
+        return (projectionPoint:projectP2, distance:localDistance, isOnPlane:localDistance < Float.toleranceThreshold)
     }
     static func pointToPlaneTest() {
         let plane = Plane(position: simd_float3(1, 3, 1), normal: simd_float3(0, 0, 3))

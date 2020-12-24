@@ -75,7 +75,7 @@ struct Line {
         
         print("距离\(distance),距离平方\(distanceSquared), 投影点\(tarPoint)")
         print(isPointOnLine(point: pointC, line: line),isPointOnLine2(point: pointC, line: line),isPointOnLine3(point: pointC, line: line))
-        if (distanceSquared < Float.toleranceThresholdLittle) {
+        if (distanceSquared < Float.toleranceThreshold) {
             print("点在直线上")
         } else {
             print("点不在直线上")

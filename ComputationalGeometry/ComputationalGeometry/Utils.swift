@@ -8,17 +8,31 @@
 import Foundation
 import simd
 extension Float {
-    static let toleranceThresholdLittle:Float = 0.0001
+    static let toleranceThreshold:Float = 0.0001
 }
 extension simd_float3 {
+    func angleDegree(to vector:simd_float3) -> Float {
+        return angleRadian(to: vector) * 57.29578
+    }
+    func angleRadian(to vector:simd_float3) -> Float {
+        let num = sqrt(simd_length_squared(self) * simd_length_squared(vector))
+        if num < Float.leastNormalMagnitude {
+            return 0
+        }
+        var num2 = dot(self, vector) / num
+        num2 = Swift.max(num2, -1)
+        num2 = Swift.min(num2, 1)
+        return acos(num2)
+    }
+    
     func tooLittleToBeNormalized() -> Bool {
-        return length_squared(self) < Float.toleranceThresholdLittle
+        return length_squared(self) < Float.toleranceThreshold * Float.toleranceThreshold
     }
     
     func isAlmostSamePoint(to point:simd_float3) -> Bool {
         return almostSamePoint(to: point).isSame
     }
-    func almostSamePoint(to point:simd_float3, tol:Float = Float.toleranceThresholdLittle) -> (isSame:Bool, distanceSquared:Float) {
+    func almostSamePoint(to point:simd_float3, tol:Float = Float.toleranceThreshold) -> (isSame:Bool, distanceSquared:Float) {
         let distanceSquared = distance_squared(self, point)
         return (isSame:distanceSquared < tol * tol, distanceSquared:distanceSquared)
     }
@@ -26,23 +40,23 @@ extension simd_float3 {
     func isAlmostParallel(to vector:simd_float3) -> Bool {
         return almostParallelRelative(to: vector).isParallel
     }
-    func almostParallelRelative(to vector:simd_float3, tol:Float = Float.toleranceThresholdLittle) -> (isParallel:Bool, crossValue:simd_float3) {
+    func almostParallelRelative(to vector:simd_float3, tol:Float = Float.toleranceThreshold) -> (isParallel:Bool, crossValue:simd_float3) {
         let lengthS1 = length_squared(self)
         let lengthS2 = length_squared(vector)
         let crossValue = cross(self, vector)
         // (sinx)^2 = (1-cos2x)/2
-        let isParallel = length_squared(crossValue)/lengthS1/lengthS2 < tol
+        let isParallel = length_squared(crossValue)/lengthS1/lengthS2 < tol * tol
         
         return (isParallel:isParallel, crossValue:crossValue)
     }
     func isAlmostPerpendicular(to vector:simd_float3) -> Bool {
         return almostPerpendicular(to: vector).isPerpendicular
     }
-    func almostPerpendicular(to vector:simd_float3, tol:Float = Float.toleranceThresholdLittle) -> (isPerpendicular:Bool, dotValue:Float) {
+    func almostPerpendicular(to vector:simd_float3, tol:Float = Float.toleranceThreshold) -> (isPerpendicular:Bool, dotValue:Float) {
         let lengthS1 = length_squared(self)
         let lengthS2 = length_squared(vector)
         let dotValue = dot(self, vector)
-        let isPerpendicular = dotValue * dotValue / lengthS1 / lengthS2 < tol
+        let isPerpendicular = dotValue * dotValue / lengthS1 / lengthS2 < tol * tol
         
         return (isPerpendicular:isPerpendicular, dotValue:dotValue)
     }
