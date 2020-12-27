@@ -114,7 +114,7 @@ struct Sphere {
         if !isSurfaceIntersection(sphere1: sphere1, sphere2: sphere2) {
             return nil
         }
-        let x = 0.5 * ((sphere1.radius * sphere1.radius - sphere2.radius * sphere2.radius) / distance_squared(sphere1.position, sphere2.position) + 1)
+        let x = 0.5 * (sphere1.radius * sphere1.radius - sphere2.radius * sphere2.radius) / distance_squared(sphere1.position, sphere2.position) + 0.5
         
         let vector = x * (sphere2.position - sphere1.position)
         let position = sphere1.position + vector
