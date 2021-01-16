@@ -10,7 +10,11 @@ import simd
 //定义多边形
 struct Polygon {
     let points:[simd_float3]
-    
+    var count: Int {
+        get{
+            return points.count
+        }
+    }
     static func isPolygon(points:[simd_float3]) -> Bool {
         return points.count > 3
     }
@@ -18,7 +22,7 @@ struct Polygon {
         if !isPolygon(points: polygon.points) {
             return false
         }
-        var preview = polygon.points[polygon.points.count-2]
+        var preview = polygon.points[polygon.count-2]
         var middle = polygon.points.last!
         
         var vector1 = middle - preview
@@ -47,7 +51,7 @@ struct Polygon {
         var center = simd_float3.zero
         
         for point in polygon.points {
-            center += point / Float(polygon.points.count)
+            center += point / Float(polygon.count)
         }
         return center
     }

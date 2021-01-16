@@ -26,7 +26,7 @@ struct Triangle {
             return points.columns.2
         }
     }
-    ///三边长
+    ///三条边的长度。(x,y,z) 按顺序为 point1 的对边长，point2 的对边长，point3 的对边长
     static func edgesLength(triangle:Triangle) ->simd_float3 {
         let l1 = distance(triangle.point2, triangle.point3)
         let l2 = distance(triangle.point1, triangle.point3)
@@ -66,6 +66,10 @@ struct Triangle {
     static func barycenter(triangle:Triangle) -> simd_float3 {
         return (triangle.point1 + triangle.point2 + triangle.point3)/3
     }
+    ///重心的重心坐标
+    static func barycenterInBarycentricCoordinate(triangle:Triangle) -> simd_float3 {
+        return simd_float3(arrayLiteral: 1/3.0)
+    }
     ///内心、三边距离相等点
     static func incenter(triangle:Triangle) -> simd_float3 {
         let edges = edgesLength(triangle: triangle)
@@ -73,6 +77,12 @@ struct Triangle {
         
         let r = triangle.points * edges
         return r / p
+    }
+    ///内心的重心坐标
+    static func incenterInBarycentricCoordinate(triangle:Triangle) -> simd_float3 {
+        let edges = edgesLength(triangle: triangle)
+        let p = edges.sum()
+        return edges / p
     }
     ///内切圆半径
     static func incenterRadius(triangle:Triangle) -> Float {
@@ -114,6 +124,18 @@ struct Triangle {
         let s = triangle.points * t
         let d = dot(v, edges)
         return s / d
+    }
+    ///外心的重心坐标
+    static func circumcenterInBarycentricCoordinate(triangle:Triangle) -> simd_float3 {
+        let e1 = triangle.point3 - triangle.point2
+        let e2 = triangle.point1 - triangle.point3
+        let e3 = triangle.point2 - triangle.point1
+        
+        let edges = edgesLength(triangle: triangle)
+        let v = simd_float3(dot(e2,e3), dot(e3,e1), dot(e1,e2))
+        let t = v * edges
+        let d = dot(v, edges)
+        return t / d
     }
     ///外切圆半径
     static func circumcenterRadius(triangle:Triangle) -> Float {
