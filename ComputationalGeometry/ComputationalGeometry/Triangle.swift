@@ -162,7 +162,7 @@ struct Triangle {
         return ss
     }
     ///点在三角形上的重心坐标
-    static func computeBarycenricCoordinate(of point:simd_float3, in triangle:Triangle) -> simd_float3? {
+    static func computeBarycenricCoordinate2(of point:simd_float3, in triangle:Triangle) -> simd_float3? {
         let d1 = triangle.point2 - triangle.point1
         let d2 = triangle.point3 - triangle.point2
         let n = cross(d1, d2)
@@ -218,5 +218,28 @@ struct Triangle {
         let b1 = (v1*u3 - v3*u1) * oneOverDenom
         let b2 = 1 - b0 - b1
         return simd_float3(b0, b1, b2)
+    }
+    ///点在三角形上的重心坐标
+    static func computeBarycenricCoordinate(of point:simd_float3, in triangle:Triangle) -> simd_float3? {
+        let e1 = triangle.point3 - triangle.point2
+        let e2 = triangle.point1 - triangle.point3
+        let e3 = triangle.point2 - triangle.point1
+        let d1 = point - triangle.point1
+        let d2 = point - triangle.point2
+        let d3 = point - triangle.point3
+        
+        let n = cross(e1, e2)
+        if abs(dot(d1, n)) > Float.leastNormalMagnitude {
+            // 点与三角形不共面
+            return nil
+        }
+        let an = dot(cross(e1, e2), n)
+        if an < Float.leastNormalMagnitude {
+            return nil
+        }
+        let b1 = dot(cross(e1, d3), n) / an
+        let b2 = dot(cross(e2, d1), n) / an
+        let b3 = dot(cross(e3, d2), n) / an
+        return simd_float3(b1, b2, b3)
     }
 }
