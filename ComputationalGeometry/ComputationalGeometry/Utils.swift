@@ -11,9 +11,11 @@ extension Float {
     static let toleranceThreshold:Float = 0.0001
 }
 extension simd_float3 {
+    ///向量夹角，角度制
     func angleDegree(to vector:simd_float3) -> Float {
         return angleRadian(to: vector) * 57.29578
     }
+    ///向量夹角，弧度制
     func angleRadian(to vector:simd_float3) -> Float {
         let num = sqrt(simd_length_squared(self) * simd_length_squared(vector))
         if num < Float.leastNormalMagnitude {
@@ -24,22 +26,24 @@ extension simd_float3 {
         num2 = Swift.min(num2, 1)
         return acos(num2)
     }
-    
+    ///长度过小，归一化误差大
     func tooLittleToBeNormalized() -> Bool {
         return length_squared(self) < Float.toleranceThreshold * Float.toleranceThreshold
     }
-    
+    ///是否是同一个点（误差范围内）
     func isAlmostSamePoint(to point:simd_float3) -> Bool {
         return almostSamePoint(to: point).isSame
     }
+    ///是否是同一个点（误差范围内），同时返回距离平方
     func almostSamePoint(to point:simd_float3, tol:Float = Float.toleranceThreshold) -> (isSame:Bool, distanceSquared:Float) {
         let distanceSquared = distance_squared(self, point)
         return (isSame:distanceSquared < tol * tol, distanceSquared:distanceSquared)
     }
-    
+    ///是否平行（误差范围内）
     func isAlmostParallel(to vector:simd_float3) -> Bool {
         return almostParallelRelative(to: vector).isParallel
     }
+    ///是否平行（误差范围内），并返回叉乘结果
     func almostParallelRelative(to vector:simd_float3, tol:Float = Float.toleranceThreshold) -> (isParallel:Bool, crossValue:simd_float3) {
         let lengthS1 = length_squared(self)
         let lengthS2 = length_squared(vector)
@@ -49,9 +53,11 @@ extension simd_float3 {
         
         return (isParallel:isParallel, crossValue:crossValue)
     }
+    ///是否垂直（误差范围内）
     func isAlmostPerpendicular(to vector:simd_float3) -> Bool {
         return almostPerpendicular(to: vector).isPerpendicular
     }
+    ///是否垂直（误差范围内），并返回点乘结果
     func almostPerpendicular(to vector:simd_float3, tol:Float = Float.toleranceThreshold) -> (isPerpendicular:Bool, dotValue:Float) {
         let lengthS1 = length_squared(self)
         let lengthS2 = length_squared(vector)
@@ -62,6 +68,7 @@ extension simd_float3 {
     }
 }
 extension Collection where Self.Element == simd_float3 {
+    ///SVD 拟合直线、平面、外接球、包围盒
     func estimateSVD() -> (line:Line?, plane:Plane?, sphere:Sphere?, boundingBox:simd_float4x4?) {
         if self.count < 3 {
             return (nil, nil, nil, nil)

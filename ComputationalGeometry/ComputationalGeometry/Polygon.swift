@@ -15,9 +15,28 @@ struct Polygon {
             return points.count
         }
     }
+    ///是否是多边形：多于 3 个点，且共面
     static func isPolygon(points:[simd_float3]) -> Bool {
-        return points.count > 3
+        if points.count < 3 {
+            return false
+        }
+        let d1 = points[1] - points[0]
+        let d2 = points[2] - points[1]
+        let n = cross(d1, d2)
+        
+        var lastPoint = points[2]
+        
+        for i in 3..<points.count {
+            let point = points[i]
+            let vector = point - lastPoint
+            if abs(dot(vector, n)) > Float.leastNormalMagnitude   {
+                return false
+            }
+            lastPoint = point
+        }
+        return true
     }
+    ///是否是凸多边形
     static func isConvex(polygon:Polygon) -> Bool {
         if !isPolygon(points: polygon.points) {
             return false
@@ -46,7 +65,7 @@ struct Polygon {
         }
         return true
     }
-    
+    ///几何中心：各顶点平均值
     static func geometryCenter(polygon:Polygon) -> simd_float3 {
         var center = simd_float3.zero
         

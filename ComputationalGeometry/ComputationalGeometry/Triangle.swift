@@ -33,11 +33,11 @@ struct Triangle {
         let l3 = distance(triangle.point2, triangle.point1)
         return simd_float3(l1, l2, l3)
     }
-    ///周长
+    ///三角形的周长
     static func perimeter(triangle:Triangle) -> Float {
         return edgesLength(triangle: triangle).sum()
     }
-    ///是否钝角
+    ///是否是钝角三角形
     static func isObtuse(triangle:Triangle) -> Bool {
         let vector1 = triangle.point2 - triangle.point1
         let vector2 = triangle.point3 - triangle.point2
@@ -49,7 +49,7 @@ struct Triangle {
         
         return dot1 > 0 || dot2 > 0 || dot3 > 0
     }
-    ///面积
+    ///三角形的面积
     static func area(triangle:Triangle) -> Float {
         let vector1 = triangle.point2 - triangle.point1
         let vector2 = triangle.point3 - triangle.point2
@@ -62,15 +62,15 @@ struct Triangle {
         let s = edgesLength.sum()*0.5
         return sqrtf(s*(s-edgesLength.x)*(s-edgesLength.y)*(s-edgesLength.z))
     }
-    ///重心、几何中心
+    ///三角形的重心、几何中心
     static func barycenter(triangle:Triangle) -> simd_float3 {
         return (triangle.point1 + triangle.point2 + triangle.point3)/3
     }
-    ///重心的重心坐标
+    ///三角形重心的重心坐标
     static func barycenterInBarycentricCoordinate(triangle:Triangle) -> simd_float3 {
         return simd_float3(arrayLiteral: 1/3.0)
     }
-    ///内心、三边距离相等点
+    ///三角形内心、三边距离相等点
     static func incenter(triangle:Triangle) -> simd_float3 {
         let edges = edgesLength(triangle: triangle)
         let p = edges.sum()
@@ -78,20 +78,20 @@ struct Triangle {
         let r = triangle.points * edges
         return r / p
     }
-    ///内心的重心坐标
+    ///三角形内心的重心坐标
     static func incenterInBarycentricCoordinate(triangle:Triangle) -> simd_float3 {
         let edges = edgesLength(triangle: triangle)
         let p = edges.sum()
         return edges / p
     }
-    ///内切圆半径
+    ///三角形内切圆半径
     static func incenterRadius(triangle:Triangle) -> Float {
         let edges = edgesLength(triangle: triangle)
         let p = edges.sum()
         let A = area(edgesLength: edges)
         return A / p
     }
-    ///外心、三点距离相等点
+    ///三角形外心、三点距离相等点
     static func circumcenter(triangle:Triangle) -> simd_float3 {
         let e1 = triangle.point3 - triangle.point2
         let e2 = triangle.point1 - triangle.point3
@@ -125,7 +125,7 @@ struct Triangle {
         let d = dot(v, edges)
         return s / d
     }
-    ///外心的重心坐标
+    ///三角形外心的重心坐标
     static func circumcenterInBarycentricCoordinate(triangle:Triangle) -> simd_float3 {
         let e1 = triangle.point3 - triangle.point2
         let e2 = triangle.point1 - triangle.point3
@@ -137,7 +137,7 @@ struct Triangle {
         let d = dot(v, edges)
         return t / d
     }
-    ///外切圆半径
+    ///三角形外切圆半径
     static func circumcenterRadius(triangle:Triangle) -> Float {
         let e1 = triangle.point3 - triangle.point2
         let e2 = triangle.point1 - triangle.point3
@@ -160,5 +160,63 @@ struct Triangle {
         let d = dot(v, edges)
         let ss = edges.x * edges.y * edges.z / (sqrtf(-2 * d))
         return ss
+    }
+    ///点在三角形上的重心坐标
+    static func computeBarycenricCoordinate(of point:simd_float3, in triangle:Triangle) -> simd_float3? {
+        let d1 = triangle.point2 - triangle.point1
+        let d2 = triangle.point3 - triangle.point2
+        let n = cross(d1, d2)
+        
+        let t = point - triangle.point1
+        if abs(dot(t, n)) > Float.leastNormalMagnitude {
+            // 点与三角形不共面
+            return nil
+        }
+        var u1,u2,u3,u4:Float
+        var v1,v2,v3,v4:Float
+        if (fabsf(n.x) >= fabsf(n.y)) && (fabsf(n.x) >= fabsf(n.z)) {
+            // 抛弃 x，向 yz 平面投影
+            u1 = triangle.point1.y - triangle.point3.y
+            u2 = triangle.point2.y - triangle.point3.y
+            u3 = point.y - triangle.point1.y
+            u4 = point.y - triangle.point3.y
+            
+            v1 = triangle.point1.z - triangle.point3.z
+            v2 = triangle.point2.z - triangle.point3.z
+            v3 = point.z - triangle.point1.z
+            v4 = point.z - triangle.point3.z
+        } else if fabsf(n.y) >= fabsf(n.z){
+            // 抛弃 y，向 xz 平面投影
+            u1 = triangle.point1.z - triangle.point3.z
+            u2 = triangle.point2.z - triangle.point3.z
+            u3 = point.z - triangle.point1.z
+            u4 = point.z - triangle.point3.z
+            
+            v1 = triangle.point1.x - triangle.point3.x
+            v2 = triangle.point2.x - triangle.point3.x
+            v3 = point.x - triangle.point1.x
+            v4 = point.x - triangle.point3.x
+        } else {
+            u1 = triangle.point1.x - triangle.point3.x
+            u2 = triangle.point2.x - triangle.point3.x
+            u3 = point.x - triangle.point1.x
+            u4 = point.x - triangle.point3.x
+            
+            v1 = triangle.point1.y - triangle.point3.y
+            v2 = triangle.point2.y - triangle.point3.y
+            v3 = point.y - triangle.point1.y
+            v4 = point.y - triangle.point3.y
+        }
+        let denom = v1 * u2 - v2 * u1
+        if abs(denom) < Float.leastNormalMagnitude {
+            // 退化三角形:面积为零的三角形
+            return nil
+        }
+        // 计算重心坐标
+        let oneOverDenom = 1.0 / denom
+        let b0 = (v4*u2 - v2*u4) * oneOverDenom
+        let b1 = (v1*u3 - v3*u1) * oneOverDenom
+        let b2 = 1 - b0 - b1
+        return simd_float3(b0, b1, b2)
     }
 }
