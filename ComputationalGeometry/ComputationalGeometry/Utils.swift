@@ -28,7 +28,11 @@ extension simd_float3 {
     }
     ///长度过小，归一化误差大
     func tooLittleToBeNormalized() -> Bool {
-        return length_squared(self) < Float.toleranceThreshold * Float.toleranceThreshold
+        return length_squared(self) < Float.leastNormalMagnitude
+    }
+    ///是否是同一个点
+    func isSamePoint(to point:simd_float3) -> Bool {
+        return almostSamePoint(to: point, tol: Float.leastNormalMagnitude).isSame
     }
     ///是否是同一个点（误差范围内）
     func isAlmostSamePoint(to point:simd_float3) -> Bool {
@@ -39,6 +43,10 @@ extension simd_float3 {
         let distanceSquared = distance_squared(self, point)
         return (isSame:distanceSquared < tol * tol, distanceSquared:distanceSquared)
     }
+    ///是否平行
+    func isParallel(to vector:simd_float3) -> Bool {
+        return almostParallelRelative(to: vector, tol: Float.leastNormalMagnitude).isParallel
+    }
     ///是否平行（误差范围内）
     func isAlmostParallel(to vector:simd_float3) -> Bool {
         return almostParallelRelative(to: vector).isParallel
@@ -47,11 +55,18 @@ extension simd_float3 {
     func almostParallelRelative(to vector:simd_float3, tol:Float = Float.toleranceThreshold) -> (isParallel:Bool, crossValue:simd_float3) {
         let lengthS1 = length_squared(self)
         let lengthS2 = length_squared(vector)
+        if lengthS1 < Float.leastNormalMagnitude || lengthS2 < Float.leastNormalMagnitude {
+            return (isParallel:false, crossValue:.zero)
+        }
         let crossValue = cross(self, vector)
         // (sinx)^2 = (1-cos2x)/2
         let isParallel = length_squared(crossValue)/lengthS1/lengthS2 < tol * tol
         
         return (isParallel:isParallel, crossValue:crossValue)
+    }
+    ///是否垂直
+    func isPerpendicular(to vector:simd_float3) -> Bool {
+        return almostPerpendicular(to: vector, tol: Float.leastNormalMagnitude).isPerpendicular
     }
     ///是否垂直（误差范围内）
     func isAlmostPerpendicular(to vector:simd_float3) -> Bool {
@@ -61,6 +76,9 @@ extension simd_float3 {
     func almostPerpendicular(to vector:simd_float3, tol:Float = Float.toleranceThreshold) -> (isPerpendicular:Bool, dotValue:Float) {
         let lengthS1 = length_squared(self)
         let lengthS2 = length_squared(vector)
+        if lengthS1 < Float.leastNormalMagnitude || lengthS2 < Float.leastNormalMagnitude {
+            return (isPerpendicular:false, dotValue:.zero)
+        }
         let dotValue = dot(self, vector)
         let isPerpendicular = dotValue * dotValue / lengthS1 / lengthS2 < tol * tol
         
