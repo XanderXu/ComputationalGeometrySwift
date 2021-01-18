@@ -32,4 +32,30 @@ struct Ray {
         let position = nearestPointOnRay(from: point, to: ray)
         return distance_squared(position, point)
     }
+    ///射线与射线最近点坐标
+    static func footPoints(ray1:Ray, ray2:Ray) -> (simd_float3, simd_float3)? {
+        let nearestPointOnRay1 = nearestPointOnRay(from: ray2.position, to: ray1)
+        let nearestPointToRay2Vector = ray2.position - nearestPointOnRay1
+        
+        if dot(nearestPointToRay2Vector, ray2.direction) >= 0 {
+            // ray2 远离 ray1
+            return (nearestPointOnRay1, ray2.position)
+        }
+        
+        let ray1ToRay2 = ray2.position - ray1.position
+        let crossValue = cross(ray1.direction, ray1ToRay2)
+        let faceFar = cross(crossValue, ray1ToRay2)
+        
+        if dot(faceFar, ray2.direction) >= 0 {
+            // ray2 指向了 ray1 负方向
+            let nearestPointOnRay2 = nearestPointOnRay(from: ray1.position, to: ray2)
+            return (ray1.position, nearestPointOnRay2)
+        }
+        
+        // 可按直线最近点处理
+        
+        
+        
+        return nil
+    }
 }
