@@ -12,6 +12,7 @@ struct Line {
     let position:simd_float3
     let direction:simd_float3
     
+    ///点在直线上的投影坐标
     static func projectionOnLine(from point:simd_float3, to line:Line) -> simd_float3 {
         let vector = point - line.position
         let normalizedDirection = normalize(line.direction)
@@ -19,11 +20,12 @@ struct Line {
         let tarPoint = line.position + dotValue * normalizedDirection
         return tarPoint
     }
-    
+    ///点与直线间的距离
     static func distanceBetween(point:simd_float3, line:Line) -> Float{
         let position = projectionOnLine(from: point, to: line)
         return distance(position, point)
     }
+    ///点与直线间距离的平方
     static func distanceSquaredBetween(point:simd_float3, line:Line) -> Float {
         let position = projectionOnLine(from: point, to: line)
         return distance_squared(position, point)
@@ -44,11 +46,12 @@ struct Line {
         
         return dot(vector, normalizedDis)
     }
-    
+    ///点是否在直线上（误差范围内）
     static func isPointOnLine(point:simd_float3, line:Line) -> Bool {
         let tarPoint = projectionOnLine(from: point, to: line)
         return tarPoint.isAlmostSamePoint(to: point)
     }
+    ///点是否在直线上（误差范围内）
     static func isPointOnLine2(point:simd_float3, line:Line) -> Bool {
         let vector = point - line.position
         return vector.isAlmostParallel(to: line.direction)
@@ -81,9 +84,11 @@ struct Line {
             print("点不在直线上")
         }
     }
+    ///直线与直线是否平行（误差范围内）
     static func isParallel(line1:Line, line2:Line) -> Bool {
         return line1.direction.isAlmostParallel(to: line2.direction)
     }
+    ///直线与直线是否重合（误差范围内）
     static func isSame(line1:Line, line2:Line) -> Bool {
         if !isParallel(line1: line1, line2: line2) {
             return false
@@ -95,6 +100,7 @@ struct Line {
             return vector.isAlmostParallel(to: line1.direction)
         }
     }
+    ///直线与直线间的距离
     static func distanceBetween(line1:Line, line2:Line) -> Float {
         let parallelResult = line2.direction.almostParallelRelative(to: line1.direction)
         let crossValue = parallelResult.crossValue
@@ -109,6 +115,7 @@ struct Line {
         
         return abs(dis)
     }
+    ///直线与直线最近点坐标
     static func footPoints(line1:Line, line2:Line) -> (simd_float3, simd_float3)? {
         let parallelResult = line2.direction.almostParallelRelative(to: line1.direction)
         let crossValue = parallelResult.crossValue
@@ -148,7 +155,7 @@ struct Line {
             
         }
     }
-    
+    ///SVD 拟合直线
     static func estimateLineSVD(from points:[simd_float3]) -> Line? {
         if points.count < 2 {
             return nil

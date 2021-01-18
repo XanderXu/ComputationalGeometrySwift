@@ -11,13 +11,13 @@ import simd
 struct Plane {
     var position:simd_float3
     var normal:simd_float3
-    
+    ///点与平面之间的距离
     static func distanceBetween(point:simd_float3, plane:Plane) -> Float {
         let vector = point - plane.position
         let dotValue = dot(vector, normalize(plane.normal))
         return dotValue
     }
-    
+    ///点在平面上的投影点坐标
     static func projectionOnPlane(from point:simd_float3, to plane:Plane) -> simd_float3 {
         let vector = point - plane.position
         let normalizedNormal = normalize(plane.normal)
@@ -26,11 +26,12 @@ struct Plane {
         let tarPoint = point - dotValue * normalizedNormal
         return tarPoint
     }
+    ///点是否在平面上（误差范围内）
     static func isPointOnPlane(point:simd_float3, plane:Plane) -> Bool {
         let vector = point - plane.position
         return vector.isAlmostPerpendicular(to: plane.normal)
     }
-    // 返回值为：投影点坐标，距离，是否在平面上
+    ///矩阵法，求点与平面位置关系。 返回值为：投影点坐标，距离，是否在平面上
     static func matrixRelationship(point:simd_float3, plane:Plane) -> (projectionPoint:simd_float3, distance:Float, isOnPlane:Bool) {
         let vector = point - plane.position
         
@@ -89,19 +90,23 @@ struct Plane {
             print("点不在平面上")
         }
     }
+    ///平面与平面是否平行（误差范围内）
     static func isParallel(plane1:Plane, plane2:Plane) -> Bool {
         return plane1.normal.isAlmostParallel(to: plane2.normal)
     }
+    ///平面与平面是否重合（误差范围内）
     static func isSame(plane1:Plane, plane2:Plane) -> Bool {
         if !isParallel(plane1:plane1, plane2:plane2) {
             return false
         }
         return isPointOnPlane(point: plane1.position, plane: plane2)
     }
+    ///直线与平面是否平行（误差范围内）
     static func isParallel(line:Line, plane:Plane) -> Bool {
         // 与法线垂直就是平行
         return line.direction.isAlmostPerpendicular(to: plane.normal)
     }
+    ///直线与平面交点坐标，平行时为 nil
     static func intersectionPoint(line:Line, plane:Plane) -> simd_float3? {
         let vector = line.position - plane.position
         let distance = dot(vector, normalize(plane.normal))
@@ -115,6 +120,7 @@ struct Plane {
         let x = distance / dotValue
         return line.position +  x * line.direction
     }
+    ///平面与平面相交形成的直线，平行时为 nil
     static func intersectionLine(plane1:Plane, plane2:Plane) -> Line? {
         let result = plane1.normal.almostParallelRelative(to: plane2.normal)
         let crossValue = result.crossValue
@@ -142,6 +148,7 @@ struct Plane {
         let line = intersectionLine(plane1: plane1, plane2: plane2)
         print(line as Any)
     }
+    ///根据点，拟合出最佳平面
     static func estimatePlane(from points:[simd_float3]) -> Plane? {
         if points.count < 3 {
             return nil
@@ -167,6 +174,7 @@ struct Plane {
         normal = normalize(normal)
         return Plane(position: position, normal: normal)
     }
+    ///SVD 拟合平面
     static func estimatePlaneSVD(from points:[simd_float3]) -> Plane? {
         if points.count < 3 {
             return nil

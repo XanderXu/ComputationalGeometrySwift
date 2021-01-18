@@ -10,15 +10,38 @@ import simd
 //定义多边形
 struct Polygon {
     let points:[simd_float3]
-    
-    static func isPolygon(points:[simd_float3]) -> Bool {
-        return points.count > 3
+    var count: Int {
+        get{
+            return points.count
+        }
     }
+    ///是否是多边形：多于 3 个点，且共面
+    static func isPolygon(points:[simd_float3]) -> Bool {
+        if points.count < 3 {
+            return false
+        }
+        let d1 = points[1] - points[0]
+        let d2 = points[2] - points[1]
+        let n = cross(d1, d2)
+        
+        var lastPoint = points[2]
+        
+        for i in 3..<points.count {
+            let point = points[i]
+            let vector = point - lastPoint
+            if abs(dot(vector, n)) > Float.leastNormalMagnitude   {
+                return false
+            }
+            lastPoint = point
+        }
+        return true
+    }
+    ///是否是凸多边形
     static func isConvex(polygon:Polygon) -> Bool {
         if !isPolygon(points: polygon.points) {
             return false
         }
-        var preview = polygon.points[polygon.points.count-2]
+        var preview = polygon.points[polygon.count-2]
         var middle = polygon.points.last!
         
         var vector1 = middle - preview
@@ -42,12 +65,12 @@ struct Polygon {
         }
         return true
     }
-    
+    ///几何中心：各顶点平均值
     static func geometryCenter(polygon:Polygon) -> simd_float3 {
         var center = simd_float3.zero
         
         for point in polygon.points {
-            center += point / Float(polygon.points.count)
+            center += point / Float(polygon.count)
         }
         return center
     }
