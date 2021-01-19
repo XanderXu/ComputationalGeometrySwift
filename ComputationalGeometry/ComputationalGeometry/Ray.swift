@@ -43,19 +43,42 @@ struct Ray {
         }
         
         let ray1ToRay2 = ray2.position - ray1.position
-        let crossValue = cross(ray1.direction, ray1ToRay2)
-        let faceFar = cross(crossValue, ray1ToRay2)
+        let crossValueRay1 = cross(ray1.direction, ray1ToRay2)
+        let faceFar = cross(crossValueRay1, ray1ToRay2)
         
         if dot(faceFar, ray2.direction) >= 0 {
-            // ray2 指向了 ray1 负方向
+            // ray2 指向了 ray1 原点的负方向
             let nearestPointOnRay2 = nearestPointOnRay(from: ray1.position, to: ray2)
             return (ray1.position, nearestPointOnRay2)
         }
         
         // 可按直线最近点处理
+        let parallelResult = ray2.direction.almostParallelRelative(to: ray1.direction)
+        let crossValue = parallelResult.crossValue
+        if parallelResult.isParallel {
+            // 平行
+            return nil
+        }
+        let distanceVector = normalize(crossValue)
         
+        let vector = ray1.position - ray2.position
+        let dis = dot(distanceVector, vector)
         
+        let point2OnPlane = ray2.position + dis * distanceVector
         
-        return nil
+        let projectionOnLine1 = nearestPointOnRay(from: point2OnPlane, to: ray1)
+        let result = projectionOnLine1.almostSamePoint(to: point2OnPlane)
+        if result.isSame {
+            // 垂足是 line2.position
+            return (point2OnPlane,ray2.position)
+        }
+        let projectionVector = projectionOnLine1 - point2OnPlane
+        let squared = result.distanceSquared
+        
+        let x1:Float = squared / dot(ray2.direction, projectionVector)
+        let footPoint2 = point2OnPlane + x1 * ray2.direction
+        let footPoint1 = footPoint2 - dis * distanceVector
+        
+        return (footPoint1, footPoint2)
     }
 }
