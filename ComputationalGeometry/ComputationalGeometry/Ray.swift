@@ -33,7 +33,7 @@ struct Ray {
         return distance_squared(position, point)
     }
     ///射线与射线最近点坐标
-    static func footPoints(ray1:Ray, ray2:Ray) -> (simd_float3, simd_float3)? {
+    static func nearestPoints(ray1:Ray, ray2:Ray) -> (simd_float3, simd_float3)? {
         let nearestPointOnRay1 = nearestPointOnRay(from: ray2.position, to: ray1)
         let nearestPointToRay2Vector = ray2.position - nearestPointOnRay1
         
