@@ -242,4 +242,12 @@ struct Triangle {
         let b3 = dot(cross(e3, d2), n) / an
         return simd_float3(b1, b2, b3)
     }
+    ///点到三角形的最近点坐标
+    static func nearestPoint(point:simd_float3, triangle:Triangle) -> simd_float3? {
+        return nil
+    }
+    ///射线与三角形相交，重心坐标
+    static func intersectionPointBarycenricCoordinate(ray:Ray, triangle:Triangle) -> simd_float3? {
+        return nil
+    }
 }
