@@ -29,6 +29,9 @@ struct Plane {
     ///点是否在平面上（误差范围内）
     static func isPointOnPlane(point:simd_float3, plane:Plane) -> Bool {
         let vector = point - plane.position
+        if vector.tooLittleToBeNormalized() {
+            return true
+        }
         return vector.isAlmostPerpendicular(to: plane.normal)
     }
     ///矩阵法，求点与平面位置关系。 返回值为：投影点坐标，距离，是否在平面上

@@ -10,5 +10,3 @@ import simd
 
 Line.pointToLineTest3()
 //Plane.pointToPlaneTest3()
-
-

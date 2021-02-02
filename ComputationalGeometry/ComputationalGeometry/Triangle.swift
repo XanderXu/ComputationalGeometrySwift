@@ -168,7 +168,7 @@ struct Triangle {
         let n = cross(d1, d2)
         
         let t = point - triangle.point1
-        if abs(dot(t, n)) > Float.leastNormalMagnitude {
+        if !n.isPerpendicular(to: t) {
             // 点与三角形不共面
             return nil
         }
@@ -229,12 +229,13 @@ struct Triangle {
         let d3 = point - triangle.point3
         
         let n = cross(e1, e2)
-        if abs(dot(d1, n)) > Float.leastNormalMagnitude {
+        if !n.isPerpendicular(to: d1) {
             // 点与三角形不共面
             return nil
         }
         let an = dot(cross(e1, e2), n)
         if an < Float.leastNormalMagnitude {
+            // 退化三角形:面积为零的三角形
             return nil
         }
         let b1 = dot(cross(e1, d3), n) / an
@@ -244,7 +245,49 @@ struct Triangle {
     }
     ///点到三角形的最近点坐标
     static func nearestPoint(point:simd_float3, triangle:Triangle) -> simd_float3? {
-        return nil
+        let e1 = triangle.point3 - triangle.point2
+        let e2 = triangle.point1 - triangle.point3
+        let e3 = triangle.point2 - triangle.point1
+        
+        var midWayPoint = point
+        var d1 = point - triangle.point1
+        var d2 = point - triangle.point2
+        var d3 = point - triangle.point3
+        
+        let n = cross(e1, e2)
+        if !n.isPerpendicular(to: d1) {
+            // 点与三角形不共面
+            let normalizedNormal = normalize(n)
+            
+            let dotValue = dot(d1, normalizedNormal)
+            midWayPoint = point - dotValue * normalizedNormal
+            // 点与三角形不共面，求投影点
+            d1 = midWayPoint - triangle.point1
+            d2 = midWayPoint - triangle.point2
+            d3 = midWayPoint - triangle.point3
+        }
+        // 计算点是否在三角形内部
+        //点1跨立
+        let inside = true
+        if inside {
+            return midWayPoint
+        } else {
+            let direction = e3
+            
+            let vector1 = point - triangle.point1
+            let normalizedDirection = normalize(direction)
+            let dotValue1 = dot(vector1, normalizedDirection)
+            if dotValue1 <= 0 {
+                return triangle.point1
+            }
+            let vector2 = point - triangle.point2
+            let dotValue2 = dot(vector2, -normalizedDirection)
+            if dotValue2 <= 0 {
+                return triangle.point2
+            }
+            let tarPoint = triangle.point1 + dotValue1 * normalizedDirection
+            return tarPoint
+        }
     }
     ///射线与三角形相交，重心坐标
     static func intersectionPointBarycenricCoordinate(ray:Ray, triangle:Triangle) -> simd_float3? {

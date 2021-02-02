@@ -8,7 +8,10 @@
 import Foundation
 import simd
 extension Float {
+    /// 0.0001
     static let toleranceThreshold:Float = 0.0001
+    ///1.0842022e-19
+    static let sqrtLeastNormalMagnitude:Float = sqrtf(Float.leastNormalMagnitude)
 }
 extension simd_float3 {
     ///向量夹角，角度制
@@ -17,7 +20,7 @@ extension simd_float3 {
     }
     ///向量夹角，弧度制
     func angleRadian(to vector:simd_float3) -> Float {
-        let num = sqrt(simd_length_squared(self) * simd_length_squared(vector))
+        let num = sqrt(length_squared(self) * length_squared(vector))
         if num < Float.leastNormalMagnitude {
             return 0
         }
@@ -32,7 +35,7 @@ extension simd_float3 {
     }
     ///是否是同一个点
     func isSamePoint(to point:simd_float3) -> Bool {
-        return almostSamePoint(to: point, tol: Float.leastNormalMagnitude).isSame
+        return distance_squared(self, point) < Float.leastNormalMagnitude
     }
     ///是否是同一个点（误差范围内）
     func isAlmostSamePoint(to point:simd_float3) -> Bool {
@@ -43,20 +46,21 @@ extension simd_float3 {
         let distanceSquared = distance_squared(self, point)
         return (isSame:distanceSquared < tol * tol, distanceSquared:distanceSquared)
     }
-    ///是否平行
+    ///是否平行。0 向量返回 true
     func isParallel(to vector:simd_float3) -> Bool {
-        return almostParallelRelative(to: vector, tol: Float.leastNormalMagnitude).isParallel
+        let crossValue = cross(self, vector)
+        return length_squared(crossValue) < Float.leastNormalMagnitude
     }
-    ///是否平行（误差范围内）
+    ///是否平行（误差范围内）。0 向量返回 true
     func isAlmostParallel(to vector:simd_float3) -> Bool {
         return almostParallelRelative(to: vector).isParallel
     }
-    ///是否平行（误差范围内），并返回叉乘结果
+    ///是否平行（误差范围内），并返回叉乘结果。数学定义：0 向量与任何向量平行，此处返回 true，请自行处理
     func almostParallelRelative(to vector:simd_float3, tol:Float = Float.toleranceThreshold) -> (isParallel:Bool, crossValue:simd_float3) {
         let lengthS1 = length_squared(self)
         let lengthS2 = length_squared(vector)
         if lengthS1 < Float.leastNormalMagnitude || lengthS2 < Float.leastNormalMagnitude {
-            return (isParallel:false, crossValue:.zero)
+            return (isParallel:true, crossValue:.zero)
         }
         let crossValue = cross(self, vector)
         // (sinx)^2 = (1-cos2x)/2
@@ -64,15 +68,16 @@ extension simd_float3 {
         
         return (isParallel:isParallel, crossValue:crossValue)
     }
-    ///是否垂直
+    ///是否垂直。0 向量为 false
     func isPerpendicular(to vector:simd_float3) -> Bool {
-        return almostPerpendicular(to: vector, tol: Float.leastNormalMagnitude).isPerpendicular
+        let notPerpendicular = abs(dot(self, vector)) > Float.leastNormalMagnitude
+        return !notPerpendicular
     }
-    ///是否垂直（误差范围内）
+    ///是否垂直（误差范围内）。0 向量为 false
     func isAlmostPerpendicular(to vector:simd_float3) -> Bool {
         return almostPerpendicular(to: vector).isPerpendicular
     }
-    ///是否垂直（误差范围内），并返回点乘结果
+    ///是否垂直（误差范围内），并返回点乘结果。数学定义：0 向量未明确定义，此处返回 false，请自行处理
     func almostPerpendicular(to vector:simd_float3, tol:Float = Float.toleranceThreshold) -> (isPerpendicular:Bool, dotValue:Float) {
         let lengthS1 = length_squared(self)
         let lengthS2 = length_squared(vector)
