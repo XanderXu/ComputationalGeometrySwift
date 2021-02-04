@@ -244,7 +244,7 @@ struct Triangle {
         return simd_float3(b1, b2, b3)
     }
     ///点到三角形的最近点坐标
-    static func nearestPoint(point:simd_float3, triangle:Triangle) -> simd_float3? {
+    static func nearestPoint(point:simd_float3, triangle:Triangle) -> simd_float3 {
         let e1 = triangle.point3 - triangle.point2
         let e2 = triangle.point1 - triangle.point3
         let e3 = triangle.point2 - triangle.point1
@@ -267,30 +267,96 @@ struct Triangle {
             d3 = midWayPoint - triangle.point3
         }
         // 计算点是否在三角形内部
-        //点1跨立
-        let inside = true
-        if inside {
+        let e1Cross = dot(cross(e1, d2), cross(e1, -e3))
+        let e2Cross = dot(cross(e2, d3), cross(e2, -e1))
+        let e3Cross = dot(cross(e3, d1), cross(e3, -e2))
+        
+        if e1Cross >= 0 && e2Cross >= 0 && e3Cross >= 0 {
+            // 全大于 0，点在三角形内部
             return midWayPoint
+        } else if e1Cross * e2Cross * e3Cross > 0 {
+            // 有两个小于0的，点在顶点处
+            if e1Cross > 0 {
+                return triangle.point1
+            } else if e2Cross > 0 {
+                return triangle.point2
+            } else {
+                return triangle.point3
+            }
         } else {
-            let direction = e3
+            // 有一个小于0，点在边处
+            var pLeft = simd_float3.zero
+            var pRight = simd_float3.zero
+            var direction = simd_float3.zero
+            var vector1 = midWayPoint - pLeft
+            var vector2 = midWayPoint - pRight
+            if e1Cross < 0 {
+                direction = e1
+                vector1 = d3
+                vector2 = d2
+                pLeft = triangle.point3
+                pRight = triangle.point2
+            } else if e2Cross < 0 {
+                direction = e2
+                vector1 = d1
+                vector2 = d3
+                pLeft = triangle.point1
+                pRight = triangle.point3
+            } else {
+                direction = e3
+                vector1 = d2
+                vector2 = d1
+                pLeft = triangle.point2
+                pRight = triangle.point1
+            }
             
-            let vector1 = point - triangle.point1
             let normalizedDirection = normalize(direction)
             let dotValue1 = dot(vector1, normalizedDirection)
             if dotValue1 <= 0 {
-                return triangle.point1
+                return pLeft
             }
-            let vector2 = point - triangle.point2
+            
             let dotValue2 = dot(vector2, -normalizedDirection)
             if dotValue2 <= 0 {
-                return triangle.point2
+                return pRight
             }
-            let tarPoint = triangle.point1 + dotValue1 * normalizedDirection
+            let tarPoint = pLeft + dotValue1 * normalizedDirection
             return tarPoint
         }
     }
-    ///射线与三角形相交，重心坐标
+    ///射线与三角形相交，交点
     static func intersectionPointBarycenricCoordinate(ray:Ray, triangle:Triangle) -> simd_float3? {
-        return nil
+        let e1 = triangle.point3 - triangle.point2
+        let e2 = triangle.point1 - triangle.point3
+        let e3 = triangle.point2 - triangle.point1
+        
+        let n = cross(e1, e2)
+        
+        let v = ray.position - triangle.point1
+        let rdn = dot(ray.direction, n)
+        if rdn < Float.leastNormalMagnitude {
+            // 射线与三角形所在平面，平行
+            return nil
+        }
+        let x = -dot(v, n) / rdn
+        if x < 0 {
+            return nil
+        } else {
+            let targetPoint = ray.position + x * ray.direction
+            let d1 = targetPoint - triangle.point1
+            let d2 = targetPoint - triangle.point2
+            let d3 = targetPoint - triangle.point3
+            // 计算点是否在三角形内部
+            let e1Cross = dot(cross(e1, d2), cross(e1, -e3))
+            let e2Cross = dot(cross(e2, d3), cross(e2, -e1))
+            let e3Cross = dot(cross(e3, d1), cross(e3, -e2))
+            
+            if e1Cross >= 0 && e2Cross >= 0 && e3Cross >= 0 {
+                // 全大于 0，点在三角形内部
+                return targetPoint
+            } else {
+                return nil
+            }
+        }
     }
 }
