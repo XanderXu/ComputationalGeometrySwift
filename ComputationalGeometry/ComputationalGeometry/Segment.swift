@@ -56,7 +56,7 @@ struct Segment {
             if px.isParallel {
                 zValue = simd_float3(0, 0, 1)
             } else {
-                zValue = xDirection
+                zValue = cross(xDirection,direction1)
             }
         }
         let xAxis = normalize(direction1)
