@@ -20,13 +20,13 @@ struct Polygon {
         if points.count < 3 {
             return false
         }
-        let d1 = points[1] - points[0]
-        let d2 = points[2] - points[1]
+        let d1 = points[0] - points[points.count - 1]
+        let d2 = points[1] - points[0]
         let n = cross(d1, d2)
         
-        var lastPoint = points[2]
+        var lastPoint = points[1]
         
-        for i in 3..<points.count {
+        for i in 2..<points.count {
             let point = points[i]
             let vector = point - lastPoint
             if abs(dot(vector, n)) > Float.leastNormalMagnitude   {
