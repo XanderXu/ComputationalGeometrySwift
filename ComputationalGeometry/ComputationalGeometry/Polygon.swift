@@ -65,13 +65,40 @@ struct Polygon {
         }
         return true
     }
-    ///几何中心：各顶点平均值
-    static func geometryCenter(polygon:Polygon) -> simd_float3 {
+    ///平均值中心：各顶点平均值
+    static func averageCenter(polygon:Polygon) -> simd_float3 {
         var center = simd_float3.zero
         
         for point in polygon.points {
-            center += point / Float(polygon.count)
+            center += point
         }
-        return center
+        return center / Float(polygon.count)
+    }
+    ///重心
+    static func barycenter(polygon:Polygon) -> simd_float3 {
+        var center = simd_float3.zero
+        if polygon.count <= 3 {
+            for point in polygon.points {
+                center += point
+            }
+            return center / Float(polygon.count)
+        }
+        
+        var area:Float = 0
+        var first = polygon.points[polygon.count - 1]
+        var second = polygon.points[0]
+        //归一化的法线
+        let n = normalize(cross(first, second))
+        for point in polygon.points {
+            second = point
+            //计算以 first、second 和 原点(0,0,0) 组成的三角形，重心及有向面积
+            let triangleCenter = (first + second)/2
+            let triangleArea = dot(cross(first, second), n)
+            center += triangleCenter * triangleArea
+            first = second
+            area += triangleArea
+        }
+        
+        return center / area / 3
     }
 }
