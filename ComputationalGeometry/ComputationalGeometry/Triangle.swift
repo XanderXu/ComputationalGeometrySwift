@@ -64,6 +64,8 @@ struct Triangle {
     }
     ///三角形的重心、几何中心
     static func barycenter(triangle:Triangle) -> simd_float3 {
+        // 两者等价
+//        return triangle.points * simd_float3(arrayLiteral: 1/3.0)
         return (triangle.point1 + triangle.point2 + triangle.point3)/3
     }
     ///三角形重心的重心坐标
