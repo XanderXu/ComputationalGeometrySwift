@@ -74,11 +74,9 @@ struct Triangle {
     }
     ///三角形内心、三边距离相等点
     static func incenter(triangle:Triangle) -> simd_float3 {
-        let edges = edgesLength(triangle: triangle)
-        let p = edges.sum()
-        
-        let r = triangle.points * edges
-        return r / p
+        let coor = incenterInBarycentricCoordinate(triangle: triangle)
+        let r = triangle.points * coor
+        return r
     }
     ///三角形内心的重心坐标
     static func incenterInBarycentricCoordinate(triangle:Triangle) -> simd_float3 {
@@ -95,37 +93,9 @@ struct Triangle {
     }
     ///三角形外心、三点距离相等点
     static func circumcenter(triangle:Triangle) -> simd_float3 {
-        let e1 = triangle.point3 - triangle.point2
-        let e2 = triangle.point1 - triangle.point3
-        let e3 = triangle.point2 - triangle.point1
-//        let d1 = -dot(e2,e3)
-//        let d2 = -dot(e3,e1)
-//        let d3 = -dot(e1,e2)
-        
-//        let c1 = d2*d3
-//        let c2 = d3*d1
-//        let c3 = d1*d2
-//        let c = c1 + c2 + c3
-//        let c = dot(e3,e1)*dot(e1,e2) + dot(e1,e2)*dot(e2,e3) + dot(e2,e3)*dot(e3,e1)
-//        let c = -0.5*(dot(e1,e2)*dot(e3,e3) + dot(e2,e3)*dot(e1,e1) + dot(e3,e1)*dot(e2,e2))
-        
-//        let r1 = Float(dot(e2,e3) * dot(-e1,e1)) * triangle.point1
-//        let r2 = (c3 + c1) * triangle.point2
-//        let r3 = (c1 + c2) * triangle.point3
-//
-//        return (r1 + r2 + r3) / (2 * c)
-//        let r1 = Float(dot(e2,e3) * dot(-e1,e1)) * triangle.point1
-//        let r2 = Float(dot(e3,e1) * dot(-e2,e2)) * triangle.point2
-//        let r3 = Float(dot(e1,e2) * dot(-e3,e3)) * triangle.point3
-        
-        let edges = edgesLength(triangle: triangle)
-        
-//        let s = dot(e2,e3) * edges.x * triangle.point1 + dot(e3,e1) * edges.y * triangle.point2 + dot(e1,e2) * edges.z * triangle.point3
-        let v = simd_float3(dot(e2,e3), dot(e3,e1), dot(e1,e2))
-        let t = v * edges
-        let s = triangle.points * t
-        let d = dot(v, edges)
-        return s / d
+        let coor = circumcenterInBarycentricCoordinate(triangle: triangle)
+        let s = triangle.points * coor
+        return s
     }
     ///三角形外心的重心坐标
     static func circumcenterInBarycentricCoordinate(triangle:Triangle) -> simd_float3 {
