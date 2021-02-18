@@ -305,15 +305,15 @@ struct Triangle {
             return nil
         } else {
             let targetPoint = ray.position + x * ray.direction
-            let d1 = targetPoint - triangle.point1
-            let d2 = targetPoint - triangle.point2
-            let d3 = targetPoint - triangle.point3
+            let d1 = triangle.point1 - targetPoint
+            let d2 = triangle.point2 - targetPoint
+            let d3 = triangle.point3 - targetPoint
             // 计算点是否在三角形内部
-            let e1Cross = dot(cross(e1, d2), cross(e1, -e3))
-            let e2Cross = dot(cross(e2, d3), cross(e2, -e1))
-            let e3Cross = dot(cross(e3, d1), cross(e3, -e2))
+            let p2Cross = dot(cross(d3, d1), cross(e1, -e3))
+            let p3Cross = dot(cross(d2, d1), cross(e2, -e1))
+            let p1Cross = dot(cross(d2, d3), cross(e3, -e2))
             
-            if e1Cross >= 0 && e2Cross >= 0 && e3Cross >= 0 {
+            if p1Cross >= 0 && p2Cross >= 0 && p3Cross >= 0 {
                 // 全大于 0，点在三角形内部
                 return targetPoint
             } else {
