@@ -33,6 +33,13 @@ struct Triangle {
         let l3 = distance(triangle.point2, triangle.point1)
         return simd_float3(l1, l2, l3)
     }
+    ///三条边的长度的平方。(x,y,z) 按顺序为 point1 的对边长，point2 的对边长，point3 的对边长
+    static func edgesLengthSquared(triangle:Triangle) ->simd_float3 {
+        let l1 = distance_squared(triangle.point2, triangle.point3)
+        let l2 = distance_squared(triangle.point1, triangle.point3)
+        let l3 = distance_squared(triangle.point2, triangle.point1)
+        return simd_float3(l1, l2, l3)
+    }
     ///三角形的周长
     static func perimeter(triangle:Triangle) -> Float {
         return edgesLength(triangle: triangle).sum()
@@ -103,34 +110,17 @@ struct Triangle {
         let e2 = triangle.point1 - triangle.point3
         let e3 = triangle.point2 - triangle.point1
         
-        let edges = edgesLength(triangle: triangle)
+        let edgesSquared = edgesLengthSquared(triangle: triangle)
         let v = simd_float3(dot(e2,e3), dot(e3,e1), dot(e1,e2))
-        let t = v * edges
-        let d = dot(v, edges)
+        let t = v * edgesSquared
+        let d = dot(v, edgesSquared)
         return t / d
     }
     ///三角形外切圆半径
     static func circumcenterRadius(triangle:Triangle) -> Float {
-        let e1 = triangle.point3 - triangle.point2
-        let e2 = triangle.point1 - triangle.point3
-        let e3 = triangle.point2 - triangle.point1
-//        let d1 = -dot(e2,e3)
-//        let d2 = -dot(e3,e1)
-//        let d3 = -dot(e1,e2)
-        
-//        let c1 = d2*d3
-//        let c2 = d3*d1
-//        let c3 = d1*d2
-//        let c = c1 + c2 + c3
-//        let c = dot(e3,e1)*dot(e1,e2) + dot(e1,e2)*dot(e2,e3) + dot(e2,e3)*dot(e3,e1)
-//        let c = -0.5*(dot(e1,e2)*dot(e3,e3) + dot(e2,e3)*dot(e1,e1) + dot(e3,e1)*dot(e2,e2))
-       
-//        let s = sqrtf(dot(e3,e3)*dot(e1,e1)*dot(e2,e2)/c)
-//        return s / 2
         let edges = edgesLength(triangle: triangle)
-        let v = simd_float3(dot(e2,e3), dot(e3,e1), dot(e1,e2))
-        let d = dot(v, edges)
-        let ss = edges.x * edges.y * edges.z / (sqrtf(-2 * d))
+        let A = area(edgesLength: edges)
+        let ss = edges.x * edges.y * edges.z / 4 / A
         return ss
     }
     ///点在三角形上的重心坐标
