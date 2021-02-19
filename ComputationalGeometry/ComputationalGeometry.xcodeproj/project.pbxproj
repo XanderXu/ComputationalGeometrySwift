@@ -15,6 +15,10 @@
 		6CDEC90E255C380700FBB946 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEC90D255C380700FBB946 /* main.swift */; };
 		6CDEC916255C3A9C00FBB946 /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEC915255C3A9C00FBB946 /* Plane.swift */; };
 		6CDEC919255C3C8100FBB946 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEC918255C3C8100FBB946 /* Line.swift */; };
+		6CDF0E4D25DFCC8200A34561 /* Polygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF0E4925DFCC8200A34561 /* Polygon.swift */; };
+		6CDF0E4E25DFCC8200A34561 /* Segment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF0E4A25DFCC8200A34561 /* Segment.swift */; };
+		6CDF0E4F25DFCC8200A34561 /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF0E4B25DFCC8200A34561 /* Ray.swift */; };
+		6CDF0E5025DFCC8200A34561 /* Triangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF0E4C25DFCC8200A34561 /* Triangle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,6 +43,10 @@
 		6CDEC90D255C380700FBB946 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		6CDEC915255C3A9C00FBB946 /* Plane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
 		6CDEC918255C3C8100FBB946 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		6CDF0E4925DFCC8200A34561 /* Polygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
+		6CDF0E4A25DFCC8200A34561 /* Segment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Segment.swift; sourceTree = "<group>"; };
+		6CDF0E4B25DFCC8200A34561 /* Ray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ray.swift; sourceTree = "<group>"; };
+		6CDF0E4C25DFCC8200A34561 /* Triangle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Triangle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +95,10 @@
 				6CDEC915255C3A9C00FBB946 /* Plane.swift */,
 				6CDEC918255C3C8100FBB946 /* Line.swift */,
 				6C5BB7ED257A378300C36817 /* Sphere.swift */,
+				6CDF0E4925DFCC8200A34561 /* Polygon.swift */,
+				6CDF0E4B25DFCC8200A34561 /* Ray.swift */,
+				6CDF0E4A25DFCC8200A34561 /* Segment.swift */,
+				6CDF0E4C25DFCC8200A34561 /* Triangle.swift */,
 			);
 			path = ComputationalGeometry;
 			sourceTree = "<group>";
@@ -149,12 +161,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CDEC919255C3C8100FBB946 /* Line.swift in Sources */,
+				6CDF0E4E25DFCC8200A34561 /* Segment.swift in Sources */,
 				6C4EE2F325789CD300A28B88 /* Matrix.swift in Sources */,
+				6CDF0E5025DFCC8200A34561 /* Triangle.swift in Sources */,
 				6C4EE2F425789CD300A28B88 /* MatrixMultiply.swift in Sources */,
 				6CDEC916255C3A9C00FBB946 /* Plane.swift in Sources */,
 				6CDEC90E255C380700FBB946 /* main.swift in Sources */,
+				6CDF0E4D25DFCC8200A34561 /* Polygon.swift in Sources */,
 				6C4EE2F525789CD300A28B88 /* MatrixSVD.swift in Sources */,
 				6C5BB7EE257A378300C36817 /* Sphere.swift in Sources */,
+				6CDF0E4F25DFCC8200A34561 /* Ray.swift in Sources */,
 				6CD02D4D2562CB9600E90615 /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
