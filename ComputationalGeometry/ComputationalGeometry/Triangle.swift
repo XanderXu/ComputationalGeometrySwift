@@ -229,61 +229,41 @@ struct Triangle {
             d3 = midWayPoint - triangle.point3
         }
         // 计算点是否在三角形内部
-        let e1Cross = dot(cross(e1, d2), cross(e1, -e3))
-        let e2Cross = dot(cross(e2, d3), cross(e2, -e1))
-        let e3Cross = dot(cross(e3, d1), cross(e3, -e2))
+        let p2Cross = dot(cross(d3, d1), cross(e1, -e3))
+        let p3Cross = dot(cross(d2, d1), cross(e2, -e1))
+        let p1Cross = dot(cross(d2, d3), cross(e3, -e2))
         
-        if e1Cross >= 0 && e2Cross >= 0 && e3Cross >= 0 {
+        if p1Cross >= 0 && p2Cross >= 0 && p3Cross >= 0 {
             // 全大于 0，点在三角形内部
             return midWayPoint
-        } else if e1Cross * e2Cross * e3Cross > 0 {
-            // 有两个小于0的，点在顶点处
-            if e1Cross > 0 {
-                return triangle.point1
-            } else if e2Cross > 0 {
-                return triangle.point2
+        } else if p1Cross * p2Cross * p3Cross > 0 {
+            // 有两个小于0的，点在顶点处。（如果是钝角，可能离边更近；锐角则离端点更近）
+            var segment1:Segment!
+            var segment2:Segment!
+            if p1Cross > 0 {
+                segment1 = Segment(point1: triangle.point1, point2: triangle.point3)
+                segment2 = Segment(point1: triangle.point2, point2: triangle.point1)
+            } else if p2Cross > 0 {
+                segment1 = Segment(point1: triangle.point2, point2: triangle.point3)
+                segment2 = Segment(point1: triangle.point2, point2: triangle.point1)
             } else {
-                return triangle.point3
+                segment1 = Segment(point1: triangle.point2, point2: triangle.point3)
+                segment2 = Segment(point1: triangle.point1, point2: triangle.point3)
             }
+            let t1 = Segment.nearestPointOnSegment(from: point, to: segment1)
+            let t2 = Segment.nearestPointOnSegment(from: point, to: segment2)
+            return distance_squared(t1, point) > distance_squared(t2, point) ? t2 : t1
         } else {
             // 有一个小于0，点在边处
-            var pLeft = simd_float3.zero
-            var pRight = simd_float3.zero
-            var direction = simd_float3.zero
-            var vector1 = midWayPoint - pLeft
-            var vector2 = midWayPoint - pRight
-            if e1Cross < 0 {
-                direction = e1
-                vector1 = d3
-                vector2 = d2
-                pLeft = triangle.point3
-                pRight = triangle.point2
-            } else if e2Cross < 0 {
-                direction = e2
-                vector1 = d1
-                vector2 = d3
-                pLeft = triangle.point1
-                pRight = triangle.point3
+            var segment:Segment!
+            if p1Cross < 0 {
+                segment = Segment(point1: triangle.point2, point2: triangle.point3)
+            } else if p2Cross < 0 {
+                segment = Segment(point1: triangle.point1, point2: triangle.point3)
             } else {
-                direction = e3
-                vector1 = d2
-                vector2 = d1
-                pLeft = triangle.point2
-                pRight = triangle.point1
+                segment = Segment(point1: triangle.point2, point2: triangle.point1)
             }
-            
-            let normalizedDirection = normalize(direction)
-            let dotValue1 = dot(vector1, normalizedDirection)
-            if dotValue1 <= 0 {
-                return pLeft
-            }
-            
-            let dotValue2 = dot(vector2, -normalizedDirection)
-            if dotValue2 <= 0 {
-                return pRight
-            }
-            let tarPoint = pLeft + dotValue1 * normalizedDirection
-            return tarPoint
+            return Segment.nearestPointOnSegment(from: point, to: segment)
         }
     }
     ///射线与三角形相交，交点
