@@ -19,6 +19,12 @@
 		6CDF0E4E25DFCC8200A34561 /* Segment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF0E4A25DFCC8200A34561 /* Segment.swift */; };
 		6CDF0E4F25DFCC8200A34561 /* Ray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF0E4B25DFCC8200A34561 /* Ray.swift */; };
 		6CDF0E5025DFCC8200A34561 /* Triangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF0E4C25DFCC8200A34561 /* Triangle.swift */; };
+		6CDF0E5925E5F75300A34561 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF0E5825E5F75300A34561 /* AppDelegate.swift */; };
+		6CDF0E5B25E5F75300A34561 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CDF0E5A25E5F75300A34561 /* art.scnassets */; };
+		6CDF0E5D25E5F75300A34561 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF0E5C25E5F75300A34561 /* ViewController.swift */; };
+		6CDF0E6025E5F75300A34561 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CDF0E5E25E5F75300A34561 /* Main.storyboard */; };
+		6CDF0E6225E5F75E00A34561 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CDF0E6125E5F75E00A34561 /* Assets.xcassets */; };
+		6CDF0E6525E5F75E00A34561 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CDF0E6325E5F75E00A34561 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,10 +53,25 @@
 		6CDF0E4A25DFCC8200A34561 /* Segment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Segment.swift; sourceTree = "<group>"; };
 		6CDF0E4B25DFCC8200A34561 /* Ray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ray.swift; sourceTree = "<group>"; };
 		6CDF0E4C25DFCC8200A34561 /* Triangle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Triangle.swift; sourceTree = "<group>"; };
+		6CDF0E5625E5F75300A34561 /* FrontOfAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrontOfAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CDF0E5825E5F75300A34561 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6CDF0E5A25E5F75300A34561 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
+		6CDF0E5C25E5F75300A34561 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6CDF0E5F25E5F75300A34561 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6CDF0E6125E5F75E00A34561 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6CDF0E6425E5F75E00A34561 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6CDF0E6625E5F75E00A34561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		6CDEC907255C380700FBB946 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CDF0E5325E5F75300A34561 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -74,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				6CDEC90C255C380700FBB946 /* ComputationalGeometry */,
+				6CDF0E5725E5F75300A34561 /* FrontOfAR */,
 				6CDEC90B255C380700FBB946 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -82,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				6CDEC90A255C380700FBB946 /* ComputationalGeometry */,
+				6CDF0E5625E5F75300A34561 /* FrontOfAR.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -101,6 +124,20 @@
 				6CDF0E4C25DFCC8200A34561 /* Triangle.swift */,
 			);
 			path = ComputationalGeometry;
+			sourceTree = "<group>";
+		};
+		6CDF0E5725E5F75300A34561 /* FrontOfAR */ = {
+			isa = PBXGroup;
+			children = (
+				6CDF0E5825E5F75300A34561 /* AppDelegate.swift */,
+				6CDF0E5A25E5F75300A34561 /* art.scnassets */,
+				6CDF0E5C25E5F75300A34561 /* ViewController.swift */,
+				6CDF0E5E25E5F75300A34561 /* Main.storyboard */,
+				6CDF0E6125E5F75E00A34561 /* Assets.xcassets */,
+				6CDF0E6325E5F75E00A34561 /* LaunchScreen.storyboard */,
+				6CDF0E6625E5F75E00A34561 /* Info.plist */,
+			);
+			path = FrontOfAR;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -123,17 +160,37 @@
 			productReference = 6CDEC90A255C380700FBB946 /* ComputationalGeometry */;
 			productType = "com.apple.product-type.tool";
 		};
+		6CDF0E5525E5F75300A34561 /* FrontOfAR */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6CDF0E6925E5F75E00A34561 /* Build configuration list for PBXNativeTarget "FrontOfAR" */;
+			buildPhases = (
+				6CDF0E5225E5F75300A34561 /* Sources */,
+				6CDF0E5325E5F75300A34561 /* Frameworks */,
+				6CDF0E5425E5F75300A34561 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FrontOfAR;
+			productName = FrontOfAR;
+			productReference = 6CDF0E5625E5F75300A34561 /* FrontOfAR.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		6CDEC902255C380700FBB946 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1210;
+				LastSwiftUpdateCheck = 1240;
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
 					6CDEC909255C380700FBB946 = {
 						CreatedOnToolsVersion = 12.1;
+					};
+					6CDF0E5525E5F75300A34561 = {
+						CreatedOnToolsVersion = 12.4;
 					};
 				};
 			};
@@ -151,9 +208,24 @@
 			projectRoot = "";
 			targets = (
 				6CDEC909255C380700FBB946 /* ComputationalGeometry */,
+				6CDF0E5525E5F75300A34561 /* FrontOfAR */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6CDF0E5425E5F75300A34561 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CDF0E5B25E5F75300A34561 /* art.scnassets in Resources */,
+				6CDF0E6525E5F75E00A34561 /* LaunchScreen.storyboard in Resources */,
+				6CDF0E6225E5F75E00A34561 /* Assets.xcassets in Resources */,
+				6CDF0E6025E5F75300A34561 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6CDEC906255C380700FBB946 /* Sources */ = {
@@ -175,7 +247,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6CDF0E5225E5F75300A34561 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CDF0E5D25E5F75300A34561 /* ViewController.swift in Sources */,
+				6CDF0E5925E5F75300A34561 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		6CDF0E5E25E5F75300A34561 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6CDF0E5F25E5F75300A34561 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6CDF0E6325E5F75E00A34561 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6CDF0E6425E5F75E00A34561 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		6CDEC90F255C380700FBB946 /* Debug */ = {
@@ -313,6 +413,49 @@
 			};
 			name = Release;
 		};
+		6CDF0E6725E5F75E00A34561 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = T59W99K34W;
+				INFOPLIST_FILE = FrontOfAR/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.computationalgeometry.FrontOfAR;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6CDF0E6825E5F75E00A34561 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = T59W99K34W;
+				INFOPLIST_FILE = FrontOfAR/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.computationalgeometry.FrontOfAR;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -330,6 +473,15 @@
 			buildConfigurations = (
 				6CDEC912255C380700FBB946 /* Debug */,
 				6CDEC913255C380700FBB946 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6CDF0E6925E5F75E00A34561 /* Build configuration list for PBXNativeTarget "FrontOfAR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6CDF0E6725E5F75E00A34561 /* Debug */,
+				6CDF0E6825E5F75E00A34561 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
