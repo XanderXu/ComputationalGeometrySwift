@@ -102,15 +102,19 @@ extension simd_float4x4 {
         
         let count = Float(matrices.count)
         averagePosition /= count
+        averageRotation = averageRotation.normalized
         if needScale {
             averageScale /= count
+            let s = simd_float4x4(diagonal: simd_float4(averageScale, averageScale, averageScale, 1))
+            let r = simd_float4x4(averageRotation)
+            let t = simd_float4x4(translation: averagePosition)
+            //复合变换约定顺序:缩放 —> 旋转 —> 平移
+            return t * r * s
+        } else {
+            let r = simd_float4x4(averageRotation)
+            let t = simd_float4x4(translation: averagePosition)
+            //复合变换约定顺序:缩放 —> 旋转 —> 平移
+            return t * r
         }
-        averageRotation = averageRotation.normalized
-        
-        let s = simd_float4x4(diagonal: simd_float4(averageScale, averageScale, averageScale, 1))
-        let r = simd_float4x4(averageRotation)
-        let t = simd_float4x4(translation: averagePosition)
-        //复合变换约定顺序:缩放 —> 旋转 —> 平移
-        return t * r * s
     }
 }
