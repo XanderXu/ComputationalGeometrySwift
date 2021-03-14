@@ -34,7 +34,8 @@ vertex ColorInOut vertexShader(VertexInput in [[stage_in]], constant MyNodeData&
     ColorInOut out;
     // 将模型空间的顶点补全为 float4 类型，进行 MVP 变换
     out.position = scn_node.modelViewProjectionTransform * float4(in.position, 1.0);
-    out.color = float4(in.position*0.5f + 0.5, 0.8);
+    // 加 0.5，将坐标从[-0.5～0.5]，转换到[0～1] 以代表颜色
+    out.color = float4(in.position + 0.5, 1);
     return out;
 }
 

@@ -19,10 +19,11 @@ class GameViewController: NSViewController {
         // create and add a camera to the scene
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
+        cameraNode.camera?.fieldOfView = 45
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 1, y: 0, z: 3)
+        cameraNode.position = SCNVector3(x: 1, y: 0, z: 4)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
@@ -54,18 +55,21 @@ class GameViewController: NSViewController {
         // configure the view
         scnView.backgroundColor = NSColor.black
         scnView.debugOptions = [.showBoundingBoxes]
+        
+        
         let box1 = scene.rootNode.childNode(withName: "box", recursively: true)!
         let box2 = scene.rootNode.childNode(withName: "box2", recursively: true)!
         simpleProgram(node: box1)
         simpleProgram(node: box2)
         
+        //YUV 到 RGB
         let ycbcrToRGBTransform = float4x4(
             simd_float4(+1.0000, +1.0000, +1.0000, +0.0000),
             simd_float4(+0.0000, -0.3441, +1.7720, +0.0000),
             simd_float4(+1.4020, -0.7141, +0.0000, +0.0000),
             simd_float4(-0.7010, +0.5291, -0.8860, +1.0000)
         );
-        let p = ycbcrToRGBTransform.inverse
+        let p = ycbcrToRGBTransform.inverse//RGB 到 YUV
         box1.simdTransform = p
         
 //        box2.simdTransform = box2.simdTransform * ycbcrToRGBTransform.inverse * box2.simdTransform.inverse
