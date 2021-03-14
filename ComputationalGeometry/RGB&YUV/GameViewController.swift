@@ -74,6 +74,7 @@ class GameViewController: NSViewController {
         
 //        box2.simdTransform = box2.simdTransform * ycbcrToRGBTransform.inverse * box2.simdTransform.inverse
     }
+    //用 shader 进行可视化显示
     func simpleProgram(node:SCNNode) {
         let program = SCNProgram()
         program.vertexFunctionName = "vertexShader"
