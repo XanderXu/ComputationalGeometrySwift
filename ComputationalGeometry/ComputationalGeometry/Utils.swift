@@ -115,7 +115,7 @@ extension Collection where Self.Element == simd_float3 {
         let ss = Matrix(source: source, rowCount: self.count, columnCount:3)
         let svdResult = Matrix.svd(a: ss)
         let vt = svdResult.vt
-        let sigma = svdResult.sigma
+//        let sigma = svdResult.sigma
         
         var offset = 0
         let direction = simd_float3(vt[offset], vt[offset+vt.columnCount], vt[offset+2*vt.columnCount])
@@ -125,18 +125,37 @@ extension Collection where Self.Element == simd_float3 {
         let normal = simd_float3(vt[offset], vt[offset+vt.columnCount], vt[offset+2*vt.columnCount])
         let plane = Plane(position: position, normal: normal)
         
-        let radius = sigma[0]
-        let sphere = Sphere(position: position, radius: radius)
         
         offset = 1
-        let xAxis = direction * sigma[0]
-        let yAxis = simd_float3(vt[offset], vt[offset+vt.columnCount], vt[offset+2*vt.columnCount]) * sigma[1]
-        let zAxis = normal * sigma[2]
+        let xAxis = direction// * sigma[0]
+        let yAxis = simd_float3(vt[offset], vt[offset+vt.columnCount], vt[offset+2*vt.columnCount])// * sigma[1]
+        let zAxis = normal// * sigma[2]
         let matrix = simd_float4x4([simd_float4(xAxis, 0),
                                     simd_float4(yAxis, 0),
                                     simd_float4(zAxis, 0),
                                     simd_float4(position, 1)])
-        return (line:line, plane:plane, sphere:sphere, boundingBox:matrix)
+        var maxEdge = simd_float4(-Float.infinity, -Float.infinity, -Float.infinity, 1)
+        var minEdge = simd_float4(Float.infinity, Float.infinity, Float.infinity, 1)
+        for point in self {
+            let p = matrix.inverse * simd_float4(point, 1)
+            maxEdge = simd.max(maxEdge, p)
+            minEdge = simd.min(minEdge, p)
+        }
+        
+        let centerPoint = matrix * (maxEdge + minEdge)/2
+        let lengthBox = maxEdge - minEdge
+        
+        let centerP = simd_float3(centerPoint.x, centerPoint.y, centerPoint.z)
+        
+        let radius = lengthBox.x
+        let sphere = Sphere(position: centerP, radius: radius)
+        
+        let boundingBox = simd_float4x4([simd_float4(xAxis*lengthBox.x, 0),
+                                         simd_float4(yAxis*lengthBox.y, 0),
+                                         simd_float4(zAxis*lengthBox.z, 0),
+                                         simd_float4(centerP, 1)])
+        
+        return (line:line, plane:plane, sphere:sphere, boundingBox:boundingBox)
     }
 }
 
