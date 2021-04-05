@@ -127,9 +127,9 @@ extension Collection where Self.Element == simd_float3 {
         
         
         offset = 1
-        let xAxis = direction// * sigma[0]
-        let yAxis = simd_float3(vt[offset], vt[offset+vt.columnCount], vt[offset+2*vt.columnCount])// * sigma[1]
-        let zAxis = normal// * sigma[2]
+        let xAxis = direction
+        let yAxis = simd_float3(vt[offset], vt[offset+vt.columnCount], vt[offset+2*vt.columnCount])
+        let zAxis = normal
         let matrix = simd_float4x4([simd_float4(xAxis, 0),
                                     simd_float4(yAxis, 0),
                                     simd_float4(zAxis, 0),
@@ -147,7 +147,7 @@ extension Collection where Self.Element == simd_float3 {
         
         let centerP = simd_float3(centerPoint.x, centerPoint.y, centerPoint.z)
         
-        let radius = lengthBox.x
+        let radius = simd_length(simd_float3(lengthBox.x, lengthBox.y, lengthBox.z)) / 2
         let sphere = Sphere(position: centerP, radius: radius)
         
         let boundingBox = simd_float4x4([simd_float4(xAxis*lengthBox.x, 0),
