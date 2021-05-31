@@ -38,7 +38,7 @@ extension simd_float3x3 {
 extension simd_float4x4 {
     static var identity: simd_float4x4 {
         get {
-            return simd_float4x4(diagonal:simd_float4(repeating: 1))
+            return matrix_identity_float4x4
         }
     }
     var matrix3x3: simd_float3x3 {
