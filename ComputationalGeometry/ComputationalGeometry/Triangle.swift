@@ -116,7 +116,7 @@ struct Triangle {
         let d = dot(v, edgesSquared)
         return t / d
     }
-    ///三角形外切圆半径
+    ///三角形外接圆（球）半径
     static func circumcenterRadius(triangle:Triangle) -> Float {
         let edges = edgesLength(triangle: triangle)
         let A = area(edgesLength: edges)

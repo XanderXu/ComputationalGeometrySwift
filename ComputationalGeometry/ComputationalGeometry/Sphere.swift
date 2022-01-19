@@ -130,4 +130,64 @@ struct Sphere {
         let radius = sqrtf(sphere1.radius * sphere1.radius - length_squared(vector))
         return (position, radius)
     }
+    ///多个点的最小包围球，Welzl算法
+    ///http://www.sunshine2k.de/coding/java/Welzl/Welzl.html
+    static func minSphere(pt:[simd_float3], np:Int, bnd:[simd_float3] = []) -> Sphere {
+        if np == 1 {
+            if bnd.isEmpty {
+                return sphere1pt(pt[0])
+            } else if bnd.count == 1 {
+                return sphere2pts(p1: pt[0], p2: bnd[0])
+            }
+        } else if np == 0 {
+            if bnd.isEmpty {
+                return sphere1pt(.zero)
+            } else if bnd.count == 1 {
+                return sphere1pt(bnd[0])
+            } else if bnd.count == 2 {
+                return sphere2pts(p1: bnd[0], p2: bnd[1])
+            }
+        }
+        if bnd.count == 3 {
+            return sphere3pts(p1: bnd[0], p2: bnd[1], p3: bnd[2])
+        }
+        let D = minSphere(pt: pt, np: np-1, bnd: bnd)
+        if distanceBetween(point: pt[np-1], sphere: D) <= 0  {
+            return D
+        }
+        var newbnd = bnd
+        newbnd.append(pt[np-1])
+        return minSphere(pt: pt, np: np-1, bnd: newbnd)
+    }
+    
+    private static func sphere1pt(_ p:simd_float3) ->Sphere {
+        return Sphere(position: p, radius: 0)
+    }
+    private static func sphere2pts(p1:simd_float3, p2:simd_float3) ->Sphere {
+        return Sphere(position: (p1+p2)/2, radius: simd_distance(p1, p2))
+    }
+    ///三个点的外接球
+    static func sphere3pts(p1:simd_float3, p2:simd_float3,p3:simd_float3) ->Sphere {
+        //钝角，共线：长边为直径
+        let vector1 = p2 - p1
+        let vector2 = p3 - p2
+        let vector3 = p1 - p3
+        
+        let dot2 = dot(vector1, vector2)
+        let dot3 = dot(vector2, vector3)
+        let dot1 = dot(vector3, vector1)
+        
+        if dot1 > 0 {
+            return Sphere(position: (p2+p3)/2, radius: simd_distance(p2, p3))
+        } else if dot2 > 0 {
+            return Sphere(position: (p3+p1)/2, radius: simd_distance(p3, p1))
+        } else if dot3 > 0 {
+            return Sphere(position: (p2+p1)/2, radius: simd_distance(p2, p1))
+        }
+        //锐角：外接圆
+        let t = Triangle(points: float3x3(p1, p2, p3))
+        let r = Triangle.circumcenterRadius(triangle: t)
+        let c = Triangle.circumcenter(triangle: t)
+        return Sphere(position: c, radius: r)
+    }
 }

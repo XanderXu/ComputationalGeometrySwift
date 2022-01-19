@@ -8,6 +8,7 @@
 import Foundation
 import simd
 extension simd_float3x3 {
+    ///矩阵正交化
     func orthogonalization(iterationTimes:Int = 10) -> simd_float3x3 {
         var r1 = columns.0
         var r2 = columns.1
@@ -70,6 +71,7 @@ extension simd_float4x4 {
         columns.2 = simd_float4(0, 0, 1, 0)
         columns.3 = translation / translation.w
     }
+    ///正交化
     func orthogonalization(iterationTimes:Int = 10) -> simd_float4x4 {
         let r1 = simd_float3(self.columns.0.x, self.columns.0.y, self.columns.0.z)
         let r2 = simd_float3(self.columns.1.x, self.columns.1.y, self.columns.1.z)
@@ -85,7 +87,7 @@ extension simd_float4x4 {
         ])
         return result
     }
-    
+    ///多个矩阵的平均矩阵
     static func averageMatrix(_ matrices:[simd_float4x4], needScale:Bool = false) -> simd_float4x4 {
         var averagePosition = simd_float4.zero
         var averageScale:Float = 0
