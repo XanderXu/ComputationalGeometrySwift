@@ -132,7 +132,10 @@ struct Sphere {
     }
     ///多个点的最小包围球，Welzl算法
     ///http://www.sunshine2k.de/coding/java/Welzl/Welzl.html
-    static func minSphere(pt:[simd_float3], np:Int, bnd:[simd_float3] = []) -> Sphere {
+    static func minSphere(points:[simd_float3]) -> Sphere {
+        return minSphere(pt: points, np: points.count)
+    }
+    private static func minSphere(pt:[simd_float3], np:Int, bnd:[simd_float3] = []) -> Sphere {
         if np == 1 {
             if bnd.isEmpty {
                 return sphere1pt(pt[0])
@@ -166,7 +169,7 @@ struct Sphere {
     private static func sphere2pts(p1:simd_float3, p2:simd_float3) ->Sphere {
         return Sphere(position: (p1+p2)/2, radius: simd_distance(p1, p2))
     }
-    ///三个点的外接球
+    ///三个点的最小包围球
     static func sphere3pts(p1:simd_float3, p2:simd_float3,p3:simd_float3) ->Sphere {
         //钝角，共线：长边为直径
         let vector1 = p2 - p1
