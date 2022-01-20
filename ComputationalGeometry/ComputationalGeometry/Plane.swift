@@ -76,23 +76,7 @@ struct Plane {
         
         return (projectionPoint:projectP2, distance:localDistance, isOnPlane:localDistance < Float.toleranceThreshold)
     }
-    static func pointToPlaneTest() {
-        let plane = Plane(position: simd_float3(1, 3, 1), normal: simd_float3(0, 0, 3))
-        let pointC = simd_float3(50000, 50, 2)
-        
-        let distance = distanceBetween(point: pointC, plane:plane)
-        let tarPoint = projectionOnPlane(from: pointC, to: plane)
-        
-        print("距离\(distance), 投影点\(tarPoint)")
-        print(matrixRelationship(point: pointC, plane: plane))
-        
-        print(isPointOnPlane(point: pointC, plane:plane))
-        if (abs(distance) < Float.leastNormalMagnitude) {
-            print("点在平面上")
-        } else {
-            print("点不在平面上")
-        }
-    }
+    
     ///平面与平面是否平行（误差范围内）
     static func isParallel(plane1:Plane, plane2:Plane) -> Bool {
         return plane1.normal.isAlmostParallel(to: plane2.normal)
@@ -144,13 +128,7 @@ struct Plane {
         
         return Line(position: position, direction: n0)
     }
-    static func pointToPlaneTest2() {
-        let plane1 = Plane(position: simd_float3(1, 2, 1), normal: simd_float3(2, 1, 3))
-        let plane2 = Plane(position: simd_float3(1, 3, 1), normal: simd_float3(3, 3, 1))
-        
-        let line = intersectionLine(plane1: plane1, plane2: plane2)
-        print(line as Any)
-    }
+    
     ///根据点，拟合出最佳平面
     static func estimatePlane(from points:[simd_float3]) -> Plane? {
         if points.count < 3 {
@@ -200,6 +178,32 @@ struct Plane {
         
         let normal = simd_float3(vt[offset], vt[offset+vt.columnCount], vt[offset+2*vt.columnCount])
         return Plane(position: position, normal: normal)
+    }
+}
+extension Plane {
+    static func pointToPlaneTest() {
+        let plane = Plane(position: simd_float3(1, 3, 1), normal: simd_float3(0, 0, 3))
+        let pointC = simd_float3(50000, 50, 2)
+        
+        let distance = distanceBetween(point: pointC, plane:plane)
+        let tarPoint = projectionOnPlane(from: pointC, to: plane)
+        
+        print("距离\(distance), 投影点\(tarPoint)")
+        print(matrixRelationship(point: pointC, plane: plane))
+        
+        print(isPointOnPlane(point: pointC, plane:plane))
+        if (abs(distance) < Float.leastNormalMagnitude) {
+            print("点在平面上")
+        } else {
+            print("点不在平面上")
+        }
+    }
+    static func pointToPlaneTest2() {
+        let plane1 = Plane(position: simd_float3(1, 2, 1), normal: simd_float3(2, 1, 3))
+        let plane2 = Plane(position: simd_float3(1, 3, 1), normal: simd_float3(3, 3, 1))
+        
+        let line = intersectionLine(plane1: plane1, plane2: plane2)
+        print(line as Any)
     }
     static func pointToPlaneTest3() {
 //        let points = [

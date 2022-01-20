@@ -68,22 +68,6 @@ struct Line {
         return abs(dotValue - 1) < Float.leastNonzeroMagnitude
     }
     
-    static func pointToLineTest() {
-        let line = Line(position: simd_float3(0, 0, 0), direction: simd_float3(0, 0, 1))
-        let pointC = simd_float3(1, 5, 2000019)
-        
-        let distance = distanceBetween2(point: pointC, line: line)
-        let distanceSquared = distanceSquaredBetween(point: pointC, line: line)
-        let tarPoint = projectionOnLine(from: pointC, to: line)
-        
-        print("距离\(distance),距离平方\(distanceSquared), 投影点\(tarPoint)")
-        print(isPointOnLine(point: pointC, line: line),isPointOnLine2(point: pointC, line: line),isPointOnLine3(point: pointC, line: line))
-        if (distanceSquared < Float.toleranceThreshold) {
-            print("点在直线上")
-        } else {
-            print("点不在直线上")
-        }
-    }
     ///直线与直线是否平行（误差范围内）
     static func isParallel(line1:Line, line2:Line) -> Bool {
         return line1.direction.isAlmostParallel(to: line2.direction)
@@ -145,16 +129,7 @@ struct Line {
         
         return (footPoint1, footPoint2)
     }
-    static func pointToLineTest2() {
-        let line1 = Line(position: simd_float3(0, 0, 0), direction: simd_float3(0, 0, 1))
-        let line2 = Line(position: simd_float3(50000, 50000, 50000), direction: simd_float3(1, 1, 1))
-        let disBetween = distanceBetween(line1: line1, line2: line2)
-        print("distanceBetween\(disBetween)")
-        if let (foot1, foot2) = footPoints(line1: line1, line2: line2) {
-            print(foot1, foot2)
-            
-        }
-    }
+    
     ///SVD 拟合直线
     static func estimateLineSVD(from points:[simd_float3]) -> Line? {
         if points.count < 2 {
@@ -178,6 +153,35 @@ struct Line {
         
         let direction = simd_float3(vt[offset], vt[offset+vt.columnCount], vt[offset+2*vt.columnCount])
         return Line(position: position, direction: direction)
+    }
+    
+}
+extension Line {
+    static func pointToLineTest() {
+        let line = Line(position: simd_float3(0, 0, 0), direction: simd_float3(0, 0, 1))
+        let pointC = simd_float3(1, 5, 2000019)
+        
+        let distance = distanceBetween2(point: pointC, line: line)
+        let distanceSquared = distanceSquaredBetween(point: pointC, line: line)
+        let tarPoint = projectionOnLine(from: pointC, to: line)
+        
+        print("距离\(distance),距离平方\(distanceSquared), 投影点\(tarPoint)")
+        print(isPointOnLine(point: pointC, line: line),isPointOnLine2(point: pointC, line: line),isPointOnLine3(point: pointC, line: line))
+        if (distanceSquared < Float.toleranceThreshold) {
+            print("点在直线上")
+        } else {
+            print("点不在直线上")
+        }
+    }
+    static func pointToLineTest2() {
+        let line1 = Line(position: simd_float3(0, 0, 0), direction: simd_float3(0, 0, 1))
+        let line2 = Line(position: simd_float3(50000, 50000, 50000), direction: simd_float3(1, 1, 1))
+        let disBetween = distanceBetween(line1: line1, line2: line2)
+        print("distanceBetween\(disBetween)")
+        if let (foot1, foot2) = footPoints(line1: line1, line2: line2) {
+            print(foot1, foot2)
+            
+        }
     }
     static func pointToLineTest3() {
 //        let points = [

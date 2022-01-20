@@ -167,7 +167,7 @@ struct Sphere {
         return Sphere(position: p, radius: 0)
     }
     private static func sphere2pts(p1:simd_float3, p2:simd_float3) ->Sphere {
-        return Sphere(position: (p1+p2)/2, radius: simd_distance(p1, p2))
+        return Sphere(position: (p1+p2)/2, radius: simd_distance(p1, p2)/2)
     }
     ///三个点的最小包围球
     static func sphere3pts(p1:simd_float3, p2:simd_float3,p3:simd_float3) ->Sphere {
@@ -181,11 +181,11 @@ struct Sphere {
         let dot1 = dot(vector3, vector1)
         
         if dot1 > 0 {
-            return Sphere(position: (p2+p3)/2, radius: simd_distance(p2, p3))
+            return Sphere(position: (p2+p3)/2, radius: simd_distance(p2, p3)/2)
         } else if dot2 > 0 {
-            return Sphere(position: (p3+p1)/2, radius: simd_distance(p3, p1))
+            return Sphere(position: (p3+p1)/2, radius: simd_distance(p3, p1)/2)
         } else if dot3 > 0 {
-            return Sphere(position: (p2+p1)/2, radius: simd_distance(p2, p1))
+            return Sphere(position: (p2+p1)/2, radius: simd_distance(p2, p1)/2)
         }
         //锐角：外接圆
         let t = Triangle(points: float3x3(p1, p2, p3))
