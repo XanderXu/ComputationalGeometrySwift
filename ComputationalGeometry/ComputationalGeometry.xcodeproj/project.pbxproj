@@ -45,6 +45,19 @@
 		6CDF0E8E25FDF23000A34561 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CDF0E8D25FDF23000A34561 /* Assets.xcassets */; };
 		6CDF0E9125FDF23000A34561 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CDF0E8F25FDF23000A34561 /* Main.storyboard */; };
 		6CDF0EA925FDFB0600A34561 /* Simple.metal in Sources */ = {isa = PBXBuildFile; fileRef = 6CDF0EA825FDFB0600A34561 /* Simple.metal */; };
+		6CF73A0E27BE32100050BC7C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A0D27BE32100050BC7C /* AppDelegate.swift */; };
+		6CF73A1027BE32100050BC7C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A0F27BE32100050BC7C /* ViewController.swift */; };
+		6CF73A1527BE32100050BC7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CF73A1327BE32100050BC7C /* Main.storyboard */; };
+		6CF73A1727BE32130050BC7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CF73A1627BE32130050BC7C /* Assets.xcassets */; };
+		6CF73A1A27BE32130050BC7C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CF73A1827BE32130050BC7C /* LaunchScreen.storyboard */; };
+		6CF73A2827BE324F0050BC7C /* MeshResource+Cylinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A2027BE324F0050BC7C /* MeshResource+Cylinder.swift */; };
+		6CF73A2927BE324F0050BC7C /* SIMD3+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A2127BE324F0050BC7C /* SIMD3+Extension.swift */; };
+		6CF73A2A27BE324F0050BC7C /* MeshResource+Torus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A2227BE324F0050BC7C /* MeshResource+Torus.swift */; };
+		6CF73A2B27BE324F0050BC7C /* MeshResource+Cone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A2327BE324F0050BC7C /* MeshResource+Cone.swift */; };
+		6CF73A2C27BE324F0050BC7C /* MeshResource+Planes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A2427BE324F0050BC7C /* MeshResource+Planes.swift */; };
+		6CF73A2D27BE324F0050BC7C /* MeshResource+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A2527BE324F0050BC7C /* MeshResource+Path.swift */; };
+		6CF73A2E27BE324F0050BC7C /* RealityGeometries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A2627BE324F0050BC7C /* RealityGeometries.swift */; };
+		6CF73A2F27BE324F0050BC7C /* CompleteVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A2727BE324F0050BC7C /* CompleteVertex.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -112,6 +125,20 @@
 		6CDF0E9225FDF23000A34561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6CDF0E9325FDF23000A34561 /* RGB_YUV.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RGB_YUV.entitlements; sourceTree = "<group>"; };
 		6CDF0EA825FDFB0600A34561 /* Simple.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Simple.metal; sourceTree = "<group>"; };
+		6CF73A0B27BE32100050BC7C /* RealityGeometry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealityGeometry.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CF73A0D27BE32100050BC7C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6CF73A0F27BE32100050BC7C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6CF73A1427BE32100050BC7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6CF73A1627BE32130050BC7C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6CF73A1927BE32130050BC7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6CF73A2027BE324F0050BC7C /* MeshResource+Cylinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Cylinder.swift"; sourceTree = "<group>"; };
+		6CF73A2127BE324F0050BC7C /* SIMD3+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SIMD3+Extension.swift"; sourceTree = "<group>"; };
+		6CF73A2227BE324F0050BC7C /* MeshResource+Torus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Torus.swift"; sourceTree = "<group>"; };
+		6CF73A2327BE324F0050BC7C /* MeshResource+Cone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Cone.swift"; sourceTree = "<group>"; };
+		6CF73A2427BE324F0050BC7C /* MeshResource+Planes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Planes.swift"; sourceTree = "<group>"; };
+		6CF73A2527BE324F0050BC7C /* MeshResource+Path.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Path.swift"; sourceTree = "<group>"; };
+		6CF73A2627BE324F0050BC7C /* RealityGeometries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealityGeometries.swift; sourceTree = "<group>"; };
+		6CF73A2727BE324F0050BC7C /* CompleteVertex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteVertex.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +171,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6CDF0E8225FDF22300A34561 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CF73A0827BE32100050BC7C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -194,6 +228,7 @@
 				6CDF0E8625FDF22300A34561 /* RGB&YUV */,
 				6C93A41B2610A80900AFB4EC /* RelativeMovement */,
 				6C3A8F412621747100EC55EA /* SimultaneousEquations */,
+				6CF73A0C27BE32100050BC7C /* RealityGeometry */,
 				6CDEC90B255C380700FBB946 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -206,6 +241,7 @@
 				6CDF0E8525FDF22300A34561 /* RGB&YUV.app */,
 				6C93A41A2610A80900AFB4EC /* RelativeMovement.app */,
 				6C3A8F402621747100EC55EA /* SimultaneousEquations */,
+				6CF73A0B27BE32100050BC7C /* RealityGeometry.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -256,6 +292,34 @@
 				6CDF0E9325FDF23000A34561 /* RGB_YUV.entitlements */,
 			);
 			path = "RGB&YUV";
+			sourceTree = "<group>";
+		};
+		6CF73A0C27BE32100050BC7C /* RealityGeometry */ = {
+			isa = PBXGroup;
+			children = (
+				6CF73A0D27BE32100050BC7C /* AppDelegate.swift */,
+				6CF73A1F27BE324F0050BC7C /* RealityGeometries */,
+				6CF73A0F27BE32100050BC7C /* ViewController.swift */,
+				6CF73A1327BE32100050BC7C /* Main.storyboard */,
+				6CF73A1627BE32130050BC7C /* Assets.xcassets */,
+				6CF73A1827BE32130050BC7C /* LaunchScreen.storyboard */,
+			);
+			path = RealityGeometry;
+			sourceTree = "<group>";
+		};
+		6CF73A1F27BE324F0050BC7C /* RealityGeometries */ = {
+			isa = PBXGroup;
+			children = (
+				6CF73A2027BE324F0050BC7C /* MeshResource+Cylinder.swift */,
+				6CF73A2127BE324F0050BC7C /* SIMD3+Extension.swift */,
+				6CF73A2227BE324F0050BC7C /* MeshResource+Torus.swift */,
+				6CF73A2327BE324F0050BC7C /* MeshResource+Cone.swift */,
+				6CF73A2427BE324F0050BC7C /* MeshResource+Planes.swift */,
+				6CF73A2527BE324F0050BC7C /* MeshResource+Path.swift */,
+				6CF73A2627BE324F0050BC7C /* RealityGeometries.swift */,
+				6CF73A2727BE324F0050BC7C /* CompleteVertex.swift */,
+			);
+			path = RealityGeometries;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -346,13 +410,30 @@
 			productReference = 6CDF0E8525FDF22300A34561 /* RGB&YUV.app */;
 			productType = "com.apple.product-type.application";
 		};
+		6CF73A0A27BE32100050BC7C /* RealityGeometry */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6CF73A1D27BE32130050BC7C /* Build configuration list for PBXNativeTarget "RealityGeometry" */;
+			buildPhases = (
+				6CF73A0727BE32100050BC7C /* Sources */,
+				6CF73A0827BE32100050BC7C /* Frameworks */,
+				6CF73A0927BE32100050BC7C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RealityGeometry;
+			productName = RealityGeometry;
+			productReference = 6CF73A0B27BE32100050BC7C /* RealityGeometry.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		6CDEC902255C380700FBB946 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1240;
+				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
 					6C3A8F3F2621747100EC55EA = {
@@ -369,6 +450,9 @@
 					};
 					6CDF0E8425FDF22300A34561 = {
 						CreatedOnToolsVersion = 12.4;
+					};
+					6CF73A0A27BE32100050BC7C = {
+						CreatedOnToolsVersion = 13.2.1;
 					};
 				};
 			};
@@ -390,6 +474,7 @@
 				6CDF0E8425FDF22300A34561 /* RGB&YUV */,
 				6C93A4192610A80900AFB4EC /* RelativeMovement */,
 				6C3A8F3F2621747100EC55EA /* SimultaneousEquations */,
+				6CF73A0A27BE32100050BC7C /* RealityGeometry */,
 			);
 		};
 /* End PBXProject section */
@@ -424,6 +509,16 @@
 				6CDF0E9125FDF23000A34561 /* Main.storyboard in Resources */,
 				6CDF0E8E25FDF23000A34561 /* Assets.xcassets in Resources */,
 				6CDF0E8C25FDF22300A34561 /* art.scnassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6CF73A0927BE32100050BC7C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CF73A1A27BE32130050BC7C /* LaunchScreen.storyboard in Resources */,
+				6CF73A1727BE32130050BC7C /* Assets.xcassets in Resources */,
+				6CF73A1527BE32100050BC7C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,6 +587,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6CF73A0727BE32100050BC7C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CF73A2827BE324F0050BC7C /* MeshResource+Cylinder.swift in Sources */,
+				6CF73A2F27BE324F0050BC7C /* CompleteVertex.swift in Sources */,
+				6CF73A1027BE32100050BC7C /* ViewController.swift in Sources */,
+				6CF73A2E27BE324F0050BC7C /* RealityGeometries.swift in Sources */,
+				6CF73A2927BE324F0050BC7C /* SIMD3+Extension.swift in Sources */,
+				6CF73A0E27BE32100050BC7C /* AppDelegate.swift in Sources */,
+				6CF73A2A27BE324F0050BC7C /* MeshResource+Torus.swift in Sources */,
+				6CF73A2D27BE324F0050BC7C /* MeshResource+Path.swift in Sources */,
+				6CF73A2B27BE324F0050BC7C /* MeshResource+Cone.swift in Sources */,
+				6CF73A2C27BE324F0050BC7C /* MeshResource+Planes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
@@ -533,6 +645,22 @@
 				6CDF0E9025FDF23000A34561 /* Base */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6CF73A1327BE32100050BC7C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6CF73A1427BE32100050BC7C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6CF73A1827BE32130050BC7C /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6CF73A1927BE32130050BC7C /* Base */,
+			);
+			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -823,6 +951,73 @@
 			};
 			name = Release;
 		};
+		6CF73A1B27BE32130050BC7C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T59W99K34W;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.demo.RealityGeometry;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6CF73A1C27BE32130050BC7C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T59W99K34W;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.demo.RealityGeometry;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -876,6 +1071,15 @@
 			buildConfigurations = (
 				6CDF0E9425FDF23000A34561 /* Debug */,
 				6CDF0E9525FDF23000A34561 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6CF73A1D27BE32130050BC7C /* Build configuration list for PBXNativeTarget "RealityGeometry" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6CF73A1B27BE32130050BC7C /* Debug */,
+				6CF73A1C27BE32130050BC7C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
