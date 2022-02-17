@@ -58,6 +58,7 @@
 		6CF73A2D27BE324F0050BC7C /* MeshResource+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A2527BE324F0050BC7C /* MeshResource+Path.swift */; };
 		6CF73A2E27BE324F0050BC7C /* RealityGeometries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A2627BE324F0050BC7C /* RealityGeometries.swift */; };
 		6CF73A2F27BE324F0050BC7C /* CompleteVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A2727BE324F0050BC7C /* CompleteVertex.swift */; };
+		6CF73A3127BE5B5E0050BC7C /* shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 6CF73A3027BE5B5E0050BC7C /* shader.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -139,6 +140,7 @@
 		6CF73A2527BE324F0050BC7C /* MeshResource+Path.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Path.swift"; sourceTree = "<group>"; };
 		6CF73A2627BE324F0050BC7C /* RealityGeometries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealityGeometries.swift; sourceTree = "<group>"; };
 		6CF73A2727BE324F0050BC7C /* CompleteVertex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteVertex.swift; sourceTree = "<group>"; };
+		6CF73A3027BE5B5E0050BC7C /* shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shader.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -301,6 +303,7 @@
 				6CF73A1F27BE324F0050BC7C /* RealityGeometries */,
 				6CF73A0F27BE32100050BC7C /* ViewController.swift */,
 				6CF73A1327BE32100050BC7C /* Main.storyboard */,
+				6CF73A3027BE5B5E0050BC7C /* shader.metal */,
 				6CF73A1627BE32130050BC7C /* Assets.xcassets */,
 				6CF73A1827BE32130050BC7C /* LaunchScreen.storyboard */,
 			);
@@ -594,6 +597,7 @@
 				6CF73A2827BE324F0050BC7C /* MeshResource+Cylinder.swift in Sources */,
 				6CF73A2F27BE324F0050BC7C /* CompleteVertex.swift in Sources */,
 				6CF73A1027BE32100050BC7C /* ViewController.swift in Sources */,
+				6CF73A3127BE5B5E0050BC7C /* shader.metal in Sources */,
 				6CF73A2E27BE324F0050BC7C /* RealityGeometries.swift in Sources */,
 				6CF73A2927BE324F0050BC7C /* SIMD3+Extension.swift in Sources */,
 				6CF73A0E27BE32100050BC7C /* AppDelegate.swift in Sources */,
