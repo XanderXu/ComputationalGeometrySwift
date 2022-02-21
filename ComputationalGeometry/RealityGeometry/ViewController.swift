@@ -27,10 +27,15 @@ class ViewController: UIViewController {
         
         var m = PhysicallyBasedMaterial()
         m.baseColor = .init(tint: .white, texture: .init(try! TextureResource.load(named: "number.jpeg", in: nil)))
-        let box = ModelEntity(mesh: MeshResource.generatePlane(width: 0.1, depth: 0.1),materials: [m])
-        box.position.y = 0.05
-        box.name = "box"
-        boxAnchor.addChild(box)
+        do {
+            let mesh = try MeshResource.generateTorus(sides: 18, csSides: 360, radius: 0.1, csRadius: 0.02)
+            let box = ModelEntity(mesh:mesh,materials: [m])
+            box.position.y = 0.05
+            box.name = "box"
+            boxAnchor.addChild(box)
+        } catch {
+            print(error)
+        }
     }
     @IBAction func segChanged(_ sender: UISegmentedControl) {
         if let box = arView.scene.findEntity(named: "box") as? ModelEntity {
