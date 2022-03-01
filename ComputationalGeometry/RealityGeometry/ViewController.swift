@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         arView.session.run(config, options: [])
         
         var m = PhysicallyBasedMaterial()
-        m.baseColor = .init(tint: .white, texture: .init(try! TextureResource.load(named: "number.jpeg", in: nil)))
+        m.baseColor = .init(tint: .white, texture: nil)//.init(try! TextureResource.load(named: "number.jpeg", in: nil)))
         do {
             let mesh = MeshResource.generateBox(size: 0.2)
             let model = ModelEntity(mesh:mesh,materials: [m])
