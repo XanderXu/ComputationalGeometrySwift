@@ -130,7 +130,23 @@ extension MeshResource {
                 meshPositions.append(position)
                 textureMap.append([position.x/width+0.5, position.z/depth+0.5])
                 if x_v == 0 {
-                    
+                    if y_v < radialResolution {//top
+                        
+                    } else if y_v < vertices.1 + radialResolution {//middle
+                        if y_v == radialResolution {//middle top
+                            
+                        }
+                        if y_v == vertices.1 + radialResolution - 1 {
+                            
+                        }
+                    } else {//bottom
+                        
+                    }
+                    indices.append(
+                        contentsOf: [
+                            vertexCounts - middleCounts, vertexCounts, vertexCounts - middleCounts + 1,
+                            vertexCounts - middleCounts + 1, vertexCounts, vertexCounts + 1
+                        ].map { UInt32($0 + y_v - 1) })
                 } else if x_v > 0 && y_v > 0 {
                     indices.append(
                         contentsOf: [
