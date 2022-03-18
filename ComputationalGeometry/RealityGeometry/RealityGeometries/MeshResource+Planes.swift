@@ -44,7 +44,7 @@ extension MeshResource {
         descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
         return try .generate(from: [descr])
     }
-    public static func generateCirclePlane(radius:Float,angularResolution:Int, radialResolution:Int,circleUV:Bool = true) throws -> MeshResource {
+    public static func generateCirclePlane(radius: Float, angularResolution: Int, radialResolution: Int, circleUV: Bool = true) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
@@ -71,9 +71,9 @@ extension MeshResource {
                 let ca = cos(angle)
                 let sa = sin(angle)
 
-                meshPositions.append(SIMD3<Float>(rad * ca,0,rad * sa))
+                meshPositions.append(SIMD3<Float>(rad * ca, 0, rad * sa))
                 if circleUV {
-                    textureMap.append(SIMD2<Float>(rFactor, af / angularf))
+                    textureMap.append(SIMD2<Float>(rFactor, 1 - af / angularf))
                 } else {
                     textureMap.append(SIMD2<Float>((ca*rFactor)/2+0.5, 0.5-(sa*rFactor)/2))
                 }
@@ -91,6 +91,62 @@ extension MeshResource {
                 }
             }
         }
+        
+        descr.primitives = .triangles(indices)
+        descr.positions = MeshBuffer(meshPositions)
+        descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
+        
+        return try .generate(from: [descr])
+    }
+    public static func generateArcPlane(innerRadius: Float, outerRadius: Float, startAngle: Float,
+                                        endAngle: Float, angularResolution: Int, radialResolution: Int, circleUV: Bool = true) throws -> MeshResource {
+        var descr = MeshDescriptor()
+        var meshPositions: [SIMD3<Float>] = []
+        var indices: [UInt32] = []
+        var textureMap: [SIMD2<Float>] = []
+        
+        let radial = radialResolution > 0 ? radialResolution : 1
+        let angular = angularResolution > 2 ? angularResolution : 3;
+
+        let radialf = Float(radial)
+        let angularf = Float(angular)
+        
+        let radialInc = (outerRadius - innerRadius) / radialf
+        let angularInc = (endAngle - startAngle) / angularf
+
+        let perArc = angular + 1
+        
+        for r in 0...radial {
+            let rf = Float(r)
+            let rad = innerRadius + rf * radialInc
+            let rFactor = rad / outerRadius
+            for a in 0...angular {
+                let af = Float(a)
+                let angle = startAngle + af * angularInc
+                let ca = cos(angle)
+                let sa = sin(angle)
+
+                meshPositions.append(SIMD3<Float>(rad * ca, 0, rad * sa))
+                if circleUV {
+                    textureMap.append(SIMD2<Float>(rFactor, 1 - af / angularf))
+                } else {
+                    textureMap.append(SIMD2<Float>((ca*rFactor)/2+0.5, 0.5-(sa*rFactor)/2))
+                }
+                
+                if (r != radial && a != angular) {
+                    let index = UInt32(a + r * perArc)
+
+                    let br = index
+                    let bl = br + 1
+                    let tr = br + UInt32(perArc)
+                    let tl = bl + UInt32(perArc)
+
+                    indices.append(contentsOf: [tr,br,bl,
+                                                tl,tr,bl])
+                }
+            }
+        }
+        
         
         descr.primitives = .triangles(indices)
         descr.positions = MeshBuffer(meshPositions)
