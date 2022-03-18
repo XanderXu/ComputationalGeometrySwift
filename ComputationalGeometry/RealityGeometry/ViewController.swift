@@ -29,7 +29,8 @@ class ViewController: UIViewController {
 //        m.baseColor = .init(tint: .white, texture: nil)
         m.baseColor = .init(tint: .white, texture:.init(try! TextureResource.load(named: "number.jpeg", in: nil)))
         do {
-            let mesh = try MeshResource.generateArcPlane(innerRadius: 0.1, outerRadius: 0.2, startAngle: 0, endAngle: Float.pi*2, angularResolution: 30, radialResolution: 5, circleUV: false)
+//            let mesh = try MeshResource.generateCirclePlane(radius:0.2, angularResolution: 30, radialResolution: 5, circleUV: true)
+            let mesh = try MeshResource.generateSquirclePlane(size: 0.2, p: 4, angularResolution: 30, radialResolution: 5, circleUV: true)
             let model = ModelEntity(mesh:mesh,materials: [m])
             model.position.y = 0.05
             model.name = "model"

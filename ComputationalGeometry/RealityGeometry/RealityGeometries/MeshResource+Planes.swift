@@ -95,7 +95,6 @@ extension MeshResource {
         descr.primitives = .triangles(indices)
         descr.positions = MeshBuffer(meshPositions)
         descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
-        
         return try .generate(from: [descr])
     }
     public static func generateArcPlane(innerRadius: Float, outerRadius: Float, startAngle: Float,
@@ -151,7 +150,61 @@ extension MeshResource {
         descr.primitives = .triangles(indices)
         descr.positions = MeshBuffer(meshPositions)
         descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
-        
         return try .generate(from: [descr])
+    }
+    public static func generateSquirclePlane(size: Float, p: Float, angularResolution: Int, radialResolution: Int, circleUV: Bool = true) throws -> MeshResource {
+        var descr = MeshDescriptor()
+        var meshPositions: [SIMD3<Float>] = []
+        var indices: [UInt32] = []
+        var textureMap: [SIMD2<Float>] = []
+        
+        let rad = size * 0.5
+        let angular = angularResolution > 2 ? angularResolution : 3
+        let radial = radialResolution > 1 ? radialResolution : 1
+
+        let perLoop = angular + 1
+        for r in 0...radial {
+            let k = Float(r) / Float(radial)
+            let radius = map(input: Float(r), inMin: 0, inMax: Float(radial), outMin: 0, outMax: rad)
+            for a in 0...angular {
+                let t = Float(a) / Float(angular)
+                let theta = 2.0 * .pi * t
+
+                let cost = cos(theta)
+                let sint = sin(theta)
+
+                let den = pow(abs(cost), p) + pow(abs(sint), p)
+                let phi = 1.0 / pow(den, 1.0 / p)
+
+                let x = radius * phi * cost
+                let z = radius * phi * sint
+                meshPositions.append(SIMD3<Float>(x, 0, z))
+                if circleUV {
+                    textureMap.append(SIMD2<Float>(t, k))
+                } else {
+                    textureMap.append(SIMD2<Float>(x/size+0.5, -z/size+0.5))
+                }
+                
+                if (r != radial && a != angular) {
+                    let index = UInt32(a + r * perLoop)
+
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(perLoop)
+                    let br = bl + 1
+
+                    indices.append(contentsOf: [tr,bl,tl,
+                                                br,bl,tr])
+                }
+            }
+        }
+        
+        descr.primitives = .triangles(indices)
+        descr.positions = MeshBuffer(meshPositions)
+        descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
+        return try .generate(from: [descr])
+    }
+    private static func map(input: Float, inMin: Float, inMax:Float, outMin:Float, outMax: Float) -> Float {
+        return ((input - inMin) / (inMax - inMin) * (outMax - outMin)) + outMin;
     }
 }
