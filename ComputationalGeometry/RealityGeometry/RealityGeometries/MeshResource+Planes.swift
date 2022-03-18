@@ -44,140 +44,58 @@ extension MeshResource {
         descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
         return try .generate(from: [descr])
     }
-    
-    public static func generateDetailedPlane(
-        width: Float, depth: Float, radius:Float, vertices: (Int, Int), corners:(angularResolution:Int, radialResolution:Int)
-    ) throws -> MeshResource {
-        if radius == 0 {
-            return try generateDetailedPlane(width: width, depth: depth, vertices: vertices)
-        }
-        
+    public static func generateCirclePlane(radius:Float,angularResolution:Int, radialResolution:Int,circleUV:Bool = true) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
         var textureMap: [SIMD2<Float>] = []
         
-        let innerWidth = width - radius*2
-        let innerDepth = depth - radius*2
-        if innerWidth < 0 || innerDepth < 0 {
-            return try .generate(from: [descr])
-        }
-        let radialResolution = min(1, corners.radialResolution)
-        let angularResolution = min(1, corners.angularResolution)
-        let angleIncs = .pi/2/Float(angularResolution)
-        let widthIncs = vertices.0 < 2 ? 0 : innerWidth / Float(vertices.0 - 1)
-        let depthIncs = vertices.1 < 2 ? 0 : innerDepth / Float(vertices.1 - 1)
-        //left
-        let leftCounts = (angularResolution-1)*2 + vertices.1
-        for x_v in 0..<radialResolution {
-            let vertexCounts = meshPositions.count
-            
-            let topCorner = SIMD3<Float>(radius-width/2, 0, radius-depth/2)
-            let bottomCorner = SIMD3<Float>(radius-width/2, 0, -radius+depth/2)
-            let radiusX = radius * (1-Float(x_v)/Float(radialResolution))
-            for y_v in 0..<leftCounts {
-                var position = SIMD3<Float>()
-                if y_v < angularResolution - 1 {//topCorner
-                    let y_v_T = angularResolution - 1 - y_v
-                    position = SIMD3<Float>(topCorner.x - cos(Float(y_v_T)*angleIncs)*radiusX,
-                                            0,
-                                            topCorner.y - sin(Float(y_v_T)*angleIncs)*radiusX)
-                } else if y_v < vertices.1 + angularResolution - 1 {//middle
-                    let y_v_M = y_v - (angularResolution - 1)
-                    position = SIMD3<Float>(topCorner.x - radiusX,
-                                            0,
-                                            topCorner.y + Float(y_v_M)*depthIncs)
-                } else {//bottomCorner
-                    let y_v_B = y_v - (vertices.1 + angularResolution - 1) + 1
-                    position = SIMD3<Float>(bottomCorner.x - cos(Float(y_v_B)*angleIncs)*radiusX,
-                                            0,
-                                            bottomCorner.y + sin(Float(y_v_B)*angleIncs)*radiusX)
-                }
-                
-                meshPositions.append(position)
-                textureMap.append([position.x/width+0.5, position.z/depth+0.5])
-                if x_v > 0 && y_v > 0 {
-                    indices.append(
-                        contentsOf: [
-                            vertexCounts - leftCounts, vertexCounts, vertexCounts - leftCounts + 1,
-                            vertexCounts - leftCounts + 1, vertexCounts, vertexCounts + 1
-                        ].map { UInt32($0 + y_v - 1) })
-                }
-            }
-        }
-        //middle
-        let middleCounts = (radialResolution-1)*2 + vertices.1
-        for x_v in 0..<vertices.0 {
-            let vertexCounts = meshPositions.count
-            for y_v in 0..<middleCounts {
-                var position = SIMD3<Float>()
-                if y_v < radialResolution {//top
-                    position = SIMD3<Float>(-innerWidth/2 + Float(x_v) * widthIncs,
-                                            0,
-                                            -innerDepth/2 - radius + Float(y_v) * radius / Float(radialResolution))
-                } else if y_v < vertices.1 + radialResolution {//middle
-                    let y_v_M = y_v - radialResolution
-                    position = SIMD3<Float>(-innerWidth/2 + Float(x_v) * widthIncs,
-                                            0,
-                                             -innerDepth/2 + Float(y_v_M) * depthIncs)
-                } else {//bottom
-                    let y_v_B = y_v - (vertices.1 + radialResolution - 1) + 1
-                    position = SIMD3<Float>(-innerWidth/2 + Float(x_v) * widthIncs,
-                                            0,
-                                            innerDepth/2 + Float(y_v_B) * radius / Float(radialResolution))
-                }
-                
-                meshPositions.append(position)
-                textureMap.append([position.x/width+0.5, position.z/depth+0.5])
-                if x_v == 0 && y_v > 0 {
-                    if y_v < radialResolution {//top
-                        let l1Index = (y_v - 1) * leftCounts
-                        let l2Index = y_v * leftCounts
-                        let r1Index = y_v - 1 + vertexCounts - 1
-                        let r2Index = y_v + vertexCounts - 1
-                        indices.append(contentsOf: [
-                            l1Index,r1Index,l2Index,
-                            l2Index,r1Index,r2Index
-                        ].map { UInt32($0) })
-                    } else if y_v < vertices.1 + radialResolution {//middle
-                        if y_v == radialResolution {//middle top
-                            let r1Index = y_v - 1 + vertexCounts - 1
-                            let r2Index = y_v + vertexCounts - 1
-                            let angleIndex = [UInt32(r1Index)] + (0..<angularResolution-1).map { UInt32($0 + (radialResolution-1)*leftCounts) }
-                            for i in 1..<angleIndex.count {
-                                let pre = angleIndex[i-1]
-                                let next = angleIndex[i]
-                                indices.append(contentsOf: [
-                                    pre,UInt32(r2Index),next
-                                ])
-                            }
-                        }
-                        if y_v == vertices.1 + radialResolution - 1 {//middle bottom
-                            
-                        }
-                    } else {//bottom
-                        
-                    }
-                    indices.append(
-                        contentsOf: [
-                            vertexCounts - middleCounts, vertexCounts, vertexCounts - middleCounts + 1,
-                            vertexCounts - middleCounts + 1, vertexCounts, vertexCounts + 1
-                        ].map { UInt32($0 + y_v - 1) })
-                } else if x_v > 0 && y_v > 0 {
-                    indices.append(
-                        contentsOf: [
-                            vertexCounts - middleCounts, vertexCounts, vertexCounts - middleCounts + 1,
-                            vertexCounts - middleCounts + 1, vertexCounts, vertexCounts + 1
-                        ].map { UInt32($0 + y_v - 1) })
-                }
-            }
-        }
-        //right
+        let radial = radialResolution > 0 ? radialResolution : 1
+        let angular = angularResolution > 2 ? angularResolution : 3;
+
+        let radialf = Float(radial)
+        let angularf = Float(angular)
         
+        let radialInc = radius / radialf
+        let angularInc = (2.0 * Float.pi) / angularf
+
+        let perLoop = angular + 1
+
+        for r in 0...radial {
+            let rf = Float(r)
+            let rad = rf * radialInc
+            let rFactor = rf / radialf
+            for a in 0...angular {
+                let af = Float(a)
+                let angle = af * angularInc
+                let ca = cos(angle)
+                let sa = sin(angle)
+
+                meshPositions.append(SIMD3<Float>(rad * ca,0,rad * sa))
+                if circleUV {
+                    textureMap.append(SIMD2<Float>(rFactor, af / angularf))
+                } else {
+                    textureMap.append(SIMD2<Float>((ca*rFactor)/2+0.5, 0.5-(sa*rFactor)/2))
+                }
+                
+                if (r != radial && a != angular) {
+                    let index = UInt32(a + r * perLoop)
+
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(perLoop)
+                    let br = bl + 1
+
+                    indices.append(contentsOf: [tr,bl,tl,
+                                                br,bl,tr])
+                }
+            }
+        }
         
         descr.primitives = .triangles(indices)
         descr.positions = MeshBuffer(meshPositions)
         descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
+        
         return try .generate(from: [descr])
     }
 }

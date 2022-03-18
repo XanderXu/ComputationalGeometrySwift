@@ -26,15 +26,16 @@ class ViewController: UIViewController {
         arView.session.run(config, options: [])
         
         var m = PhysicallyBasedMaterial()
-        m.baseColor = .init(tint: .white, texture: nil)//.init(try! TextureResource.load(named: "number.jpeg", in: nil)))
+//        m.baseColor = .init(tint: .white, texture: nil)
+        m.baseColor = .init(tint: .white, texture:.init(try! TextureResource.load(named: "number.jpeg", in: nil)))
         do {
-            let mesh = MeshResource.generateBox(size: 0.2)
+            let mesh = try MeshResource.generateCirclePlane(radius: 0.2, angularResolution: 4, radialResolution: 5,circleUV: false)
             let model = ModelEntity(mesh:mesh,materials: [m])
             model.position.y = 0.05
             model.name = "model"
             modelAnchor.addChild(model)
-//        } catch {
-//            print(error)
+        } catch {
+            print(error)
         }
     }
     @IBAction func segChanged(_ sender: UISegmentedControl) {
