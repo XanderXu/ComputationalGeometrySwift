@@ -97,8 +97,7 @@ extension MeshResource {
         descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
         return try .generate(from: [descr])
     }
-    public static func generateArcPlane(innerRadius: Float, outerRadius: Float, startAngle: Float,
-                                        endAngle: Float, angularResolution: Int, radialResolution: Int, circleUV: Bool = true) throws -> MeshResource {
+    public static func generateArcPlane(innerRadius: Float, outerRadius: Float, startAngle: Float, endAngle: Float, angularResolution: Int, radialResolution: Int, circleUV: Bool = true) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
@@ -127,7 +126,7 @@ extension MeshResource {
 
                 meshPositions.append(SIMD3<Float>(rad * ca, 0, rad * sa))
                 if circleUV {
-                    textureMap.append(SIMD2<Float>(rFactor, 1 - af / angularf))
+                    textureMap.append(SIMD2<Float>(rf / radialf, 1 - af / angularf))
                 } else {
                     textureMap.append(SIMD2<Float>((ca*rFactor)/2+0.5, 0.5-(sa*rFactor)/2))
                 }
