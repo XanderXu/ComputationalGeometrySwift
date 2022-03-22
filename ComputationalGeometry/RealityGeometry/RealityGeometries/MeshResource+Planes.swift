@@ -206,4 +206,228 @@ extension MeshResource {
     private static func map(input: Float, inMin: Float, inMax:Float, outMin:Float, outMax: Float) -> Float {
         return ((input - inMin) / (inMax - inMin) * (outMax - outMin)) + outMin;
     }
+    private static func angle2(a:simd_float2) -> Float {
+        var theta = atan2f(a.y, a.x);
+        if (theta < 0) { theta += .pi * 2.0; }
+        return theta;
+    }
+    public static func generateRoundedRectPlane(width: Float, depth: Float, radius: Float, angularResolution: Int, edgeXResolution: Int, edgeYResolution: Int, radialResolution: Int, circleUV: Bool = true) throws -> MeshResource {
+        var descr = MeshDescriptor()
+        var meshPositions: [SIMD3<Float>] = []
+        var indices: [UInt32] = []
+        var textureMap: [SIMD2<Float>] = []
+        
+        let twoPi = Float.pi * 2.0
+        let halfPi = Float.pi * 0.5
+
+        let angular = angularResolution > 2 ? angularResolution : 3
+        let angularMinusOne = angular - 1
+        let angularMinusOnef = Float(angularMinusOne)
+        
+        let radial = radialResolution > 1 ? radialResolution : 2
+        let radialf = Float(radial)
+        let radialMinusOnef = radialf - 1.0
+            
+        let edgeX = edgeXResolution > 1 ? edgeXResolution : 2
+        
+        let edgeXMinusOne = edgeX - 1
+        let edgeXMinusOnef = Float(edgeXMinusOne)
+        
+        let edgeY = edgeYResolution > 1 ? edgeYResolution : 2
+        
+        let edgeYMinusOne = edgeY - 1
+        let edgeYMinusOnef = Float(edgeYMinusOne)
+
+        let perLoop = (angular - 2) * 4 + (edgeX * 2) + (edgeY * 2) + (circleUV ? 2 : 0)
+
+        let widthHalf = width * 0.5
+        let depthHalf = depth * 0.5
+
+        let minDim = (widthHalf < depthHalf ? widthHalf : depthHalf)
+        let radius = radius > minDim ? minDim : radius
+        
+        for j in 0..<radial {
+            let n = Float(j) / radialMinusOnef
+            
+            // +X, -Y -> +Y
+            var start = SIMD2<Float>(widthHalf, -depthHalf + radius)
+            var end = SIMD2<Float>(widthHalf, depthHalf - radius)
+            for i in 0..<edgeY {
+                let t = Float(i) / edgeYMinusOnef
+                let pos = simd_mix(start, end, SIMD2<Float>(t, t)) * n
+                meshPositions.append(SIMD3<Float>(pos.x, 0, pos.y))
+                
+                if circleUV {
+                    let angle = angle2(a: pos)
+                    let uvx = angle / twoPi
+                    let uvy = n
+                    textureMap.append(SIMD2<Float>(uvx,uvy))
+                    
+                    if i == edgeY/2 {
+                        let newPos = SIMD2<Float>(pos.x, 0)
+                        meshPositions.append(SIMD3<Float>(newPos.x, 0, newPos.y))
+                        textureMap.append(SIMD2<Float>(0,uvy))
+                        
+                        meshPositions.append(SIMD3<Float>(newPos.x, 0, newPos.y))
+                        textureMap.append(SIMD2<Float>(1,uvy))
+                    }
+                } else {
+                    textureMap.append(SIMD2<Float>(pos.x / width + 0.5, -pos.y / depth + 0.5))
+                }
+            }
+            
+            // corner 0
+            for i in 1..<angularMinusOne {
+                let t = Float(i) / angularMinusOnef
+                let theta = t * halfPi
+                let x = radius * cos(theta)
+                let y = radius * sin(theta)
+                let pos = SIMD2<Float>(widthHalf - radius + x, depthHalf - radius + y) * n
+                meshPositions.append(SIMD3<Float>(pos.x, 0, pos.y))
+                
+                if circleUV {
+                    let angle = angle2(a: pos)
+                    let uvx = angle / twoPi
+                    let uvy = n
+                    textureMap.append(SIMD2<Float>(uvx,uvy))
+                } else {
+                    textureMap.append(SIMD2<Float>(pos.x / width + 0.5, -pos.y / depth + 0.5))
+                }
+            }
+            
+            // +Y, +X -> -X
+            start = SIMD2<Float>(widthHalf - radius, depthHalf)
+            end = SIMD2<Float>(-widthHalf + radius, depthHalf)
+            for i in 0..<edgeX {
+                let t = Float(i) / edgeXMinusOnef
+                let pos = simd_mix(start, end, SIMD2<Float>(t, t)) * n
+                meshPositions.append(SIMD3<Float>(pos.x, 0, pos.y))
+                
+                if circleUV {
+                    let angle = angle2(a: pos)
+                    let uvx = angle / twoPi
+                    let uvy = n
+                    textureMap.append(SIMD2<Float>(uvx,uvy))
+                } else {
+                    textureMap.append(SIMD2<Float>(pos.x / width + 0.5, -pos.y / depth + 0.5))
+                }
+            }
+            
+            // corner 1
+            for i in 1..<angularMinusOne {
+                let t = Float(i) / angularMinusOnef
+                let theta = t * halfPi + halfPi
+                let x = radius * cos(theta)
+                let y = radius * sin(theta)
+                let pos = SIMD2<Float>(-widthHalf + radius + x, depthHalf - radius + y) * n
+                meshPositions.append(SIMD3<Float>(pos.x, 0, pos.y))
+                
+                if circleUV {
+                    let angle = angle2(a: pos)
+                    let uvx = angle / twoPi
+                    let uvy = n
+                    textureMap.append(SIMD2<Float>(uvx,uvy))
+                } else {
+                    textureMap.append(SIMD2<Float>(pos.x / width + 0.5, -pos.y / depth + 0.5))
+                }
+            }
+            
+            // -X, +Y -> -Y
+            start = SIMD2<Float>(-widthHalf, depthHalf - radius)
+            end = SIMD2<Float>(-widthHalf, -depthHalf + radius)
+            for i in 0..<edgeY {
+                let t = Float(i) / edgeYMinusOnef
+                let pos = simd_mix(start, end, SIMD2<Float>(t, t)) * n
+                meshPositions.append(SIMD3<Float>(pos.x, 0, pos.y))
+                
+                if circleUV {
+                    let angle = angle2(a: pos)
+                    let uvx = angle / twoPi
+                    let uvy = n
+                    textureMap.append(SIMD2<Float>(uvx,uvy))
+                } else {
+                    textureMap.append(SIMD2<Float>(pos.x / width + 0.5, -pos.y / depth + 0.5))
+                }
+            }
+            
+            // corner 2
+            for i in 1..<angularMinusOne {
+                let t = Float(i) / angularMinusOnef
+                let theta = t * halfPi + .pi
+                let x = radius * cos(theta)
+                let y = radius * sin(theta)
+                let pos = SIMD2<Float>(-widthHalf + radius + x, -depthHalf + radius + y) * n
+                meshPositions.append(SIMD3<Float>(pos.x, 0, pos.y))
+                
+                if circleUV {
+                    let angle = angle2(a: pos)
+                    let uvx = angle / twoPi
+                    let uvy = n
+                    textureMap.append(SIMD2<Float>(uvx,uvy))
+                } else {
+                    textureMap.append(SIMD2<Float>(pos.x / width + 0.5, -pos.y / depth + 0.5))
+                }
+            }
+            
+            // -Y, -X -> +X
+            start = SIMD2<Float>(-widthHalf + radius, -depthHalf)
+            end = SIMD2<Float>(widthHalf - radius, -depthHalf)
+            for i in 0..<edgeX {
+                let t = Float(i) / edgeXMinusOnef
+                let pos = simd_mix(start, end, SIMD2<Float>(t, t)) * n
+                meshPositions.append(SIMD3<Float>(pos.x, 0, pos.y))
+                
+                if circleUV {
+                    let angle = angle2(a: pos)
+                    let uvx = angle / twoPi
+                    let uvy = n
+                    textureMap.append(SIMD2<Float>(uvx,uvy))
+                } else {
+                    textureMap.append(SIMD2<Float>(pos.x / width + 0.5, -pos.y / depth + 0.5))
+                }
+            }
+            
+            // corner 3
+            for i in 1..<angularMinusOne {
+                let t = Float(i) / angularMinusOnef
+                let theta = t * halfPi + 1.5 * .pi
+                let x = radius * cos(theta)
+                let y = radius * sin(theta)
+                let pos = SIMD2<Float>(widthHalf - radius + x, -depthHalf + radius + y) * n
+                meshPositions.append(SIMD3<Float>(pos.x, 0, pos.y))
+                
+                if circleUV {
+                    var angle = angle2(a: pos)
+                    angle = abs(angle) < .ulpOfOne ? twoPi : angle;
+                    let uvx = angle / twoPi
+                    let uvy = n
+                    textureMap.append(SIMD2<Float>(uvx,uvy))
+                } else {
+                    textureMap.append(SIMD2<Float>(pos.x / width + 0.5, -pos.y / depth + 0.5))
+                }
+            }
+            
+            for i in 0..<perLoop {
+                if j + 1 != radial {
+                    let currLoop = j * perLoop
+                    let nextLoop = (j + 1) * perLoop
+                    let next = (i + 1) % perLoop
+
+                    let i0 = UInt32(currLoop + i)
+                    let i1 = UInt32(currLoop + next)
+                    let i2 = UInt32(nextLoop + i)
+                    let i3 = UInt32(nextLoop + next)
+                    
+                    indices.append(contentsOf: [i3,i2,i0,
+                                                i1,i3,i0
+                    ])
+                }
+            }
+        }
+        
+        descr.primitives = .triangles(indices)
+        descr.positions = MeshBuffer(meshPositions)
+        descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
+        return try .generate(from: [descr])
+    }
 }
