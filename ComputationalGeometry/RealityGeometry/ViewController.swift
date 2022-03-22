@@ -32,7 +32,7 @@ class ViewController: UIViewController {
 //            let mesh = try MeshResource.generateCirclePlane(radius:0.1, angularResolution: 30, radialResolution: 5, circleUV: true)
 //            let mesh = try MeshResource.generateArcPlane(innerRadius: 0.02, outerRadius: 0.2, startAngle: 0, endAngle: .pi, angularResolution: 30, radialResolution: 5, circleUV: true)
 //            let mesh = try MeshResource.generateSquirclePlane(size: 0.2, p: 4, angularResolution: 30, radialResolution: 5, circleUV: true)
-            let mesh = try MeshResource.generateRoundedRectPlane(width: 0.2, depth: 0.2, radius: 0.05, angularResolution: 10, edgeXResolution: 10, edgeYResolution: 10, radialResolution: 5, circleUV: true)
+            let mesh = try MeshResource.generateRoundedRectPlane(width: 0.2, depth: 0.2, radius: 0.05, angularResolution: 10, edgeXResolution: 5, edgeYResolution: 5, radialResolution: 5, circleUV: true)
             let model = ModelEntity(mesh:mesh,materials: [m])
             model.position.y = 0.05
             model.name = "model"
