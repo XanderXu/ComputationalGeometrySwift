@@ -36,7 +36,7 @@ class ViewController: UIViewController {
 //            let mesh = try MeshResource.generateSquirclePlane(size: 0.2, p: 4, angularResolution: 30, radialResolution: 5, circleUV: true)
 //            let mesh = try MeshResource.generateRoundedRectPlane(width: 0.2, depth: 0.2, radius: 0.05, angularResolution: 10, edgeXResolution: 5, edgeYResolution: 5, radialResolution: 5, circleUV: true)
             let mesh = try MeshResource.generateCone(radius: 0.2, height: 0.3, angularResolution: 24, radialResolution: 2, verticalResolution: 3, splitFaces: true, smoothNormals: true)
-            let model = ModelEntity(mesh:mesh, materials: [m,m2])
+            let model = ModelEntity(mesh:mesh, materials: [m,m])
             model.position.y = 0.15
             model.name = "model"
             modelAnchor.addChild(model)

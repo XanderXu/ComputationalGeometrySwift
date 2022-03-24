@@ -187,15 +187,11 @@ extension MeshResource {
 
             let yOffset = -0.5 * height
             let perLoop = angular + 1
-
             let verticesPerWall = perLoop * (vertical + 1)
             
-            let slopeInv = -radius / height
-            let theta = atan(slopeInv)
-            let quatTilt = simd_quaternion(theta, SIMD3<Float>(0.0, 0.0, 1.0))
-            
-            let xDir = SIMD3<Float>(1.0, 0.0, 0.0)
-            let yDir = SIMD3<Float>(0.0, 1.0, 0.0)
+            let hyp = sqrtf(radius * radius + height * height)
+            let coneNormX = radius / hyp
+            let coneNormY = height / hyp
             
             for v in 0...vertical {
                 let vf = Float(v)
@@ -211,15 +207,11 @@ extension MeshResource {
                     
                     let x = rad * cosAngle
                     let z = rad * sinAngle
-
-                    var normal = xDir
-                    let quatRot = simd_quaternion(-angle, yDir)
                     
-                    normal = simd_act(quatTilt, normal)
-                    normal = simd_act(quatRot, normal)
+                    let coneBottomNormal: SIMD3<Float> = [coneNormY * cosAngle, coneNormX, coneNormY * sinAngle]
                     
                     meshPositions.append(SIMD3<Float>(x, y, z))
-                    normals.append(normalize(normal))
+                    normals.append(normalize(coneBottomNormal))
                     textureMap.append(SIMD2<Float>(1 - af / angularf, vf / verticalf))
                     
                     if (v != vertical && a != angular) {
