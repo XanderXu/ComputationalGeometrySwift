@@ -162,4 +162,116 @@ extension MeshResource {
         )
         return try MeshResource.generate(from: [meshDescr])
     }
+    
+    public static func generateCone(
+        radius: Float, height: Float, angularResolution: Int = 24, radialResolution: Int = 1, verticalResolution: Int = 1, splitFaces: Bool = false, smoothNormals: Bool = false) throws -> MeshResource {
+            var descr = MeshDescriptor()
+            var meshPositions: [SIMD3<Float>] = []
+            var indices: [UInt32] = []
+            var normals: [SIMD3<Float>] = []
+            var textureMap: [SIMD2<Float>] = []
+            
+            let vertical = verticalResolution > 0 ? verticalResolution : 1
+            let angular = angularResolution > 2 ? angularResolution : 3
+            let radial = radialResolution > 0 ? radialResolution : 1
+
+            let verticalf = Float(vertical)
+            let angularf = Float(angular)
+            let radialf = Float(radial)
+
+            let angularInc = (2.0 * .pi) / angularf
+            let verticalInc = height / verticalf
+            let radialInc = radius / radialf
+            let radiusInc = radius / verticalf
+
+            let yOffset = -0.5 * height
+            let perLoop = angular + 1
+
+            let verticesPerWall = perLoop * (vertical + 1)
+            
+            let slopeInv = -radius / height
+            let theta = atan(slopeInv)
+            let quatTilt = simd_quaternion(theta, SIMD3<Float>(0.0, 0.0, 1.0))
+            
+            let xDir = SIMD3<Float>(1.0, 0.0, 0.0)
+            let yDir = SIMD3<Float>(0.0, 1.0, 0.0)
+            
+            for v in 0...vertical {
+                let vf = Float(v)
+                let y = yOffset + vf * verticalInc
+                let rad = radius - vf * radiusInc
+                
+                for a in 0...angular {
+                    let af = Float(a)
+                    let angle = af * angularInc
+                    
+                    let cosAngle = cos(angle)
+                    let sinAngle = sin(angle)
+                    
+                    let x = rad * cosAngle
+                    let z = rad * sinAngle
+
+                    var normal = xDir
+                    let quatRot = simd_quaternion(-angle, yDir)
+                    
+                    normal = simd_act(quatTilt, normal)
+                    normal = simd_act(quatRot, normal)
+                    
+                    meshPositions.append(SIMD3<Float>(x, y, z))
+                    normals.append(normalize(normal))
+                    textureMap.append(SIMD2<Float>(1 - af / angularf, vf / verticalf))
+                    
+                    if (v != vertical && a != angular) {
+                        let index = a + v * perLoop
+
+                        let tl = UInt32(index)
+                        let tr = tl + 1
+                        let bl = UInt32(index + perLoop)
+                        let br = bl + 1
+
+                        indices.append(contentsOf: [tl, bl, tr,
+                                                    tr, bl, br
+                        ])
+                    }
+                }
+            }
+            
+            for r in 0...radial {
+                let rf = Float(r)
+                let rad = rf * radialInc
+                
+                for a in 0...angular {
+                    let af = Float(a)
+                    let angle = af * angularInc
+                    let x = rad * cos(angle)
+                    let y = rad * sin(angle)
+                    
+                    meshPositions.append(SIMD3<Float>(x, -height * 0.5, y))
+                    normals.append(SIMD3<Float>(0, -1, 0))
+                    textureMap.append(SIMD2<Float>(af / angularf, 1 - rf / radialf))
+                    
+                    if (r != radial && a != angular) {
+                        let index = verticesPerWall + a + r * perLoop;
+
+                        let tl = UInt32(index)
+                        let tr = tl + 1
+                        let bl = UInt32(index + perLoop)
+                        let br = bl + 1
+
+                        indices.append(contentsOf: [tl, bl, tr,
+                                                    tr, bl, br
+                        ])
+                    }
+                }
+            }
+            
+            descr.positions = MeshBuffers.Positions(meshPositions)
+            descr.normals = MeshBuffers.Normals(normals)
+            descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
+            descr.primitives = .triangles(indices)
+            if splitFaces {
+                descr.materials = MeshDescriptor.Materials.perFace([0,1])
+            }
+        return try MeshResource.generate(from: [descr])
+    }
 }

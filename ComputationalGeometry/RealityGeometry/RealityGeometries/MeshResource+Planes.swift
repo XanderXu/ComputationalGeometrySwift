@@ -44,7 +44,7 @@ extension MeshResource {
         descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
         return try .generate(from: [descr])
     }
-    public static func generateCirclePlane(radius: Float, angularResolution: Int, radialResolution: Int, circleUV: Bool = true) throws -> MeshResource {
+    public static func generateCirclePlane(radius: Float, angularResolution: Int = 24, radialResolution: Int = 1, circleUV: Bool = true) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
@@ -97,7 +97,7 @@ extension MeshResource {
         descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
         return try .generate(from: [descr])
     }
-    public static func generateArcPlane(innerRadius: Float, outerRadius: Float, startAngle: Float, endAngle: Float, angularResolution: Int, radialResolution: Int, circleUV: Bool = true) throws -> MeshResource {
+    public static func generateArcPlane(innerRadius: Float, outerRadius: Float, startAngle: Float, endAngle: Float, angularResolution: Int = 12, radialResolution: Int = 1, circleUV: Bool = true) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
@@ -151,7 +151,7 @@ extension MeshResource {
         descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
         return try .generate(from: [descr])
     }
-    public static func generateSquirclePlane(size: Float, p: Float, angularResolution: Int, radialResolution: Int, circleUV: Bool = true) throws -> MeshResource {
+    public static func generateSquirclePlane(size: Float, p: Float = 4, angularResolution: Int = 24, radialResolution: Int  = 1, circleUV: Bool = true) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
@@ -211,7 +211,7 @@ extension MeshResource {
         if (theta < 0) { theta += .pi * 2.0; }
         return theta;
     }
-    public static func generateRoundedRectPlane(width: Float, depth: Float, radius: Float, angularResolution: Int, edgeXResolution: Int, edgeYResolution: Int, radialResolution: Int, circleUV: Bool = true) throws -> MeshResource {
+    public static func generateRoundedRectPlane(width: Float, depth: Float, radius: Float, angularResolution: Int = 24, edgeXResolution: Int = 2, edgeYResolution: Int = 2, radialResolution: Int = 2, circleUV: Bool = true) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
