@@ -170,6 +170,7 @@ extension MeshResource {
             var indices: [UInt32] = []
             var normals: [SIMD3<Float>] = []
             var textureMap: [SIMD2<Float>] = []
+            var materials: [UInt32] = []
             
             let vertical = verticalResolution > 0 ? verticalResolution : 1
             let angular = angularResolution > 2 ? angularResolution : 3
@@ -232,6 +233,9 @@ extension MeshResource {
                         indices.append(contentsOf: [tl, bl, tr,
                                                     tr, bl, br
                         ])
+                        if splitFaces {
+                            materials.append(contentsOf: [0, 0])
+                        }
                     }
                 }
             }
@@ -261,6 +265,9 @@ extension MeshResource {
                         indices.append(contentsOf: [tl, bl, tr,
                                                     tr, bl, br
                         ])
+                        if splitFaces {
+                            materials.append(contentsOf: [1, 1])
+                        }
                     }
                 }
             }
@@ -269,8 +276,8 @@ extension MeshResource {
             descr.normals = MeshBuffers.Normals(normals)
             descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
             descr.primitives = .triangles(indices)
-            if splitFaces {
-                descr.materials = MeshDescriptor.Materials.perFace([0,1])
+            if !materials.isEmpty {
+                descr.materials = MeshDescriptor.Materials.perFace(materials)
             }
         return try MeshResource.generate(from: [descr])
     }

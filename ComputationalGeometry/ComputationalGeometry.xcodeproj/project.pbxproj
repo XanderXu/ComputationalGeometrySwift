@@ -25,11 +25,9 @@
 		6C93A4262610A80A00AFB4EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C93A4252610A80A00AFB4EC /* Assets.xcassets */; };
 		6C93A4292610A80A00AFB4EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C93A4272610A80A00AFB4EC /* LaunchScreen.storyboard */; };
 		6CBC76E427C331B600F45FD2 /* MeshResource+Cylinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC76DC27C331B600F45FD2 /* MeshResource+Cylinder.swift */; };
-		6CBC76E527C331B600F45FD2 /* SIMD3+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC76DD27C331B600F45FD2 /* SIMD3+Extension.swift */; };
 		6CBC76E627C331B600F45FD2 /* MeshResource+Torus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC76DE27C331B600F45FD2 /* MeshResource+Torus.swift */; };
 		6CBC76E727C331B600F45FD2 /* MeshResource+Cone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC76DF27C331B600F45FD2 /* MeshResource+Cone.swift */; };
 		6CBC76E827C331B600F45FD2 /* MeshResource+Planes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC76E027C331B600F45FD2 /* MeshResource+Planes.swift */; };
-		6CBC76EA27C331B600F45FD2 /* RealityGeometries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC76E227C331B600F45FD2 /* RealityGeometries.swift */; };
 		6CBC76EB27C331B600F45FD2 /* CompleteVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC76E327C331B600F45FD2 /* CompleteVertex.swift */; };
 		6CD02D4D2562CB9600E90615 /* simd_float+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD02D4C2562CB9600E90615 /* simd_float+Utils.swift */; };
 		6CDEC90E255C380700FBB946 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEC90D255C380700FBB946 /* main.swift */; };
@@ -99,11 +97,9 @@
 		6C93A4282610A80A00AFB4EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6C93A42A2610A80A00AFB4EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6CBC76DC27C331B600F45FD2 /* MeshResource+Cylinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Cylinder.swift"; sourceTree = "<group>"; };
-		6CBC76DD27C331B600F45FD2 /* SIMD3+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SIMD3+Extension.swift"; sourceTree = "<group>"; };
 		6CBC76DE27C331B600F45FD2 /* MeshResource+Torus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Torus.swift"; sourceTree = "<group>"; };
 		6CBC76DF27C331B600F45FD2 /* MeshResource+Cone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Cone.swift"; sourceTree = "<group>"; };
 		6CBC76E027C331B600F45FD2 /* MeshResource+Planes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Planes.swift"; sourceTree = "<group>"; };
-		6CBC76E227C331B600F45FD2 /* RealityGeometries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealityGeometries.swift; sourceTree = "<group>"; };
 		6CBC76E327C331B600F45FD2 /* CompleteVertex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteVertex.swift; sourceTree = "<group>"; };
 		6CD02D4C2562CB9600E90615 /* simd_float+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "simd_float+Utils.swift"; sourceTree = "<group>"; };
 		6CDEC90A255C380700FBB946 /* ComputationalGeometry */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComputationalGeometry; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -224,11 +220,9 @@
 			isa = PBXGroup;
 			children = (
 				6CBC76DC27C331B600F45FD2 /* MeshResource+Cylinder.swift */,
-				6CBC76DD27C331B600F45FD2 /* SIMD3+Extension.swift */,
 				6CBC76DE27C331B600F45FD2 /* MeshResource+Torus.swift */,
 				6CBC76DF27C331B600F45FD2 /* MeshResource+Cone.swift */,
 				6CBC76E027C331B600F45FD2 /* MeshResource+Planes.swift */,
-				6CBC76E227C331B600F45FD2 /* RealityGeometries.swift */,
 				6CBC76E327C331B600F45FD2 /* CompleteVertex.swift */,
 			);
 			path = RealityGeometries;
@@ -593,11 +587,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CBC76E627C331B600F45FD2 /* MeshResource+Torus.swift in Sources */,
-				6CBC76E527C331B600F45FD2 /* SIMD3+Extension.swift in Sources */,
 				6CF73A1027BE32100050BC7C /* ViewController.swift in Sources */,
 				6CF73A0E27BE32100050BC7C /* AppDelegate.swift in Sources */,
 				6CBC76E827C331B600F45FD2 /* MeshResource+Planes.swift in Sources */,
-				6CBC76EA27C331B600F45FD2 /* RealityGeometries.swift in Sources */,
 				6CBC76E427C331B600F45FD2 /* MeshResource+Cylinder.swift in Sources */,
 				6CBC76E727C331B600F45FD2 /* MeshResource+Cone.swift in Sources */,
 				6CBC76EB27C331B600F45FD2 /* CompleteVertex.swift in Sources */,
