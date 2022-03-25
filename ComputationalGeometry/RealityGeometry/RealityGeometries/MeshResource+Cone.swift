@@ -164,7 +164,7 @@ extension MeshResource {
     }
     
     public static func generateCone(
-        radius: Float, height: Float, angularResolution: Int = 24, radialResolution: Int = 1, verticalResolution: Int = 1, splitFaces: Bool = false, smoothNormals: Bool = false) throws -> MeshResource {
+        radius: Float, height: Float, angularResolution: Int = 24, radialResolution: Int = 1, verticalResolution: Int = 1, splitFaces: Bool = false, smoothNormals: Bool = false, circleUV: Bool = true) throws -> MeshResource {
             var descr = MeshDescriptor()
             var meshPositions: [SIMD3<Float>] = []
             var indices: [UInt32] = []
@@ -225,11 +225,11 @@ extension MeshResource {
                         indices.append(contentsOf: [tl, bl, tr,
                                                     tr, bl, br
                         ])
-                        if splitFaces {
-                            materials.append(contentsOf: [0, 0])
-                        }
                     }
                 }
+            }
+            if splitFaces {
+                materials.append(contentsOf: Array(repeating: 0, count: angular * vertical * 2))
             }
             
             for r in 0...radial {
@@ -244,7 +244,11 @@ extension MeshResource {
                     
                     meshPositions.append(SIMD3<Float>(x, -height * 0.5, y))
                     normals.append(SIMD3<Float>(0, -1, 0))
-                    textureMap.append(SIMD2<Float>(af / angularf, 1 - rf / radialf))
+                    if circleUV {
+                        textureMap.append(SIMD2<Float>(af / angularf, 1 - rf / radialf))
+                    } else {
+                        textureMap.append(SIMD2<Float>(x/radius/2+0.5, y/radius/2+0.5))
+                    }
                     
                     if (r != radial && a != angular) {
                         let index = verticesPerWall + a + r * perLoop;
@@ -257,11 +261,11 @@ extension MeshResource {
                         indices.append(contentsOf: [tl, bl, tr,
                                                     tr, bl, br
                         ])
-                        if splitFaces {
-                            materials.append(contentsOf: [1, 1])
-                        }
                     }
                 }
+            }
+            if splitFaces {
+                materials.append(contentsOf: Array(repeating: 1, count: angular * radial * 2))
             }
             
             descr.positions = MeshBuffers.Positions(meshPositions)
