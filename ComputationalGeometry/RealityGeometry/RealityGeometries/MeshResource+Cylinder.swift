@@ -8,7 +8,7 @@
 import RealityKit
 
 extension MeshResource {
-    public static func generateCylinder(radius: Float, height: Float, angularResolution: Int = 24, radialResolution: Int = 1, verticalResolution: Int = 1, splitFaces: Bool = false) throws -> MeshResource {
+    public static func generateCylinder(radius: Float, height: Float, angularResolution: Int = 24, radialResolution: Int = 1, verticalResolution: Int = 1, splitFaces: Bool = false, circleUV: Bool = true) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
@@ -80,7 +80,11 @@ extension MeshResource {
                     
                     meshPositions.append(SIMD3<Float>(x, direction * height * 0.5, y))
                     normals.append(SIMD3<Float>(0.0, direction, 0.0))
-                    textureMap.append(SIMD2<Float>(flip ? af / angularf : 1.0 - af / angularf, rf / radialf))
+                    if circleUV {
+                        textureMap.append(SIMD2<Float>(flip ? af / angularf : 1.0 - af / angularf, rf / radialf))
+                    } else {
+                        textureMap.append(SIMD2<Float>(-direction * x/radius/2+0.5, y/radius/2+0.5))
+                    }
                     if (r != radial && a != angular) {
                         let index = vertexOffset + a + r * perLoop;
 

@@ -203,10 +203,10 @@ extension MeshResource {
         descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
         return try .generate(from: [descr])
     }
-    private static func map(input: Float, inMin: Float, inMax:Float, outMin:Float, outMax: Float) -> Float {
+    public static func map(input: Float, inMin: Float, inMax:Float, outMin:Float, outMax: Float) -> Float {
         return ((input - inMin) / (inMax - inMin) * (outMax - outMin)) + outMin;
     }
-    private static func angle2(a:simd_float2) -> Float {
+    public static func angle2(a:simd_float2) -> Float {
         var theta = atan2f(a.y, a.x);
         if (theta < 0) { theta += .pi * 2.0; }
         return theta;
