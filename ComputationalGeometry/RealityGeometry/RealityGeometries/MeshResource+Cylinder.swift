@@ -8,174 +8,116 @@
 import RealityKit
 
 extension MeshResource {
-    fileprivate static func cylinderIndices(
-        _ sides: Int, _ lowerCenterIndex: UInt32,
-        _ upperCenterIndex: UInt32, _ splitFaces: Bool, _ smoothNormals: Bool
-    ) -> ([UInt32], [UInt32]) {
+    public static func generateCylinder(radius: Float, height: Float, angularResolution: Int = 24, radialResolution: Int = 1, verticalResolution: Int = 1, splitFaces: Bool = false) throws -> MeshResource {
+        var descr = MeshDescriptor()
+        var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
-        var materialIndices: [UInt32] = []
-        let uiSides = UInt32(sides) * (smoothNormals ? 1 : 2)
-        for side in 0..<sides {
-            let uiSide = UInt32(side) * (smoothNormals ? 1 : 2)
-            let bottomLeft = uiSide
-            let bottomRight = uiSide + 1
-            let topLeft = uiSide + uiSides + 1
-            let topRight = uiSide + uiSides + 2
+        var normals: [SIMD3<Float>] = []
+        var textureMap: [SIMD2<Float>] = []
+        var materials: [UInt32] = []
+        
+        
+        let radial = radialResolution > 0 ? radialResolution : 1
+        let angular = angularResolution > 2 ? angularResolution : 3
+        let vertical = verticalResolution > 0 ? verticalResolution : 1
 
-            // First triangle of side
-            indices.append(contentsOf: [bottomLeft, topRight, bottomRight])
+        let radialf = Float(radial)
+        let angularf = Float(angular)
+        let verticalf = Float(vertical)
 
-            // Second triangle of side
-            indices.append(contentsOf: [bottomLeft, topLeft, topRight])
+        let radialInc = radius / radialf
+        let angularInc = (2.0 * .pi) / angularf
+        let verticalInc = height / verticalf
 
-            // Add bottom cap triangle
-            indices.append(contentsOf: [0, UInt32(side) + 1, UInt32(side) + 2].map { $0 + lowerCenterIndex })
+        let perLoop = angular + 1
+        let verticesPerCircle = perLoop * (radial + 1)
+        let yOffset = -0.5 * height
+        
+        for v in 0...vertical {
+            let vf = Float(v)
+            let y = yOffset + vf * verticalInc
+            for a in 0...angular {
+                let af = Float(a)
+                let angle = af * angularInc
+                let x = cos(angle)
+                let z = sin(angle)
+                
+                meshPositions.append(SIMD3<Float>(radius * x, y, radius * z))
+                normals.append(SIMD3<Float>(x, 0.0, z))
+                textureMap.append(SIMD2<Float>(1.0 - af / angularf, vf / verticalf))
+                
+                if (v != vertical && a != angular) {
+                    let index = a + v * perLoop
 
-            // Add top cap triangle
-            indices.append(contentsOf: [0, UInt32(side) + 2, UInt32(side) + 1].map { $0 + upperCenterIndex })
-            if splitFaces {
-                materialIndices.append(0)
-                materialIndices.append(0)
-                materialIndices.append(1)
-                materialIndices.append(2)
+                    let tl = UInt32(index)
+                    let tr = tl + 1
+                    let bl = UInt32(index + perLoop)
+                    let br = bl + 1
+
+                    indices.append(contentsOf: [
+                        tl, bl, tr,
+                        tr, bl, br
+                    ])
+                }
             }
         }
-        return (indices, materialIndices)
-    }
-
-    fileprivate struct CylinderVertices {
-        var lowerEdge: [CompleteVertex]
-        var upperEdge: [CompleteVertex]
-        var lowerCap: [CompleteVertex]
-        var upperCap: [CompleteVertex]
-        var combinedVerts: [CompleteVertex]?
-        var indices: [UInt32]?
-        var materialIndices: [UInt32]?
-        var smoothNormals: Bool
-        mutating func calculateCylinderDetails(height: Float, sides: Int, splitFaces: Bool) -> Bool {
-            let halfHeight = height / 2
-            var combinedVerts: [CompleteVertex] = lowerEdge
-            combinedVerts.append(contentsOf: upperEdge)
-
-            let lowerCenterIndex = UInt32(combinedVerts.count)
-            combinedVerts.append(CompleteVertex(
-                position: [0, -halfHeight, 0], normal: [0, -1, 0], uv: [0.5, 0.5]
-            ))
-
-            combinedVerts.append(contentsOf: lowerCap)
-            let upperCenterIndex = UInt32(combinedVerts.count)
-            combinedVerts.append(CompleteVertex(
-                position: [0, halfHeight, 0], normal: [0, 1, 0], uv: [0.5, 0.5]
-            ))
-            combinedVerts.append(contentsOf: upperCap)
-            self.combinedVerts = combinedVerts
-            (self.indices, self.materialIndices) = cylinderIndices(
-                sides, lowerCenterIndex, upperCenterIndex, splitFaces, self.smoothNormals
-            )
-            return true
+        if splitFaces {
+            materials.append(contentsOf: Array(repeating: 0, count: angular * vertical * 2))
         }
-    }
+        
+        var flip = true
+        var direction: Float = 1.0
+        var vertexOffset = meshPositions.count
+        for _ in 0..<2 {
+            for r in 0...radial {
+                let rf = Float(r)
+                let rad = rf * radialInc
+                for a in 0...angular {
+                    let af = Float(a)
+                    let angle = af * angularInc
+                    let x = rad * cos(angle)
+                    let y = rad * sin(angle)
+                    
+                    meshPositions.append(SIMD3<Float>(x, direction * height * 0.5, y))
+                    normals.append(SIMD3<Float>(0.0, direction, 0.0))
+                    textureMap.append(SIMD2<Float>(flip ? af / angularf : 1.0 - af / angularf, rf / radialf))
+                    if (r != radial && a != angular) {
+                        let index = vertexOffset + a + r * perLoop;
 
-    fileprivate static func cylinderVertices(
-        _ sides: Int, _ radius: Float, _ height: Float, _ smoothNormals: Bool = false
-    ) -> CylinderVertices {
-        var theta: Float = 0
-        let thetaInc = 2 * .pi / Float(sides)
-        let uStep: Float = 1 / Float(sides)
-        // first vertices added will be bottom edges
-        var vertices = [CompleteVertex]()
-        // all top edge vertices of the cylinder
-        var upperEdgeVertices = [CompleteVertex]()
-        // bottom edge vertices
-        var lowerCapVertices = [CompleteVertex]()
-        // top edge vertices
-        var upperCapVertices = [CompleteVertex]()
+                        let tl = UInt32(index)
+                        let tr = tl + 1
+                        let bl = UInt32(index + perLoop)
+                        let br = bl + 1
 
-        // create vertices for all sides of the cylinder
-        for side in 0...sides {
-            let cosTheta = cos(theta); let sinTheta = sin(theta)
-
-            let lowerPosition: SIMD3<Float> = [radius * cosTheta, -height / 2, radius * sinTheta]
-            if side != 0, !smoothNormals {
-                vertices.append(CompleteVertex(
-                    position: lowerPosition,
-                    normal: [cos(theta - thetaInc / 2), 0, sin(theta - thetaInc / 2)],
-                    uv: [1 - uStep * Float(side), 0]
-                ))
+                        if (flip) {
+                            indices.append(contentsOf: [
+                                tl, tr, bl,
+                                tr, br, bl
+                            ])
+                        } else {
+                            indices.append(contentsOf: [
+                                tl, bl, tr,
+                                tr, bl, br
+                            ])
+                        }
+                    }
+                }
             }
-
-            let bottomVertex = CompleteVertex(
-                position: lowerPosition,
-                normal: [
-                    cos(theta + (smoothNormals ? 0 : thetaInc / 2)), 0,
-                    sin(theta + (smoothNormals ? 0 : thetaInc / 2))
-                ], uv: [1 - uStep * Float(side), 0]
-            )
-
-            // add vertex for bottom side of cylinder, facing out
-            vertices.append(bottomVertex)
-
-            // add vertex for bottom side facing down
-            lowerCapVertices.append(CompleteVertex(
-                position: bottomVertex.position,
-                normal: [0, -1, 0], uv: [cosTheta + 1, sinTheta + 1] / 2)
-            )
-
-            if side != 0, !smoothNormals {
-                upperEdgeVertices.append(CompleteVertex(
-                    position: lowerPosition + [0, height, 0],
-                    normal: [cos(theta - thetaInc / 2), 0, sin(theta - thetaInc / 2)],
-                    uv: [1 - uStep * Float(side), 1]
-                ))
-            }
-
-            // add vertex for top side facing out
-            let topVertex = CompleteVertex(
-                position: lowerPosition + [0, height, 0],
-                normal: bottomVertex.normal, uv: [1 - uStep * Float(side), 1]
-            )
-            upperEdgeVertices.append(topVertex)
-
-            upperCapVertices.append(CompleteVertex(
-                position: topVertex.position, normal: [0, 1, 0], uv: [1 - cosTheta, sinTheta + 1] / 2)
-            )
-
-            theta += thetaInc
+            vertexOffset += verticesPerCircle
+            direction *= -1.0
+            flip = !flip
         }
-        return CylinderVertices(
-            lowerEdge: vertices, upperEdge: upperEdgeVertices, lowerCap: lowerCapVertices,
-            upperCap: upperCapVertices, smoothNormals: smoothNormals
-        )
-    }
-
-    /// Creates a new cylinder mesh with the specified values
-    /// - Parameters:
-    ///   - radius: Radius of the cylinder
-    ///   - height: Height of the cylinder
-    ///   - sides: How many sides the cone should have, default is 24, minimum is 3
-    ///   - splitFaces: A Boolean you set to true to indicate that vertices shouldn’t be merged.
-    ///   - smoothNormals: Whether to smooth the normals. Good for high numbers of sides to give a rounder shape.
-    ///                    Smoothed normal setting also reduces the total number of vertices
-    /// - Returns: A cylinder mesh.
-    public static func generateCylinder(
-        radius: Float, height: Float, sides: Int = 24,
-        splitFaces: Bool = false, smoothNormals: Bool = false
-    ) throws -> MeshResource {
-        assert(sides > 2, "Sides must be an integer above 2")
-
-        // first vertices added to vertices will be bottom edges
-        // upperEdgeVertices are all top edge vertices of the cylinder
-        // lowerCapVertices are the bottom edge vertices
-        // upperCapVertices are the top edge vertices
-        var cylinderVerts = cylinderVertices(sides, radius, height, smoothNormals)
-        if !cylinderVerts.calculateCylinderDetails(
-            height: height, sides: sides, splitFaces: splitFaces
-        ) {
-            assertionFailure("Cannot calculate cylinder")
+        if splitFaces {
+            materials.append(contentsOf: Array(repeating: 1, count: angular * radial * 4))
         }
-        let meshDescr = cylinderVerts.combinedVerts!.generateMeshDescriptor(
-            with: cylinderVerts.indices!, materials: cylinderVerts.materialIndices!
-        )
-        return try MeshResource.generate(from: [meshDescr])
+        
+        descr.positions = MeshBuffers.Positions(meshPositions)
+        descr.normals = MeshBuffers.Normals(normals)
+        descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
+        descr.primitives = .triangles(indices)
+        if !materials.isEmpty {
+            descr.materials = MeshDescriptor.Materials.perFace(materials)
+        }
+        return try MeshResource.generate(from: [descr])
     }
 }
