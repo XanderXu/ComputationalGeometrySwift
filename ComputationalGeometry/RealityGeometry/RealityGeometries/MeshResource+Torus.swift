@@ -8,80 +8,70 @@
 import RealityKit
 
 extension MeshResource {
-    fileprivate static func addTorusVertices(
-        _ radius: Float, _ csRadius: Float, _ sides: Int, _ csSides: Int
-    ) -> [CompleteVertex] {
-        let angleIncs = 360 / Float(sides)
-        let csAngleIncs = 360 / Float(csSides)
-        var allVertices: [CompleteVertex] = []
-        var currentradius: Float
-        var jAngle: Float = 0
-        var iAngle: Float = 0
-        let dToR: Float = .pi / 180
-        var zval: Float
-        while jAngle <= 360 {
-            currentradius = radius + (csRadius * cosf(jAngle * dToR))
-            zval = csRadius * sinf(jAngle * dToR)
-            let baseNorm: SIMD3<Float> = [cosf(jAngle * dToR), 0, sinf(jAngle * dToR)]
-            iAngle = 0
-            while iAngle <= 360 {
-                let normVal = simd_quatf(angle: iAngle * dToR, axis: [0, 0, 1]).act(baseNorm)
-                let vertexPos: SIMD3<Float> = [
-                    currentradius * cosf(iAngle * dToR),
-                    currentradius * sinf(iAngle * dToR),
-                    zval
-                ]
-                var uv: SIMD2<Float> = [1 - iAngle / 360, 2 * jAngle / 360 - 1]
-                if uv.y < 0 { uv.y *= -1 }
-                allVertices.append(CompleteVertex(position: vertexPos, normal: normVal, uv: uv))
-                iAngle += angleIncs
-            }
-            jAngle += csAngleIncs
-        }
-        return allVertices
-    }
-
-    /// Create a new torus MeshResource 🍩
-    /// - Parameters:
-    ///   - sides: Number of segments in the toroidal direction (outer edge of the torus).
-    ///   - csSides: Number of segments in the poloidal direction (segments in the tube)
-    ///   - radius: Distance from the centre of the torus to the centre of the tube.
-    ///   - csRadius: Radius of the tube.
-    /// - Returns: A new torus `MeshResource`
-    public static func generateTorus(
-        sides: Int, csSides: Int, radius: Float, csRadius: Float
-    ) throws -> MeshResource {
-        let allVertices = addTorusVertices(radius, csRadius, sides, csSides)
-
+    public static func generateTorus(minorRadius: Float, majorRadius: Float, minorResolution :Int = 24, majorResolution: Int = 24) throws -> MeshResource {
+        var descr = MeshDescriptor()
+        var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
-        var i = 0
-        let rowCount = sides + 1
-        while i < csSides {
-            var j = 0
-            while j < sides {
-                /*
-                 1
-                 |\
-                 | \
-                 2--3
-                 */
-                indices.append(UInt32(i * rowCount + j))
-                indices.append(UInt32(i * rowCount + j + 1))
-                indices.append(UInt32((i + 1) * rowCount + j + 1))
-                /*
-                 3--2
-                  \ |
-                   \|
-                    1
-                 */
-                indices.append(UInt32((i + 1) * rowCount + j + 1))
-                indices.append(UInt32((i + 1) * rowCount + j))
-                indices.append(UInt32(i * rowCount + j))
-                j += 1
+        var normals: [SIMD3<Float>] = []
+        var textureMap: [SIMD2<Float>] = []
+        
+        let slices = minorResolution > 2 ? minorResolution : 3
+        let angular = majorResolution > 2 ? majorResolution : 3
+
+        let slicesf = Float(slices)
+        let angularf = Float(angular)
+
+        let limit = Float.pi * 2.0
+        let sliceInc = limit / slicesf
+        let angularInc = limit / angularf
+
+        let perLoop = angular + 1
+        
+        for s in 0...slices {
+            let sf = Float(s)
+            let slice = sf * sliceInc
+            let cosSlice = cos(slice)
+            let sinSlice = sin(slice)
+            
+            for a in 0...angular {
+                let af = Float(a)
+                let angle = af * angularInc
+
+                let cosAngle = cos(angle)
+                let sinAngle = sin(angle)
+
+                let x = cosSlice * (majorRadius + cosAngle * minorRadius)
+                let y = sinSlice * (majorRadius + cosAngle * minorRadius)
+                let z = sinAngle * minorRadius
+
+                let tangent = SIMD3<Float>(-sinSlice, cosSlice, 0.0)
+                let stangent = SIMD3<Float>(cosSlice * (-sinAngle), sinSlice * (-sinAngle), cosAngle)
+                
+                meshPositions.append(SIMD3<Float>(x, z, y))
+                normals.append(SIMD3<Float>(simd_cross(tangent, stangent)))
+                textureMap.append(SIMD2<Float>(af / angularf, sf / slicesf))
+                
+                if (s != slices && a != angular) {
+                    let index = a + s * perLoop
+
+                    let tl = UInt32(index)
+                    let tr = tl + 1
+                    let bl = UInt32(index + perLoop)
+                    let br = bl + 1
+
+                    indices.append(contentsOf: [
+                        tl, tr, bl,
+                        tr, br, bl
+                    ])
+                }
             }
-            i += 1
         }
-        let meshDesc = allVertices.generateMeshDescriptor(with: indices)
-        return try .generate(from: [meshDesc])
+        
+        descr.positions = MeshBuffers.Positions(meshPositions)
+        descr.normals = MeshBuffers.Normals(normals)
+        descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
+        descr.primitives = .triangles(indices)
+        
+        return try MeshResource.generate(from: [descr])
     }
 }
