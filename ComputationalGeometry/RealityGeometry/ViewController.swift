@@ -37,8 +37,8 @@ class ViewController: UIViewController {
 //            let mesh = try MeshResource.generateRoundedRectPlane(width: 0.2, depth: 0.2, radius: 0.05, angularResolution: 10, edgeXResolution: 5, edgeYResolution: 5, radialResolution: 5, circleUV: true)
 //            let mesh = try MeshResource.generateCone(radius: 0.2, height: 0.3, angularResolution: 24, radialResolution: 2, verticalResolution: 3, splitFaces: true, circleUV: false)
 //            let mesh = try MeshResource.generateCylinder(radius: 0.2, height: 0.2, angularResolution: 24, radialResolution: 2, verticalResolution: 3, splitFaces: false, circleUV: false)
-            let mesh = try MeshResource.generateCapsule(radius: 0.1, height: 0.1, angularResolution: 24, radialResolution: 5, verticalResolution: 3, splitFaces: true)
-//            let mesh = try MeshResource.generateTorus(minorRadius: 0.05, majorRadius: 0.2)
+//            let mesh = try MeshResource.generateCapsule(radius: 0.1, height: 0.1, angularResolution: 24, radialResolution: 5, verticalResolution: 3, splitFaces: true)
+            let mesh = try MeshResource.generateTorus(minorRadius: 0.05, majorRadius: 0.2)
             let model = ModelEntity(mesh:mesh, materials: [m,m])
             model.position.y = 0.2
 //            model.orientation = simd_quatf(angle: -.pi/4, axis: SIMD3<Float>(1,0,0))

@@ -18,6 +18,7 @@
 		6C4EE2F525789CD300A28B88 /* MatrixSVD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4EE2F225789CD300A28B88 /* MatrixSVD.swift */; };
 		6C5BB7EE257A378300C36817 /* Sphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5BB7ED257A378300C36817 /* Sphere.swift */; };
 		6C7C8B5E27BF3E9000107FD9 /* number.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6C7C8B5D27BF3E8F00107FD9 /* number.jpeg */; };
+		6C8A979D27F57F5100F4E347 /* MeshResource+MetaLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8A979C27F57F5100F4E347 /* MeshResource+MetaLogo.swift */; };
 		6C93A41D2610A80900AFB4EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C93A41C2610A80900AFB4EC /* AppDelegate.swift */; };
 		6C93A41F2610A80900AFB4EC /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C93A41E2610A80900AFB4EC /* art.scnassets */; };
 		6C93A4212610A80900AFB4EC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C93A4202610A80900AFB4EC /* ViewController.swift */; };
@@ -29,7 +30,6 @@
 		6CBC76E627C331B600F45FD2 /* MeshResource+Torus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC76DE27C331B600F45FD2 /* MeshResource+Torus.swift */; };
 		6CBC76E727C331B600F45FD2 /* MeshResource+Cone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC76DF27C331B600F45FD2 /* MeshResource+Cone.swift */; };
 		6CBC76E827C331B600F45FD2 /* MeshResource+Planes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC76E027C331B600F45FD2 /* MeshResource+Planes.swift */; };
-		6CBC76EB27C331B600F45FD2 /* CompleteVertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC76E327C331B600F45FD2 /* CompleteVertex.swift */; };
 		6CD02D4D2562CB9600E90615 /* simd_float+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD02D4C2562CB9600E90615 /* simd_float+Utils.swift */; };
 		6CDEC90E255C380700FBB946 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEC90D255C380700FBB946 /* main.swift */; };
 		6CDEC916255C3A9C00FBB946 /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDEC915255C3A9C00FBB946 /* Plane.swift */; };
@@ -89,6 +89,7 @@
 		6C4EE2F225789CD300A28B88 /* MatrixSVD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixSVD.swift; sourceTree = "<group>"; };
 		6C5BB7ED257A378300C36817 /* Sphere.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sphere.swift; sourceTree = "<group>"; };
 		6C7C8B5D27BF3E8F00107FD9 /* number.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = number.jpeg; sourceTree = "<group>"; };
+		6C8A979C27F57F5100F4E347 /* MeshResource+MetaLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeshResource+MetaLogo.swift"; sourceTree = "<group>"; };
 		6C93A41A2610A80900AFB4EC /* RelativeMovement.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RelativeMovement.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C93A41C2610A80900AFB4EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6C93A41E2610A80900AFB4EC /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -102,7 +103,6 @@
 		6CBC76DE27C331B600F45FD2 /* MeshResource+Torus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Torus.swift"; sourceTree = "<group>"; };
 		6CBC76DF27C331B600F45FD2 /* MeshResource+Cone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Cone.swift"; sourceTree = "<group>"; };
 		6CBC76E027C331B600F45FD2 /* MeshResource+Planes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MeshResource+Planes.swift"; sourceTree = "<group>"; };
-		6CBC76E327C331B600F45FD2 /* CompleteVertex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteVertex.swift; sourceTree = "<group>"; };
 		6CD02D4C2562CB9600E90615 /* simd_float+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "simd_float+Utils.swift"; sourceTree = "<group>"; };
 		6CDEC90A255C380700FBB946 /* ComputationalGeometry */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComputationalGeometry; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CDEC90D255C380700FBB946 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -224,9 +224,9 @@
 				6CBC76DC27C331B600F45FD2 /* MeshResource+Cylinder.swift */,
 				6CA60BF427F2ACE000756C00 /* MeshResource+Capsule.swift */,
 				6CBC76DE27C331B600F45FD2 /* MeshResource+Torus.swift */,
+				6C8A979C27F57F5100F4E347 /* MeshResource+MetaLogo.swift */,
 				6CBC76DF27C331B600F45FD2 /* MeshResource+Cone.swift */,
 				6CBC76E027C331B600F45FD2 /* MeshResource+Planes.swift */,
-				6CBC76E327C331B600F45FD2 /* CompleteVertex.swift */,
 			);
 			path = RealityGeometries;
 			sourceTree = "<group>";
@@ -591,12 +591,12 @@
 			files = (
 				6CBC76E627C331B600F45FD2 /* MeshResource+Torus.swift in Sources */,
 				6CF73A1027BE32100050BC7C /* ViewController.swift in Sources */,
+				6C8A979D27F57F5100F4E347 /* MeshResource+MetaLogo.swift in Sources */,
 				6CA60BF527F2ACE000756C00 /* MeshResource+Capsule.swift in Sources */,
 				6CF73A0E27BE32100050BC7C /* AppDelegate.swift in Sources */,
 				6CBC76E827C331B600F45FD2 /* MeshResource+Planes.swift in Sources */,
 				6CBC76E427C331B600F45FD2 /* MeshResource+Cylinder.swift in Sources */,
 				6CBC76E727C331B600F45FD2 /* MeshResource+Cone.swift in Sources */,
-				6CBC76EB27C331B600F45FD2 /* CompleteVertex.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

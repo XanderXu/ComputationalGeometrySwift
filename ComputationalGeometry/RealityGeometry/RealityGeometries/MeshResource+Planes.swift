@@ -2,7 +2,7 @@
 //  MeshResource+Planes.swift
 //  
 //
-//  Created by Max Cobb on 11/06/2021.
+//  Created by Xu on 2022/3/29.
 //
 
 import RealityKit

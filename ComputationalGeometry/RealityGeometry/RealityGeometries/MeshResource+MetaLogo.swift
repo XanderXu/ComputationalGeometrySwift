@@ -1,14 +1,14 @@
 //
-//  MeshResource+Torus.swift
-//  
+//  MeshResource+MetaLogo.swift
+//  RealityGeometry
 //
-//  Created by Xu on 2022/3/29.
+//  Created by 许 on 2022/3/31.
 //
 
 import RealityKit
 
 extension MeshResource {
-    public static func generateTorus(minorRadius: Float, majorRadius: Float, minorResolution :Int = 24, majorResolution: Int = 24) throws -> MeshResource {
+    public static func generateMetaLogo(minorRadius: Float, majorRadius: Float, minorResolution :Int = 24, majorResolution: Int = 24) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
@@ -16,7 +16,7 @@ extension MeshResource {
         var textureMap: [SIMD2<Float>] = []
         
         let slices = minorResolution > 2 ? minorResolution : 3
-        let angular = majorResolution > 2 ? majorResolution : 3
+        let angular = majorResolution > 3 ? majorResolution : 4
 
         let slicesf = Float(slices)
         let angularf = Float(angular)
