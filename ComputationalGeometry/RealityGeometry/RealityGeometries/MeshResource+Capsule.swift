@@ -31,13 +31,19 @@ extension MeshResource {
         let heightInc = height / slicesf
         
         let halfHeight = height * 0.5
-        let totalHeight = height + 2.0 * radius
-        let vPerCap = radius / totalHeight
-        let vPerCyl = height / totalHeight
+        let totalSurfaceLength = height + .pi * radius
+        let vPerCap = thetaMax * radius / totalSurfaceLength
+        let vPerCyl = height / totalSurfaceLength
         
         let perLoop = phi + 1
         let verticesPerCap = perLoop * (theta + 1)
         
+        // top cap
+        var textureOutMin: Float = vPerCap + vPerCyl
+        var textureOutMax: Float = 1
+        if splitFaces {
+            textureOutMin = 0
+        }
         for t in 0...theta {
             let tf = Float(t)
             let thetaAngle = tf * thetaInc
@@ -57,7 +63,7 @@ extension MeshResource {
                 
                 meshPositions.append(SIMD3<Float>(radius * x, radius * y + halfHeight, radius * z))
                 normals.append(SIMD3<Float>(x, y, z))
-                textureMap.append(SIMD2<Float>(1 - pf / phif, map(input: y, inMin: 0.0, inMax: radius, outMin: vPerCap + vPerCyl, outMax: 1.0)))
+                textureMap.append(SIMD2<Float>(1 - pf / phif, map(input: thetaMax - thetaAngle, inMin: 0.0, inMax: thetaMax, outMin: textureOutMin, outMax: textureOutMax)))
                 
                 if(p != phi && t != theta) {
                     let index = p + t * perLoop
@@ -75,6 +81,14 @@ extension MeshResource {
             }
         }
         
+        // bottom cap
+        if splitFaces {//reverse at bottom
+            textureOutMin = 1
+            textureOutMax = 0
+        } else {
+            textureOutMin = 0
+            textureOutMax = vPerCap
+        }
         for t in 0...theta {
             let tf = Float(t)
             let thetaAngle = tf * thetaInc
@@ -94,7 +108,7 @@ extension MeshResource {
                 
                 meshPositions.append(SIMD3<Float>(radius * x, radius * y - halfHeight, radius * z))
                 normals.append(SIMD3<Float>(x, y, z))
-                textureMap.append(SIMD2<Float>(1 - pf / phif, map(input: y, inMin: -radius, inMax: 0, outMin:  0, outMax: vPerCap)))
+                textureMap.append(SIMD2<Float>(splitFaces ? pf / phif : 1 - pf / phif, map(input: thetaAngle - thetaMax, inMin: -thetaMax, inMax: 0, outMin: textureOutMin, outMax: textureOutMax)))
                 
                 if(p != phi && t != theta) {
                     let index = verticesPerCap + p + t * perLoop
@@ -114,6 +128,14 @@ extension MeshResource {
         if splitFaces {
             materials.append(contentsOf: Array(repeating: 1, count: theta * phi * 4))
         }
+        
+        if splitFaces {
+            textureOutMin = 0
+            textureOutMax = 1
+        } else {
+            textureOutMin = vPerCap
+            textureOutMax = vPerCap + vPerCyl
+        }
         for s in 0...slices {
             let sf = Float(s)
             let y = sf * heightInc
@@ -129,7 +151,7 @@ extension MeshResource {
                 
                 meshPositions.append(SIMD3<Float>(radius * x, y - halfHeight, radius * z))
                 normals.append(SIMD3<Float>(x, 0, z))
-                textureMap.append(SIMD2<Float>(1 - pf / phif, map(input: sf, inMin: 0, inMax: slicesf, outMin: vPerCap, outMax: vPerCap + vPerCyl)))
+                textureMap.append(SIMD2<Float>(1 - pf / phif, map(input: sf, inMin: 0, inMax: slicesf, outMin: textureOutMin, outMax: textureOutMax)))
                 
                 if(p != phi && s != slices) {
                     let index = verticesPerCap * 2 + p + s * perLoop
