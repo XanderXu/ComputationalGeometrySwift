@@ -8,15 +8,15 @@
 import RealityKit
 
 extension MeshResource {
-    public static func generateMetaLogo(minorRadius: Float, majorRadius: Float, minorResolution :Int = 24, majorResolution: Int = 24) throws -> MeshResource {
+    public static func generateMetaLogo(minorRadius: Float, majorRadius: Float, height: Float, minorResolution :Int = 24, majorResolution: Int = 24) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
         var normals: [SIMD3<Float>] = []
         var textureMap: [SIMD2<Float>] = []
         
-        let slices = minorResolution > 2 ? minorResolution : 3
-        let angular = majorResolution > 3 ? majorResolution : 4
+        let slices = majorResolution > 2 ? majorResolution : 4
+        let angular = minorResolution > 2 ? minorResolution : 3
 
         let slicesf = Float(slices)
         let angularf = Float(angular)
@@ -33,22 +33,21 @@ extension MeshResource {
             let cosSlice = cos(slice)
             let sinSlice = sin(slice)
             
+            let centerX = cosSlice * majorRadius
+            let centerY = sin(2 * slice) * height * 0.5
+            let centerZ = sinSlice * majorRadius
+            let center = SIMD3<Float>(centerX, centerY, centerZ)
+            
+            let tangent = simd_normalize(SIMD3<Float>(-sinSlice, height * cos(2 * slice) / majorRadius, cosSlice))
+            let vectorN = SIMD3<Float>(cosSlice, 0, sinSlice)
             for a in 0...angular {
                 let af = Float(a)
                 let angle = af * angularInc
-
-                let cosAngle = cos(angle)
-                let sinAngle = sin(angle)
-
-                let x = cosSlice * (majorRadius + cosAngle * minorRadius)
-                let y = sinAngle * minorRadius
-                let z = sinSlice * (majorRadius + cosAngle * minorRadius)
-
-                let tangent = SIMD3<Float>(-sinSlice, 0, cosSlice)
-                let stangent = SIMD3<Float>(cosSlice * (-sinAngle), cosAngle, sinSlice * (-sinAngle))
                 
-                meshPositions.append(SIMD3<Float>(x, y, z))
-                normals.append(SIMD3<Float>(simd_cross(stangent, tangent)))
+                let normal = simd_act(simd_quatf(angle: angle, axis: tangent), vectorN)
+
+                meshPositions.append(center + normal * minorRadius)
+                normals.append(normal)
                 textureMap.append(SIMD2<Float>(af / angularf, sf / slicesf))
                 
                 if (s != slices && a != angular) {

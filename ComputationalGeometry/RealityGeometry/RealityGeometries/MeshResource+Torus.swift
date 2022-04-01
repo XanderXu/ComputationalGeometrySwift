@@ -15,8 +15,8 @@ extension MeshResource {
         var normals: [SIMD3<Float>] = []
         var textureMap: [SIMD2<Float>] = []
         
-        let slices = minorResolution > 2 ? minorResolution : 3
-        let angular = majorResolution > 2 ? majorResolution : 3
+        let slices = majorResolution > 2 ? majorResolution : 3
+        let angular = minorResolution > 2 ? minorResolution : 3
 
         let slicesf = Float(slices)
         let angularf = Float(angular)
@@ -36,7 +36,6 @@ extension MeshResource {
             for a in 0...angular {
                 let af = Float(a)
                 let angle = af * angularInc
-
                 let cosAngle = cos(angle)
                 let sinAngle = sin(angle)
 
