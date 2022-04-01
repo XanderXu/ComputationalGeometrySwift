@@ -1,5 +1,5 @@
 //
-//  MeshResource+MetaLogo.swift
+//  MeshResource+LissajousCurve.swift
 //  RealityGeometry
 //
 //  Created by 许 on 2022/3/31.
@@ -8,14 +8,14 @@
 import RealityKit
 
 extension MeshResource {
-    public static func generateMetaLogo(minorRadius: Float, majorRadius: Float, height: Float, minorResolution :Int = 24, majorResolution: Int = 24) throws -> MeshResource {
+    public static func generateLissajousCurve(minorRadius: Float, majorRadius: Float, height: Float, cycleTimes: Float = 2, minorResolution :Int = 24, majorResolution: Int = 48) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
         var normals: [SIMD3<Float>] = []
         var textureMap: [SIMD2<Float>] = []
         
-        let slices = majorResolution > 2 ? majorResolution : 4
+        let slices = majorResolution > 3 ? majorResolution : 4
         let angular = minorResolution > 2 ? minorResolution : 3
 
         let slicesf = Float(slices)
@@ -34,11 +34,11 @@ extension MeshResource {
             let sinSlice = sin(slice)
             
             let centerX = cosSlice * majorRadius
-            let centerY = sin(2 * slice) * height * 0.5
+            let centerY = sin(cycleTimes * slice) * height * 0.5
             let centerZ = sinSlice * majorRadius
             let center = SIMD3<Float>(centerX, centerY, centerZ)
             
-            let tangentN = simd_normalize(SIMD3<Float>(-sinSlice, height * cos(2 * slice) / majorRadius, cosSlice))
+            let tangentN = simd_normalize(SIMD3<Float>(-sinSlice, cos(cycleTimes * slice) * cycleTimes * height * 0.5 / majorRadius, cosSlice))
             let vectorN = SIMD3<Float>(cosSlice, 0, sinSlice)
             for a in 0...angular {
                 let af = Float(a)
