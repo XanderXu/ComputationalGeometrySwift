@@ -38,13 +38,13 @@ extension MeshResource {
             let centerZ = sinSlice * majorRadius
             let center = SIMD3<Float>(centerX, centerY, centerZ)
             
-            let tangent = simd_normalize(SIMD3<Float>(-sinSlice, height * cos(2 * slice) / majorRadius, cosSlice))
+            let tangentN = simd_normalize(SIMD3<Float>(-sinSlice, height * cos(2 * slice) / majorRadius, cosSlice))
             let vectorN = SIMD3<Float>(cosSlice, 0, sinSlice)
             for a in 0...angular {
                 let af = Float(a)
                 let angle = af * angularInc
                 
-                let normal = simd_act(simd_quatf(angle: angle, axis: tangent), vectorN)
+                let normal = simd_act(simd_quatf(angle: angle, axis: tangentN), vectorN)
 
                 meshPositions.append(center + normal * minorRadius)
                 normals.append(normal)
