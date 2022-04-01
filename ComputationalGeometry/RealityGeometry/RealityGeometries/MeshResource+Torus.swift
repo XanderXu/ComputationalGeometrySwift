@@ -33,21 +33,20 @@ extension MeshResource {
             let cosSlice = cos(slice)
             let sinSlice = sin(slice)
             
+            let centerX = cosSlice * majorRadius
+            let centerZ = sinSlice * majorRadius
+            let center = SIMD3<Float>(centerX, 0, centerZ)
+            
+            let tangentN = SIMD3<Float>(-sinSlice, 0, cosSlice)
+            let vectorN = SIMD3<Float>(cosSlice, 0, sinSlice)
             for a in 0...angular {
                 let af = Float(a)
                 let angle = af * angularInc
-                let cosAngle = cos(angle)
-                let sinAngle = sin(angle)
-
-                let x = cosSlice * (majorRadius + cosAngle * minorRadius)
-                let y = sinAngle * minorRadius
-                let z = sinSlice * (majorRadius + cosAngle * minorRadius)
-
-                let tangent = SIMD3<Float>(-sinSlice, 0, cosSlice)
-                let stangent = SIMD3<Float>(cosSlice * (-sinAngle), cosAngle, sinSlice * (-sinAngle))
                 
-                meshPositions.append(SIMD3<Float>(x, y, z))
-                normals.append(SIMD3<Float>(simd_cross(stangent, tangent)))
+                let normal = simd_act(simd_quatf(angle: angle, axis: tangentN), vectorN)
+
+                meshPositions.append(center + normal * minorRadius)
+                normals.append(normal)
                 textureMap.append(SIMD2<Float>(af / angularf, sf / slicesf))
                 
                 if (s != slices && a != angular) {
