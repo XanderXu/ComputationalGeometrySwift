@@ -15,7 +15,7 @@ extension MeshResource {
     ///   - vertices: Vertex count in the x and z axis
     /// - Returns: A plane mesh
     public static func generateDetailedPlane(
-        width: Float, depth: Float, vertices: (Int, Int)
+        width: Float, height: Float, vertices: (Int, Int)
     ) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
@@ -27,7 +27,7 @@ extension MeshResource {
                 meshPositions.append([
                     (Float(x_v) / Float(vertices.0 - 1) - 0.5) * width,
                     0,
-                    (0.5 - Float(y_v) / Float(vertices.1 - 1)) * depth
+                    (0.5 - Float(y_v) / Float(vertices.1 - 1)) * height
                 ])
                 textureMap.append([Float(x_v) / Float(vertices.0 - 1), Float(y_v) / Float(vertices.1 - 1)])
                 if x_v > 0 && y_v > 0 {
@@ -211,8 +211,16 @@ extension MeshResource {
         if (theta < 0) { theta += .pi * 2.0; }
         return theta;
     }
-    public static func generateRoundedRectPlane(width: Float, depth: Float, radius: Float, angularResolution: Int = 24, edgeXResolution: Int = 2, edgeYResolution: Int = 2, radialResolution: Int = 2, circleUV: Bool = true) throws -> MeshResource {
+    public static func generateRoundedRectPlane(width: Float, height: Float, radius: Float, angularResolution: Int = 24, edgeXResolution: Int = 2, edgeYResolution: Int = 2, radialResolution: Int = 2, circleUV: Bool = true) throws -> MeshResource {
         var descr = MeshDescriptor()
+        let datas = generateRoundedRectPlaneDatas(width: width, height: height, radius: radius, angularResolution: angularResolution, edgeXResolution: edgeXResolution, edgeYResolution: edgeYResolution, radialResolution: radialResolution, circleUV: circleUV)
+        
+        descr.primitives = .triangles(datas.indices)
+        descr.positions = MeshBuffer(datas.meshPositions)
+        descr.textureCoordinates = MeshBuffers.TextureCoordinates(datas.textureMap)
+        return try .generate(from: [descr])
+    }
+    public static func generateRoundedRectPlaneDatas(width: Float, height: Float, radius: Float, angularResolution: Int, edgeXResolution: Int, edgeYResolution: Int, radialResolution: Int, circleUV: Bool) -> (meshPositions: [SIMD3<Float>], indices: [UInt32], textureMap: [SIMD2<Float>]) {
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
         var textureMap: [SIMD2<Float>] = []
@@ -241,7 +249,7 @@ extension MeshResource {
         let perLoop = (angular - 2) * 4 + (edgeX * 2) + (edgeY * 2) + (circleUV ? 2 : 0)
 
         let widthHalf = width * 0.5
-        let depthHalf = depth * 0.5
+        let depthHalf = height * 0.5
 
         let minDim = (widthHalf < depthHalf ? widthHalf : depthHalf)
         let radius = radius > minDim ? minDim : radius
@@ -272,7 +280,7 @@ extension MeshResource {
                         textureMap.append(SIMD2<Float>(0,uvy))
                     }
                 } else {
-                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / depth + 0.5))
+                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / height + 0.5))
                 }
             }
             
@@ -291,7 +299,7 @@ extension MeshResource {
                     let uvy = n
                     textureMap.append(SIMD2<Float>(uvx,uvy))
                 } else {
-                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / depth + 0.5))
+                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / height + 0.5))
                 }
             }
             
@@ -309,7 +317,7 @@ extension MeshResource {
                     let uvy = n
                     textureMap.append(SIMD2<Float>(uvx,uvy))
                 } else {
-                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / depth + 0.5))
+                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / height + 0.5))
                 }
             }
             
@@ -328,7 +336,7 @@ extension MeshResource {
                     let uvy = n
                     textureMap.append(SIMD2<Float>(uvx,uvy))
                 } else {
-                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / depth + 0.5))
+                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / height + 0.5))
                 }
             }
             
@@ -346,7 +354,7 @@ extension MeshResource {
                     let uvy = n
                     textureMap.append(SIMD2<Float>(uvx,uvy))
                 } else {
-                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / depth + 0.5))
+                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / height + 0.5))
                 }
             }
             
@@ -365,7 +373,7 @@ extension MeshResource {
                     let uvy = n
                     textureMap.append(SIMD2<Float>(uvx,uvy))
                 } else {
-                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / depth + 0.5))
+                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / height + 0.5))
                 }
             }
             
@@ -383,7 +391,7 @@ extension MeshResource {
                     let uvy = n
                     textureMap.append(SIMD2<Float>(uvx,uvy))
                 } else {
-                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / depth + 0.5))
+                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / height + 0.5))
                 }
             }
             
@@ -402,7 +410,7 @@ extension MeshResource {
                     let uvy = n
                     textureMap.append(SIMD2<Float>(uvx,uvy))
                 } else {
-                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / depth + 0.5))
+                    textureMap.append(SIMD2<Float>(pos.x * n / width + 0.5, -pos.y * n / height + 0.5))
                 }
             }
             
@@ -424,9 +432,6 @@ extension MeshResource {
             }
         }
         
-        descr.primitives = .triangles(indices)
-        descr.positions = MeshBuffer(meshPositions)
-        descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
-        return try .generate(from: [descr])
+        return (meshPositions: meshPositions, indices: indices, textureMap: textureMap)
     }
 }
