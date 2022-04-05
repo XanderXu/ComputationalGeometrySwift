@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C0962FE27FBDDCC00957097 /* MeshResource+PlatonicSolids.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0962FD27FBDDCC00957097 /* MeshResource+PlatonicSolids.swift */; };
 		6C3A8F432621747200EC55EA /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3A8F422621747200EC55EA /* main.swift */; };
 		6C3A8F592621909600EC55EA /* MatrixSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3A8F582621909600EC55EA /* MatrixSV.swift */; };
 		6C3A8F652621919500EC55EA /* MatrixSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3A8F582621909600EC55EA /* MatrixSV.swift */; };
@@ -81,6 +82,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6C0962FD27FBDDCC00957097 /* MeshResource+PlatonicSolids.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeshResource+PlatonicSolids.swift"; sourceTree = "<group>"; };
 		6C3A8F402621747100EC55EA /* SimultaneousEquations */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SimultaneousEquations; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C3A8F422621747200EC55EA /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		6C3A8F582621909600EC55EA /* MatrixSV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixSV.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				6CBC76DF27C331B600F45FD2 /* MeshResource+Cone.swift */,
 				6CBC76E027C331B600F45FD2 /* MeshResource+Planes.swift */,
 				6C82DE5027F7F270004CE818 /* MeshResource+Cube.swift */,
+				6C0962FD27FBDDCC00957097 /* MeshResource+PlatonicSolids.swift */,
 			);
 			path = RealityGeometries;
 			sourceTree = "<group>";
@@ -591,6 +594,7 @@
 			files = (
 				6CBC76E627C331B600F45FD2 /* MeshResource+Torus.swift in Sources */,
 				6CF73A1027BE32100050BC7C /* ViewController.swift in Sources */,
+				6C0962FE27FBDDCC00957097 /* MeshResource+PlatonicSolids.swift in Sources */,
 				6CA60BF527F2ACE000756C00 /* MeshResource+Capsule.swift in Sources */,
 				6CF73A0E27BE32100050BC7C /* AppDelegate.swift in Sources */,
 				6C82DE5127F7F270004CE818 /* MeshResource+Cube.swift in Sources */,
