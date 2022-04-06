@@ -96,7 +96,6 @@ extension MeshResource {
         var indices: [UInt32] = []
         var normals: [SIMD3<Float>] = Array(repeating: .zero, count: 60)
         var textureMap: [SIMD2<Float>] = []
-        var materials: [UInt32] = []
         
         let phi = (1.0 + sqrtf(5)) * 0.5
         let r2 = radius * radius
@@ -147,11 +146,11 @@ extension MeshResource {
             8, 6, 7,
             9, 8, 1
         ]
-        
-        for (i,ind) in index.enumerated() {
-            let t = i / 3
-            let s = t % 5
-            indices.append(ind + UInt32(points.count * s))
+        var countDict: [UInt32:Int] = [:]
+        for ind in index {
+            let count = countDict[ind] ?? 0
+            indices.append(ind + UInt32(points.count * count))
+            countDict[ind] = count + 1
         }
         var triangles = 20
         for i in 0..<triangles {
@@ -237,9 +236,6 @@ extension MeshResource {
         descr.normals = MeshBuffers.Normals(normals)
         descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
         descr.primitives = .triangles(indices)
-        if !materials.isEmpty {
-            descr.materials = MeshDescriptor.Materials.perFace(materials)
-        }
         return try MeshResource.generate(from: [descr])
     }
 }
