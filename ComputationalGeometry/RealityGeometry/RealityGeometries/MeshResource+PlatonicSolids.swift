@@ -94,7 +94,7 @@ extension MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
-        var normals: [SIMD3<Float>] = []
+        var normals: [SIMD3<Float>] = Array(repeating: .zero, count: 60)
         var textureMap: [SIMD2<Float>] = []
         var materials: [UInt32] = []
         
@@ -104,10 +104,7 @@ extension MeshResource {
         let h = sqrt(r2 / (den))
         let w = h / phi
 
-        var vertices = 12
-        var triangles = 20
-        
-        meshPositions.append(contentsOf: [
+        let points = [
             SIMD3<Float>(0.0, h, w),
             SIMD3<Float>(0.0, h, -w),
             SIMD3<Float>(0.0, -h, w),
@@ -122,9 +119,10 @@ extension MeshResource {
             SIMD3<Float>(w, 0.0, -h),
             SIMD3<Float>(-w, 0.0, h),
             SIMD3<Float>(w, 0.0, h)
-        ])
+        ]
+        meshPositions.append(contentsOf: points + points + points + points + points)
         
-        indices.append(contentsOf: [
+        let index: [UInt32] = [
             0, 11, 5,
             0, 5, 1,
             0, 1, 7,
@@ -148,8 +146,33 @@ extension MeshResource {
             6, 2, 10,
             8, 6, 7,
             9, 8, 1
-        ])
+        ]
         
+        for (i,ind) in index.enumerated() {
+            let t = i / 3
+            let s = t % 5
+            indices.append(ind + UInt32(points.count * s))
+        }
+        var triangles = 20
+        for i in 0..<triangles {
+            let ai = 3 * i
+            let bi = 3 * i + 1
+            let ci = 3 * i + 2
+            
+            let i0 = indices[ai]
+            let i1 = indices[bi]
+            let i2 = indices[ci]
+            
+            let v0 = meshPositions[Int(i0)]
+            let v1 = meshPositions[Int(i1)]
+            let v2 = meshPositions[Int(i2)]
+            
+            let faceNormal = simd_normalize((v0 + v1 + v2) / 3)
+            normals[Int(i0)] = faceNormal
+            normals[Int(i1)] = faceNormal
+            normals[Int(i2)] = faceNormal
+        }
+        var vertices = meshPositions.count
         
         for _ in 0..<res {
             let newTriangles = triangles * 4
@@ -202,12 +225,12 @@ extension MeshResource {
             vertices = newVertices
         }
         
-        for i in 0..<vertices {
+        for i in 0..<meshPositions.count {
             let p = meshPositions[i]
             let n = simd_normalize(p)
-            normals.append(n)
+//            normals.append(n)
             
-            textureMap.append(SIMD2<Float>((atan2(n.x, n.z) + .pi) / (2.0 * .pi), 1 - acos(n.y) / .pi))
+            textureMap.append(SIMD2<Float>((atan2(n.x, n.z) + .pi) / (2 * .pi), 1 - acos(n.y) / .pi))
         }
         
         descr.positions = MeshBuffers.Positions(meshPositions)
