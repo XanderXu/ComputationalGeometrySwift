@@ -91,10 +91,14 @@ extension MeshResource {
     }
     
     public static func generateIcosahedron(radius: Float, res: Int) throws -> MeshResource {
+        let pointCount = 12
+        var triangles = 20
+        var vertices = pointCount * 5
+        
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
-        var normals: [SIMD3<Float>] = Array(repeating: .zero, count: 60)
+        var normals: [SIMD3<Float>] = Array(repeating: .zero, count: vertices)
         var textureMap: [SIMD2<Float>] = []
         
         let phi = (1.0 + sqrtf(5)) * 0.5
@@ -149,10 +153,10 @@ extension MeshResource {
         var countDict: [UInt32:Int] = [:]
         for ind in index {
             let count = countDict[ind] ?? 0
-            indices.append(ind + UInt32(points.count * count))
+            indices.append(ind + UInt32(pointCount * count))
             countDict[ind] = count + 1
         }
-        var triangles = 20
+        
         for i in 0..<triangles {
             let ai = 3 * i
             let bi = 3 * i + 1
@@ -171,7 +175,6 @@ extension MeshResource {
             normals[Int(i1)] = faceNormal
             normals[Int(i2)] = faceNormal
         }
-        var vertices = meshPositions.count
         
         for _ in 0..<res {
             let newTriangles = triangles * 4
@@ -226,10 +229,9 @@ extension MeshResource {
         
         for i in 0..<meshPositions.count {
             let p = meshPositions[i]
-            let n = simd_normalize(p)
-//            normals.append(n)
-            
-            textureMap.append(SIMD2<Float>((atan2(n.x, n.z) + .pi) / (2 * .pi), 1 - acos(n.y) / .pi))
+            let n = p//simd_normalize(p)
+          
+            textureMap.append(SIMD2<Float>(abs(atan2(n.x, n.z)) / .pi, 1 - acos(n.y/radius) / .pi))
         }
         
         descr.positions = MeshBuffers.Positions(meshPositions)
