@@ -107,88 +107,93 @@ extension MeshResource {
         var vertices = 12
         var triangles = 20
         
-        meshPositions.append(SIMD3<Float>(0.0, h, w))
-        meshPositions.append(SIMD3<Float>(0.0, h, -w))
-        meshPositions.append(SIMD3<Float>(0.0, -h, w))
-        meshPositions.append(SIMD3<Float>(0.0, -h, -w))
+        meshPositions.append(contentsOf: [
+            SIMD3<Float>(0.0, h, w),
+            SIMD3<Float>(0.0, h, -w),
+            SIMD3<Float>(0.0, -h, w),
+            SIMD3<Float>(0.0, -h, -w),
 
-        meshPositions.append(SIMD3<Float>(h, -w, 0.0))
-        meshPositions.append(SIMD3<Float>(h, w, 0.0))
-        meshPositions.append(SIMD3<Float>(-h, -w, 0.0))
-        meshPositions.append(SIMD3<Float>(-h, w, 0.0))
+            SIMD3<Float>(h, -w, 0.0),
+            SIMD3<Float>(h, w, 0.0),
+            SIMD3<Float>(-h, -w, 0.0),
+            SIMD3<Float>(-h, w, 0.0),
 
-        meshPositions.append(SIMD3<Float>(-w, 0.0, -h))
-        meshPositions.append(SIMD3<Float>(w, 0.0, -h))
-        meshPositions.append(SIMD3<Float>(-w, 0.0, h))
-        meshPositions.append(SIMD3<Float>(w, 0.0, h))
+            SIMD3<Float>(-w, 0.0, -h),
+            SIMD3<Float>(w, 0.0, -h),
+            SIMD3<Float>(-w, 0.0, h),
+            SIMD3<Float>(w, 0.0, h)
+        ])
         
-        indices.append(contentsOf: [0, 11, 5])
-        indices.append(contentsOf: [0, 5, 1])
-        indices.append(contentsOf: [0, 1, 7])
-        indices.append(contentsOf: [0, 7, 10])
-        indices.append(contentsOf: [0, 10, 11])
+        indices.append(contentsOf: [
+            0, 11, 5,
+            0, 5, 1,
+            0, 1, 7,
+            0, 7, 10,
+            0, 10, 11,
 
-        indices.append(contentsOf: [1, 5, 9])
-        indices.append(contentsOf: [5, 11, 4])
-        indices.append(contentsOf: [11, 10, 2])
-        indices.append(contentsOf: [10, 7, 6])
-        indices.append(contentsOf: [7, 1, 8])
+            1, 5, 9,
+            5, 11, 4,
+            11, 10, 2,
+            10, 7, 6,
+            7, 1, 8,
 
-        indices.append(contentsOf: [3, 9, 4])
-        indices.append(contentsOf: [3, 4, 2])
-        indices.append(contentsOf: [3, 2, 6])
-        indices.append(contentsOf: [3, 6, 8])
-        indices.append(contentsOf: [3, 8, 9])
+            3, 9, 4,
+            3, 4, 2,
+            3, 2, 6,
+            3, 6, 8,
+            3, 8, 9,
 
-        indices.append(contentsOf: [4, 9, 5])
-        indices.append(contentsOf: [2, 4, 11])
-        indices.append(contentsOf: [6, 2, 10])
-        indices.append(contentsOf: [8, 6, 7])
-        indices.append(contentsOf: [9, 8, 1])
+            4, 9, 5,
+            2, 4, 11,
+            6, 2, 10,
+            8, 6, 7,
+            9, 8, 1
+        ])
+        
         
         for _ in 0..<res {
             let newTriangles = triangles * 4
             let newVertices = vertices + triangles * 3
             
             var newIndices: [UInt32] = []
-
-            var j = vertices
             var pos: SIMD3<Float>
             
             for i in 0..<triangles {
-                let i0 = indices[3 * i]
-                let i1 = indices[3 * i + 1]
-                let i2 = indices[3 * i + 2]
+                let ai = 3 * i
+                let bi = 3 * i + 1
+                let ci = 3 * i + 2
+                
+                let i0 = indices[ai]
+                let i1 = indices[bi]
+                let i2 = indices[ci]
                 
                 let v0 = meshPositions[Int(i0)]
                 let v1 = meshPositions[Int(i1)]
                 let v2 = meshPositions[Int(i2)]
                 
+                let faceNormal = normals[Int(i0)]
+                normals.append(contentsOf: [faceNormal, faceNormal, faceNormal])
                 // a
                 pos = (v0 + v1) * 0.5
-//                pos = simd_normalize(pos) * radius
                 meshPositions.append(pos)
-                let a = UInt32(j)
-                j += 1
 
                 // b
                 pos = (v1 + v2) * 0.5
-//                pos = simd_normalize(pos) * radius
                 meshPositions.append(pos)
-                let b = UInt32(j)
-                j += 1
+                
                 // c
                 pos = (v2 + v0) * 0.5
-//                pos = simd_normalize(pos) * radius
                 meshPositions.append(pos)
-                let c = UInt32(j)
-                j += 1
                 
+                
+                let a = UInt32(ai + vertices)
+                let b = UInt32(bi + vertices)
+                let c = UInt32(ci + vertices)
                 newIndices.append(contentsOf: [
-                    UInt32(i0), a, c,
-                    a, UInt32(i1), b,
+                    i0, a, c,
+                    a, i1, b,
                     a, b, c,
-                    c, b, UInt32(i2)
+                    c, b, i2
                 ])
             }
             

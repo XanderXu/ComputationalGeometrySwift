@@ -40,7 +40,7 @@ class ViewController: UIViewController {
 //            let mesh = try MeshResource.generateCapsule(radius: 0.1, height: 0.1, angularResolution: 24, radialResolution: 5, verticalResolution: 3, splitFaces: true)
 //            let mesh = try MeshResource.generateTorus(minorRadius: 0.05, majorRadius: 0.2)
 //            let mesh = try MeshResource.generateLissajousCurveTorus(minorRadius: 0.008, majorRadius: 0.2, height: 0.3, cycleTimes: 10, majorResolution: 96)
-            let mesh = try MeshResource.generateIcosahedron(radius: 0.2, res: 1)
+            let mesh = try MeshResource.generateIcosahedron(radius: 0.2, res: 0)
             let model = ModelEntity(mesh:mesh, materials: [m,m])
             model.position.y = 0.2
 //            model.orientation = simd_quatf(angle: -.pi/4, axis: SIMD3<Float>(1,0,0))
