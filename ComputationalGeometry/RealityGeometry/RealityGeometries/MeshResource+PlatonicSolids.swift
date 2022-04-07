@@ -8,6 +8,7 @@
 import RealityKit
 
 extension MeshResource {
+    /// 正四面体，radius 为外接球半径，res 三角面剖分次数
     public static func generateTetrahedron(radius: Float, res: Int = 0) throws -> MeshResource {
         let pointCount = 4
         var triangles = 4
@@ -125,6 +126,7 @@ extension MeshResource {
         descr.primitives = .triangles(indices)
         return try MeshResource.generate(from: [descr])
     }
+    /// 正六面体（立方体），radius 为外接球半径，res 四边形平面剖分次数
     public static func generateHexahedron(radius: Float, res: Int = 0) throws -> MeshResource {
         let pointCount = 8
         var quads = 6
@@ -136,7 +138,7 @@ extension MeshResource {
         var normals: [SIMD3<Float>] = Array(repeating: .zero, count: vertices)
         var textureMap: [SIMD2<Float>] = []
         
-        let a: Float = 2 * radius * sqrtf(3)//棱长
+        let a: Float = 2 * radius / sqrtf(3)//棱长
         let r = a / 2 //内切球半径
         let points: [SIMD3<Float>] = [
             SIMD3<Float>(r, r, r),
@@ -152,13 +154,14 @@ extension MeshResource {
         meshPositions.append(contentsOf: points + points + points)
         
         let index: [UInt32] = [
-            0, 1, 2, 3,
+            3, 2, 1, 0,
             4, 5, 6, 7,
             
-            7, 4, 0, 3,
-            0, 1, 3,
+            3, 0, 4, 7,
+            1, 2, 6, 5,
             
-            2, 3, 1
+            0, 1, 5, 4,
+            2, 3, 7, 6
         ]
         var countDict: [UInt32:Int] = [:]
         for ind in index {
@@ -168,10 +171,10 @@ extension MeshResource {
         }
         
         for i in 0..<quads {
-            let ai = 3 * i
-            let bi = 3 * i + 1
-            let ci = 3 * i + 2
-            let di = 3 * i + 3
+            let ai = 4 * i
+            let bi = 4 * i + 1
+            let ci = 4 * i + 2
+            let di = 4 * i + 3
             
             let i0 = indices[ai]
             let i1 = indices[bi]
@@ -198,10 +201,10 @@ extension MeshResource {
             var pos: SIMD3<Float>
             
             for i in 0..<quads {
-                let ai = 3 * i
-                let bi = 3 * i + 1
-                let ci = 3 * i + 2
-                let di = 3 * i + 3
+                let ai = 4 * i
+                let bi = 4 * i + 1
+                let ci = 4 * i + 2
+                let di = 4 * i + 3
                 
                 let i0 = indices[ai]
                 let i1 = indices[bi]
@@ -214,10 +217,7 @@ extension MeshResource {
                 let v3 = meshPositions[Int(i3)]
                 
                 let faceNormal = normals[Int(i0)]
-                normals.append(faceNormal)
-                
-                pos = (v0 + v1 + v2 + v3) / 4
-                meshPositions.append(pos)
+                normals.append(contentsOf: [faceNormal, faceNormal, faceNormal, faceNormal, faceNormal])
                 
                 pos = (v0 + v1) / 2
                 meshPositions.append(pos)
@@ -230,17 +230,21 @@ extension MeshResource {
                 
                 pos = (v0 + v3) / 2
                 meshPositions.append(pos)
+                
+                pos = (v0 + v1 + v2 + v3) / 4
+                meshPositions.append(pos)
 
                 
-                let a = UInt32(ai + vertices)
-                let b = UInt32(bi + vertices)
-                let c = UInt32(ci + vertices)
-                let d = UInt32(di + vertices)
+                let a = UInt32(5 * i + vertices)
+                let b = UInt32(5 * i + 1 + vertices)
+                let c = UInt32(5 * i + 2 + vertices)
+                let d = UInt32(5 * i + 3 + vertices)
+                let center = UInt32(5 * i + 4 + vertices)
                 newIndices.append(contentsOf: [
-                    i0, a, c,
-                    a, i1, b,
-                    a, b, c,
-                    c, b, i2
+                    i0, a, center, d,
+                    a, i1, b, center,
+                    center, b, i2, c,
+                    d, center, c, i3
                 ])
             }
             
@@ -261,6 +265,7 @@ extension MeshResource {
         descr.primitives = .trianglesAndQuads(triangles: [], quads: indices)
         return try MeshResource.generate(from: [descr])
     }
+    /// 正八面体，radius 为外接球半径，res 三角面剖分次数
     public static func generateOctahedron(radius: Float, res: Int = 0) throws -> MeshResource {
         let pointCount = 6
         var triangles = 8
@@ -384,7 +389,7 @@ extension MeshResource {
         descr.primitives = .triangles(indices)
         return try MeshResource.generate(from: [descr])
     }
-    
+    /// 正十二面体，radius 为外接球半径，res 五边形面剖分次数
     public static func generateDogecahedron(radius: Float, res: Int) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
@@ -405,7 +410,7 @@ extension MeshResource {
         }
         return try MeshResource.generate(from: [descr])
     }
-    
+    /// 正二十面体，，radius 为外接球半径，res 三角形面剖分次数
     public static func generateIcosahedron(radius: Float, res: Int = 0) throws -> MeshResource {
         let pointCount = 12
         var triangles = 20
