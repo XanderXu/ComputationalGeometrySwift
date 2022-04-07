@@ -477,17 +477,50 @@ extension MeshResource {
             let v3 = meshPositions[Int(i3)]
             let v4 = meshPositions[Int(i4)]
             
-            let faceNormal = simd_normalize((v0 + v1 + v2 + v3 + v4) / 5)
+            let faceCenter = (v0 + v1 + v2 + v3 + v4) / 5
+            let faceNormal = simd_normalize(faceCenter)
             normals[Int(i0)] = faceNormal
             normals[Int(i1)] = faceNormal
             normals[Int(i2)] = faceNormal
             normals[Int(i3)] = faceNormal
             normals[Int(i4)] = faceNormal
+            
+            if res > 0 {
+                meshPositions.append(faceCenter)
+            }
         }
         
         var triangles = pentagons * 5
         if res > 0 {
-            
+            var newIndices1: [UInt32] = []
+            for i in 0..<pentagons {
+                let ai = 5 * i
+                let bi = 5 * i + 1
+                let ci = 5 * i + 2
+                let di = 5 * i + 3
+                let ei = 5 * i + 4
+                
+                let i0 = indices[ai]
+                let i1 = indices[bi]
+                let i2 = indices[ci]
+                let i3 = indices[di]
+                let i4 = indices[ei]
+                
+                let faceNormal = normals[Int(i0)]
+                normals.append(faceNormal)
+                
+                let center = UInt32(vertices + i)
+                
+                newIndices1.append(contentsOf: [
+                    i0, i1, center,
+                    i1, i2, center,
+                    i2, i3, center,
+                    i3, i4, center,
+                    i4, i0, center
+                ])
+            }
+            vertices += pentagons
+            indices = newIndices1
             if res > 1 {
                 for _ in 1..<res {
                     let newTriangles = triangles * 4
