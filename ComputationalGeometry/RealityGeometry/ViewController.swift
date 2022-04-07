@@ -43,7 +43,8 @@ class ViewController: UIViewController {
 //            let mesh = try MeshResource.generateIcosahedron(radius: 0.1, res: 2)
 //            let mesh = try MeshResource.generateTetrahedron(radius: 0.1, res: 3)
 //            let mesh = try MeshResource.generateOctahedron(radius: 0.1, res: 3)
-            let mesh = try MeshResource.generateHexahedron(radius: 0.2, res: 3)
+//            let mesh = try MeshResource.generateHexahedron(radius: 0.2, res: 3)
+            let mesh = try MeshResource.generateDogecahedron(radius: 0.2)
             let model = ModelEntity(mesh:mesh, materials: [m,m])
             model.position.y = 0.2
 //            model.orientation = simd_quatf(angle: -.pi/4, axis: SIMD3<Float>(1,0,0))
