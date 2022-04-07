@@ -458,6 +458,7 @@ extension MeshResource {
             countDict[ind] = count + 1
         }
         
+        var newIndices1: [UInt32] = []
         for i in 0..<pentagons {
             let ai = 5 * i
             let bi = 5 * i + 1
@@ -487,30 +488,9 @@ extension MeshResource {
             
             if res > 0 {
                 meshPositions.append(faceCenter)
-            }
-        }
-        
-        var triangles = pentagons * 5
-        if res > 0 {
-            var newIndices1: [UInt32] = []
-            for i in 0..<pentagons {
-                let ai = 5 * i
-                let bi = 5 * i + 1
-                let ci = 5 * i + 2
-                let di = 5 * i + 3
-                let ei = 5 * i + 4
-                
-                let i0 = indices[ai]
-                let i1 = indices[bi]
-                let i2 = indices[ci]
-                let i3 = indices[di]
-                let i4 = indices[ei]
-                
-                let faceNormal = normals[Int(i0)]
                 normals.append(faceNormal)
                 
                 let center = UInt32(vertices + i)
-                
                 newIndices1.append(contentsOf: [
                     i0, i1, center,
                     i1, i2, center,
@@ -519,59 +499,63 @@ extension MeshResource {
                     i4, i0, center
                 ])
             }
+        }
+        
+        if res > 0 {
             vertices += pentagons
             indices = newIndices1
-            if res > 1 {
-                for _ in 1..<res {
-                    let newTriangles = triangles * 4
-                    let newVertices = vertices + triangles * 3
+        }
+        if res > 1 {
+            var triangles = pentagons * 5
+            for _ in 1..<res {
+                let newTriangles = triangles * 4
+                let newVertices = vertices + triangles * 3
+                
+                var newIndices: [UInt32] = []
+                var pos: SIMD3<Float>
+                
+                for i in 0..<triangles {
+                    let ai = 3 * i
+                    let bi = 3 * i + 1
+                    let ci = 3 * i + 2
                     
-                    var newIndices: [UInt32] = []
-                    var pos: SIMD3<Float>
+                    let i0 = indices[ai]
+                    let i1 = indices[bi]
+                    let i2 = indices[ci]
                     
-                    for i in 0..<triangles {
-                        let ai = 3 * i
-                        let bi = 3 * i + 1
-                        let ci = 3 * i + 2
-                        
-                        let i0 = indices[ai]
-                        let i1 = indices[bi]
-                        let i2 = indices[ci]
-                        
-                        let v0 = meshPositions[Int(i0)]
-                        let v1 = meshPositions[Int(i1)]
-                        let v2 = meshPositions[Int(i2)]
-                        
-                        let faceNormal = normals[Int(i0)]
-                        normals.append(contentsOf: [faceNormal, faceNormal, faceNormal])
-                        // a
-                        pos = (v0 + v1) * 0.5
-                        meshPositions.append(pos)
-                        
-                        // b
-                        pos = (v1 + v2) * 0.5
-                        meshPositions.append(pos)
-                        
-                        // c
-                        pos = (v2 + v0) * 0.5
-                        meshPositions.append(pos)
-                        
-                        
-                        let a = UInt32(ai + vertices)
-                        let b = UInt32(bi + vertices)
-                        let c = UInt32(ci + vertices)
-                        newIndices.append(contentsOf: [
-                            i0, a, c,
-                            a, i1, b,
-                            a, b, c,
-                            c, b, i2
-                        ])
-                    }
+                    let v0 = meshPositions[Int(i0)]
+                    let v1 = meshPositions[Int(i1)]
+                    let v2 = meshPositions[Int(i2)]
                     
-                    indices = newIndices
-                    triangles = newTriangles
-                    vertices = newVertices
+                    let faceNormal = normals[Int(i0)]
+                    normals.append(contentsOf: [faceNormal, faceNormal, faceNormal])
+                    // a
+                    pos = (v0 + v1) * 0.5
+                    meshPositions.append(pos)
+                    
+                    // b
+                    pos = (v1 + v2) * 0.5
+                    meshPositions.append(pos)
+                    
+                    // c
+                    pos = (v2 + v0) * 0.5
+                    meshPositions.append(pos)
+                    
+                    
+                    let a = UInt32(ai + vertices)
+                    let b = UInt32(bi + vertices)
+                    let c = UInt32(ci + vertices)
+                    newIndices.append(contentsOf: [
+                        i0, a, c,
+                        a, i1, b,
+                        a, b, c,
+                        c, b, i2
+                    ])
                 }
+                
+                indices = newIndices
+                triangles = newTriangles
+                vertices = newVertices
             }
         }
         
