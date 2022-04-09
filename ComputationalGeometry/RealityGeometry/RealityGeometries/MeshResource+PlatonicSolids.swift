@@ -116,7 +116,7 @@ extension MeshResource {
         
         for i in 0..<meshPositions.count {
             let p = meshPositions[i]
-            let n = p//simd_normalize(p)
+            let n = p
           
             textureMap.append(SIMD2<Float>(abs(atan2(n.x, n.z)) / .pi, 1 - acos(n.y/radius) / .pi))
         }
@@ -255,7 +255,7 @@ extension MeshResource {
         
         for i in 0..<meshPositions.count {
             let p = meshPositions[i]
-            let n = p//simd_normalize(p)
+            let n = p
           
             textureMap.append(SIMD2<Float>(abs(atan2(n.x, n.z)) / .pi, 1 - acos(n.y/radius) / .pi))
         }
@@ -379,7 +379,7 @@ extension MeshResource {
         
         for i in 0..<meshPositions.count {
             let p = meshPositions[i]
-            let n = p//simd_normalize(p)
+            let n = p
           
             textureMap.append(SIMD2<Float>(abs(atan2(n.x, n.z)) / .pi, 1 - acos(n.y/radius) / .pi))
         }
@@ -561,7 +561,7 @@ extension MeshResource {
         
         for i in 0..<meshPositions.count {
             let p = meshPositions[i]
-            let n = p//simd_normalize(p)
+            let n = p
           
             textureMap.append(SIMD2<Float>(abs(atan2(n.x, n.z)) / .pi, 1 - acos(n.y/radius) / .pi))
         }
@@ -716,7 +716,7 @@ extension MeshResource {
         
         for i in 0..<meshPositions.count {
             let p = meshPositions[i]
-            let n = p//simd_normalize(p)
+            let n = p
           
             textureMap.append(SIMD2<Float>(abs(atan2(n.x, n.z)) / .pi, 1 - acos(n.y/radius) / .pi))
         }
