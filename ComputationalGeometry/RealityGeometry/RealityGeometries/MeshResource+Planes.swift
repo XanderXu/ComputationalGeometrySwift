@@ -249,17 +249,17 @@ extension MeshResource {
         let perLoop = (angular - 2) * 4 + (edgeX * 2) + (edgeY * 2) + (circleUV ? 2 : 0)
 
         let widthHalf = width * 0.5
-        let depthHalf = height * 0.5
+        let heightHalf = height * 0.5
 
-        let minDim = (widthHalf < depthHalf ? widthHalf : depthHalf)
+        let minDim = (widthHalf < heightHalf ? widthHalf : heightHalf)
         let radius = radius > minDim ? minDim : radius
         
         for j in 0..<radial {
             let n = Float(j) / radialMinusOnef
             
             // +X, -Y -> +Y
-            var start = SIMD2<Float>(widthHalf, -depthHalf + radius)
-            var end = SIMD2<Float>(widthHalf, depthHalf - radius)
+            var start = SIMD2<Float>(widthHalf, -heightHalf + radius)
+            var end = SIMD2<Float>(widthHalf, heightHalf - radius)
             for i in 0..<edgeY {
                 let t = Float(i) / edgeYMinusOnef
                 let pos = simd_mix(start, end, SIMD2<Float>(t, t))
@@ -290,7 +290,7 @@ extension MeshResource {
                 let theta = t * halfPi
                 let x = radius * cos(theta)
                 let y = radius * sin(theta)
-                let pos = SIMD2<Float>(widthHalf - radius + x, depthHalf - radius + y)
+                let pos = SIMD2<Float>(widthHalf - radius + x, heightHalf - radius + y)
                 meshPositions.append(SIMD3<Float>(pos.x, 0, pos.y) * n)
                 
                 if circleUV {
@@ -304,8 +304,8 @@ extension MeshResource {
             }
             
             // +Y, +X -> -X
-            start = SIMD2<Float>(widthHalf - radius, depthHalf)
-            end = SIMD2<Float>(-widthHalf + radius, depthHalf)
+            start = SIMD2<Float>(widthHalf - radius, heightHalf)
+            end = SIMD2<Float>(-widthHalf + radius, heightHalf)
             for i in 0..<edgeX {
                 let t = Float(i) / edgeXMinusOnef
                 let pos = simd_mix(start, end, SIMD2<Float>(t, t))
@@ -327,7 +327,7 @@ extension MeshResource {
                 let theta = t * halfPi + halfPi
                 let x = radius * cos(theta)
                 let y = radius * sin(theta)
-                let pos = SIMD2<Float>(-widthHalf + radius + x, depthHalf - radius + y)
+                let pos = SIMD2<Float>(-widthHalf + radius + x, heightHalf - radius + y)
                 meshPositions.append(SIMD3<Float>(pos.x, 0, pos.y) * n)
                 
                 if circleUV {
@@ -341,8 +341,8 @@ extension MeshResource {
             }
             
             // -X, +Y -> -Y
-            start = SIMD2<Float>(-widthHalf, depthHalf - radius)
-            end = SIMD2<Float>(-widthHalf, -depthHalf + radius)
+            start = SIMD2<Float>(-widthHalf, heightHalf - radius)
+            end = SIMD2<Float>(-widthHalf, -heightHalf + radius)
             for i in 0..<edgeY {
                 let t = Float(i) / edgeYMinusOnef
                 let pos = simd_mix(start, end, SIMD2<Float>(t, t))
@@ -364,7 +364,7 @@ extension MeshResource {
                 let theta = t * halfPi + .pi
                 let x = radius * cos(theta)
                 let y = radius * sin(theta)
-                let pos = SIMD2<Float>(-widthHalf + radius + x, -depthHalf + radius + y)
+                let pos = SIMD2<Float>(-widthHalf + radius + x, -heightHalf + radius + y)
                 meshPositions.append(SIMD3<Float>(pos.x, 0, pos.y) * n)
                 
                 if circleUV {
@@ -378,8 +378,8 @@ extension MeshResource {
             }
             
             // -Y, -X -> +X
-            start = SIMD2<Float>(-widthHalf + radius, -depthHalf)
-            end = SIMD2<Float>(widthHalf - radius, -depthHalf)
+            start = SIMD2<Float>(-widthHalf + radius, -heightHalf)
+            end = SIMD2<Float>(widthHalf - radius, -heightHalf)
             for i in 0..<edgeX {
                 let t = Float(i) / edgeXMinusOnef
                 let pos = simd_mix(start, end, SIMD2<Float>(t, t))
@@ -401,7 +401,7 @@ extension MeshResource {
                 let theta = t * halfPi + 1.5 * .pi
                 let x = radius * cos(theta)
                 let y = radius * sin(theta)
-                let pos = SIMD2<Float>(widthHalf - radius + x, -depthHalf + radius + y)
+                let pos = SIMD2<Float>(widthHalf - radius + x, -heightHalf + radius + y)
                 meshPositions.append(SIMD3<Float>(pos.x, 0, pos.y) * n)
                 
                 if circleUV {

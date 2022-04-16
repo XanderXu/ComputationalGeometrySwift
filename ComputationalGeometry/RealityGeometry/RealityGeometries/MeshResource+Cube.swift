@@ -50,17 +50,24 @@ extension MeshResource {
         }
         
         let angular = angularResolution > 2 ? angularResolution : 3
-        let angularMinusOne = angular - 1
         let edgeX = edgeXResolution > 1 ? edgeXResolution : 2
         let edgeY = edgeYResolution > 1 ? edgeYResolution : 2
         let edgeDepth = depthResolution > 0 ? depthResolution : 1
+        
+        let widthHalf = width * 0.5
+        let heightHalf = height * 0.5
+        let minDim = (widthHalf < heightHalf ? widthHalf : heightHalf)
+        let radius = radius > minDim ? minDim : radius
         
         let perLoop = (angular - 2) * 4 + (edgeX * 2) + (edgeY * 2) + (circleUV ? 2 : 0)
         let perimeter = width * 2 + height * 2 + .pi * radius * 2
         
         let bottomOutPositions = bottomMeshPositions[(bottomMeshPositions.count - perLoop)...]
         let depthInc = depth / Float(edgeDepth)
-        let angularInc = Float(angular) / .pi * 2
+        let XInc = (width - 2 * radius) / Float(edgeY)
+        let YInc = (height - 2 * radius) / Float(edgeX)
+        let arcInc = .pi * radius * 0.5 / Float(angular)
+        
         for j in 0...edgeDepth {
             let jf = Float(j)
             let d = jf * depthInc
@@ -68,41 +75,38 @@ extension MeshResource {
             let curLoop = j * perLoop
             let nextLoop = (j + 1) * perLoop
             
+            var length: Float = 0
             for i in 0..<perLoop {
-                meshPositions.append(bottomOutPositions[i] + SIMD3<Float>(0, d, 0))
+                let p = bottomOutPositions[i]
+                meshPositions.append(p + SIMD3<Float>(0, d, 0))
+                var inner = p
+                if inner.x > widthHalf {
+                    inner.x = widthHalf
+                }
+                if inner.x < -widthHalf {
+                    inner.x = -widthHalf
+                }
+                if inner.z > heightHalf {
+                    inner.z = heightHalf
+                }
+                if inner.z < -heightHalf {
+                    inner.z = -heightHalf
+                }
+                let n = simd_normalize(p - inner)
+                normals.append(n)
+                
                 let line1 = edgeY + (circleUV ? 2 : 0)
-                var p: Float = 0
-                if i < line1 {
-                    normals.append(SIMD3<Float>(1, 0, 0))
-                    textureMap.append(SIMD2<Float>(width, uvy))
-                } else if i < line1 + angularMinusOne {
-                    let a = Float(i - line1) * angularInc
-                    normals.append(SIMD3<Float>(cos(a), 0, sin(a)))
-                    
-                } else if i < line1 + angularMinusOne + edgeX {
-                    normals.append(SIMD3<Float>(0, 0, 1))
-                    
-                } else if i < line1 + angularMinusOne * 2 + edgeX {
-                    let a = Float(i - line1 - angularMinusOne - edgeX) * angularInc + .pi * 0.5
-                    normals.append(SIMD3<Float>(cos(a), 0, sin(a)))
-                    
-                } else if i < line1 + angularMinusOne * 2 + edgeX + edgeY {
-                    normals.append(SIMD3<Float>(-1, 0, 0))
-                    
-                } else if i < line1 + angularMinusOne * 3 + edgeX + edgeY {
-                    let a = Float(i - line1 - angularMinusOne * 2 - edgeX) * angularInc + .pi
-                    normals.append(SIMD3<Float>(cos(a), 0, sin(a)))
-                    
-                } else if i < line1 + angularMinusOne * 3 + edgeX * 2 + edgeY {
-                    normals.append(SIMD3<Float>(0, 0, -1))
-                    
-                } else {
-                    let a = Float(i - line1 - angularMinusOne * 3 - edgeX) * angularInc + .pi * 1.5
-                    normals.append(SIMD3<Float>(cos(a), 0, sin(a)))
+                if i <= line1 {
+                    length += YInc
+                } else if i <= line1 + angular - 2 {
+                    length += arcInc
+                } else if i < line1 + angular - 2 + edgeX {
                     
                 }
                 
-                textureMap.append(SIMD2<Float>(0, uvy))
+                
+                
+                textureMap.append(SIMD2<Float>(length / perimeter, uvy))
                 
                 var prev = i - 1
                 prev = prev < 0 ? (perLoop - 1) : prev
