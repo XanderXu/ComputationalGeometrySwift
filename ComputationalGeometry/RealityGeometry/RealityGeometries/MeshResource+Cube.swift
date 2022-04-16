@@ -65,7 +65,7 @@ extension MeshResource {
         let innerWidth = width - radius * 2
         let innerHeight = height - radius * 2
         
-        
+        // 强行在 x 轴正方向插入 2 个点，以使 UV 在此处发生突变
         let perLoop = (angular - 2) * 4 + (edgeX * 2) + (edgeY * 2) + 2
         let perimeter = innerWidth * 2 + innerHeight * 2 + .pi * radius * 2
         var bottomOutPositions = Array(bottomMeshPositions[(planePositionsCount - perLoop + (circleUV ? 0 : 2))...])
@@ -78,6 +78,7 @@ extension MeshResource {
         let innerWidthHalf = widthHalf - radius
         let innerHeightHalf = heightHalf - radius
         
+        // 计算关键点，即直线与圆弧连接处，共 8 个连接点
         let index1 = edgeY + 2
         let keyIndexes = [0,
                           index1 - 1,
@@ -88,6 +89,7 @@ extension MeshResource {
                           index1 + angular * 3 + edgeX + edgeY - 6,
                           index1 + angular * 3 + edgeX * 2 + edgeY - 7
         ]
+        // 关键点对应的周长
         let keyLengths = [0,
                           innerHeight,
                           innerHeight + .pi * radius * 0.5,
@@ -123,20 +125,20 @@ extension MeshResource {
                 } else if i <= keyIndexes[2] {
                     length += keyLengths[1] + angularInc * Float(i - keyIndexes[1])
                 } else if i <= keyIndexes[3] {
-                    length += keyLengths[2] + abs(p.x - bottomOutPositions[2].x)
+                    length += keyLengths[2] + abs(p.x - bottomOutPositions[keyIndexes[2]].x)
                 } else if i <= keyIndexes[4] {
                     length += keyLengths[3] + angularInc * Float(i - keyIndexes[3])
                 } else if i <= keyIndexes[5] {
-                    length += keyLengths[4] + abs(p.z - bottomOutPositions[4].z)
+                    length += keyLengths[4] + abs(p.z - bottomOutPositions[keyIndexes[4]].z)
                 } else if i <= keyIndexes[6] {
                     length += keyLengths[5] + angularInc * Float(i - keyIndexes[5])
                 } else if i <= keyIndexes[7] {
-                    length += keyLengths[6] + abs(p.x - bottomOutPositions[6].x)
+                    length += keyLengths[6] + abs(p.x - bottomOutPositions[keyIndexes[6]].x)
                 } else {
                     length += keyLengths[7] + angularInc * Float(i - keyIndexes[7])
                 }
-                
                 textureMap.append(SIMD2<Float>(length / perimeter, uvy))
+                
                 
                 var prev = i - 1
                 prev = prev < 0 ? (perLoop - 1) : prev
@@ -160,7 +162,6 @@ extension MeshResource {
         if splitFaces {
             materials.append(contentsOf: Array(repeating: 0, count: edgeDepth * perLoop * 2))
         }
-        
         
         descr.positions = MeshBuffers.Positions(meshPositions)
         descr.normals = MeshBuffers.Normals(normals)
