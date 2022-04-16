@@ -172,4 +172,232 @@ extension MeshResource {
         }
         return try .generate(from: [descr])
     }
+    
+    public static func generateRoundedCube(width: Float, height: Float, depth: Float, radius: Float, widthResolution: Int = 10, heightResolution: Int = 10, depthResolution: Int = 10) throws -> MeshResource {
+        var descr = MeshDescriptor()
+        var meshPositions: [SIMD3<Float>] = []
+        var indices: [UInt32] = []
+        var normals: [SIMD3<Float>] = []
+        var textureMap: [SIMD2<Float>] = []
+        var materials: [UInt32] = []
+        
+        let widthHalf = width * 0.5
+        let heightHalf = height * 0.5
+        let depthHalf = depth * 0.5
+        let minDim = min(widthHalf, min(heightHalf, depthHalf))
+        let radius = radius > minDim ? minDim : radius
+        
+        let edgeWidth = widthResolution > 1 ? widthResolution : 2
+        let edgeHeight = heightResolution > 1 ? heightResolution : 2
+        let edgeDepth = depthResolution > 1 ? depthResolution : 2
+        
+        let widthInc = width / Float(edgeWidth - 1)
+        let heightInc = height / Float(edgeHeight - 1)
+        let depthInc = depth / Float(edgeDepth - 1)
+        
+        let xPointCount = edgeDepth * edgeHeight
+        let yPointCount = edgeWidth * edgeHeight
+        let zPointCount = edgeDepth * edgeWidth
+        // +X
+        for j in 0..<edgeDepth {
+            let startY = depthHalf
+            let startZ = heightHalf
+            let jf = Float(j)
+            let uvy = jf / Float(edgeDepth - 1)
+            for i in 0..<edgeHeight {
+                let p = SIMD3<Float>(widthHalf, startY - depthInc * jf, startZ - heightInc * Float(i))
+                meshPositions.append(p)
+                
+//                normals.append(SIMD3<Float>(1, 0, 0))
+                
+                let uv = SIMD2<Float>(Float(i) / Float(edgeHeight - 1), 1 - uvy)
+                textureMap.append(uv)
+                
+                if j != edgeDepth - 1 && i != edgeHeight - 1 {
+                    let index = UInt32(i + j * edgeHeight)
+
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(edgeHeight)
+                    let br = bl + 1
+
+                    indices.append(contentsOf: [tl,bl,tr,
+                                                tr,bl,br])
+                    materials.append(contentsOf: [0, 0])
+                }
+            }
+        }
+        // -X
+        for j in 0..<edgeDepth {
+            let startY = depthHalf
+            let startZ = -heightHalf
+            let jf = Float(j)
+            let uvy = jf / Float(edgeDepth - 1)
+            for i in 0..<edgeHeight {
+                let p = SIMD3<Float>(-widthHalf, startY - depthInc * jf, startZ + heightInc * Float(i))
+                meshPositions.append(p)
+                
+//                normals.append(SIMD3<Float>(-1, 0, 0))
+                
+                let uv = SIMD2<Float>(Float(i) / Float(edgeHeight - 1), 1 - uvy)
+                textureMap.append(uv)
+                
+                if j != edgeDepth - 1 && i != edgeHeight - 1 {
+                    let index = UInt32(i + j * edgeHeight + xPointCount)
+                    
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(edgeHeight)
+                    let br = bl + 1
+                    
+                    indices.append(contentsOf: [tl,bl,tr,
+                                                tr,bl,br])
+                    materials.append(contentsOf: [0, 0])
+                }
+            }
+        }
+        
+        // +Y
+        for j in 0..<edgeHeight {
+            let startX = -widthHalf
+            let startZ = -heightHalf
+            let jf = Float(j)
+            let uvy = jf / Float(edgeHeight - 1)
+            for i in 0..<edgeWidth {
+                let p = SIMD3<Float>(startX + widthInc * Float(i), depthHalf, startZ + heightInc * jf)
+                meshPositions.append(p)
+                
+//                normals.append(SIMD3<Float>(0, 1, 0))
+                
+                let uv = SIMD2<Float>(Float(i) / Float(edgeWidth - 1), 1 - uvy)
+                textureMap.append(uv)
+                
+                if j != edgeHeight - 1 && i != edgeWidth - 1 {
+                    let index = UInt32(i + j * edgeWidth + xPointCount * 2)
+
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(edgeWidth)
+                    let br = bl + 1
+
+                    indices.append(contentsOf: [tl,bl,tr,
+                                                tr,bl,br])
+                    materials.append(contentsOf: [1, 1])
+                }
+            }
+        }
+        // -Y
+        for j in 0..<edgeHeight {
+            let startX = widthHalf
+            let startZ = -heightHalf
+            let jf = Float(j)
+            let uvy = jf / Float(edgeHeight - 1)
+            for i in 0..<edgeWidth {
+                let p = SIMD3<Float>(startX - widthInc * Float(i), -depthHalf, startZ + heightInc * jf)
+                meshPositions.append(p)
+                
+//                normals.append(SIMD3<Float>(0, -1, 0))
+                
+                let uv = SIMD2<Float>(Float(i) / Float(edgeWidth - 1), 1 - uvy)
+                textureMap.append(uv)
+                
+                if j != edgeHeight - 1 && i != edgeWidth - 1 {
+                    let index = UInt32(i + j * edgeWidth + xPointCount * 2 + yPointCount)
+                    
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(edgeWidth)
+                    let br = bl + 1
+                    
+                    indices.append(contentsOf: [tl,bl,tr,
+                                                tr,bl,br])
+                    materials.append(contentsOf: [0, 0])
+                }
+            }
+        }
+        
+        // +Z
+        for j in 0..<edgeDepth {
+            let startY = depthHalf
+            let startX = -widthHalf
+            let jf = Float(j)
+            let uvy = jf / Float(edgeDepth - 1)
+            for i in 0..<edgeWidth {
+                let p = SIMD3<Float>(startX + widthInc * Float(i), startY - depthInc * jf, heightHalf)
+                meshPositions.append(p)
+                
+//                normals.append(SIMD3<Float>(0, 0, 1))
+                
+                let uv = SIMD2<Float>(Float(i) / Float(edgeWidth - 1), 1 - uvy)
+                textureMap.append(uv)
+                
+                if j != edgeDepth - 1 && i != edgeWidth - 1 {
+                    let index = UInt32(i + j * edgeWidth + xPointCount * 2 + yPointCount * 2)
+
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(edgeWidth)
+                    let br = bl + 1
+
+                    indices.append(contentsOf: [tl,bl,tr,
+                                                tr,bl,br])
+                    materials.append(contentsOf: [0, 0])
+                }
+            }
+        }
+        // -Z
+        for j in 0..<edgeDepth {
+            let startY = depthHalf
+            let startX = widthHalf
+            let jf = Float(j)
+            let uvy = jf / Float(edgeDepth - 1)
+            for i in 0..<edgeWidth {
+                let p = SIMD3<Float>(startX - widthInc * Float(i), startY - depthInc * jf, -heightHalf)
+                meshPositions.append(p)
+                
+//                normals.append(SIMD3<Float>(0, 0, -1))
+                
+                let uv = SIMD2<Float>(Float(i) / Float(edgeWidth - 1), 1 - uvy)
+                textureMap.append(uv)
+                
+                if j != edgeDepth - 1 && i != edgeWidth - 1 {
+                    let index = UInt32(i + j * edgeWidth + xPointCount * 2 + yPointCount * 2 + zPointCount)
+                    
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(edgeWidth)
+                    let br = bl + 1
+                    
+                    indices.append(contentsOf: [tl,bl,tr,
+                                                tr,bl,br])
+                    materials.append(contentsOf: [0, 0])
+                }
+            }
+        }
+        
+        let innerWidth = width - radius * 2
+        let innerHeight = height - radius * 2
+        let innerDepth = depth - radius * 2
+        let lower = SIMD3<Float>(-innerWidth * 0.5, -innerHeight * 0.5, -innerDepth * 0.5)
+        let upper = SIMD3<Float>(innerWidth * 0.5, innerHeight * 0.5, innerDepth * 0.5)
+        
+        var roundPositions: [SIMD3<Float>] = []
+        for p in meshPositions {
+            let inner = p.clamped(lowerBound: lower, upperBound: upper)
+            let n = simd_normalize(p - inner)
+            normals.append(n)
+            
+            roundPositions.append(inner + n * radius)
+        }
+        meshPositions = roundPositions
+        
+        descr.positions = MeshBuffers.Positions(meshPositions)
+        descr.normals = MeshBuffers.Normals(normals)
+        descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
+        descr.primitives = .triangles(indices)
+        if !materials.isEmpty {
+            descr.materials = MeshDescriptor.Materials.perFace(materials)
+        }
+        return try .generate(from: [descr])
+    }
 }
