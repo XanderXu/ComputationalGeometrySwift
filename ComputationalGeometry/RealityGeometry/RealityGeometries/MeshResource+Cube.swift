@@ -137,7 +137,7 @@ extension MeshResource {
                 } else {
                     length += keyLengths[7] + angularInc * Float(i - keyIndexes[7])
                 }
-                textureMap.append(SIMD2<Float>(length / perimeter, uvy))
+                textureMap.append(SIMD2<Float>( 1 - length / perimeter, uvy))
                 
                 
                 var prev = i - 1
