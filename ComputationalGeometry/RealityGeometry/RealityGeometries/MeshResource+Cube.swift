@@ -173,7 +173,7 @@ extension MeshResource {
         return try .generate(from: [descr])
     }
     
-    public static func generateRoundedCube(width: Float, height: Float, depth: Float, radius: Float, widthResolution: Int = 10, heightResolution: Int = 10, depthResolution: Int = 10) throws -> MeshResource {
+    public static func generateRoundedCube(width: Float, height: Float, depth: Float, radius: Float, widthResolution: Int = 10, heightResolution: Int = 10, depthResolution: Int = 10, splitFaces: Bool = false) throws -> MeshResource {
         var descr = MeshDescriptor()
         var meshPositions: [SIMD3<Float>] = []
         var indices: [UInt32] = []
@@ -208,8 +208,6 @@ extension MeshResource {
                 let p = SIMD3<Float>(widthHalf, startY - depthInc * jf, startZ - heightInc * Float(i))
                 meshPositions.append(p)
                 
-//                normals.append(SIMD3<Float>(1, 0, 0))
-                
                 let uv = SIMD2<Float>(Float(i) / Float(edgeHeight - 1), 1 - uvy)
                 textureMap.append(uv)
                 
@@ -223,7 +221,6 @@ extension MeshResource {
 
                     indices.append(contentsOf: [tl,bl,tr,
                                                 tr,bl,br])
-                    materials.append(contentsOf: [0, 0])
                 }
             }
         }
@@ -236,9 +233,7 @@ extension MeshResource {
             for i in 0..<edgeHeight {
                 let p = SIMD3<Float>(-widthHalf, startY - depthInc * jf, startZ + heightInc * Float(i))
                 meshPositions.append(p)
-                
-//                normals.append(SIMD3<Float>(-1, 0, 0))
-                
+
                 let uv = SIMD2<Float>(Float(i) / Float(edgeHeight - 1), 1 - uvy)
                 textureMap.append(uv)
                 
@@ -252,9 +247,12 @@ extension MeshResource {
                     
                     indices.append(contentsOf: [tl,bl,tr,
                                                 tr,bl,br])
-                    materials.append(contentsOf: [0, 0])
                 }
             }
+        }
+        if splitFaces {
+            let count = (edgeDepth - 1) * (edgeHeight - 1)
+            materials.append(contentsOf: Array(repeating: 0, count: count * 4))
         }
         
         // +Y
@@ -266,9 +264,7 @@ extension MeshResource {
             for i in 0..<edgeWidth {
                 let p = SIMD3<Float>(startX + widthInc * Float(i), depthHalf, startZ + heightInc * jf)
                 meshPositions.append(p)
-                
-//                normals.append(SIMD3<Float>(0, 1, 0))
-                
+
                 let uv = SIMD2<Float>(Float(i) / Float(edgeWidth - 1), 1 - uvy)
                 textureMap.append(uv)
                 
@@ -282,7 +278,6 @@ extension MeshResource {
 
                     indices.append(contentsOf: [tl,bl,tr,
                                                 tr,bl,br])
-                    materials.append(contentsOf: [1, 1])
                 }
             }
         }
@@ -295,8 +290,6 @@ extension MeshResource {
             for i in 0..<edgeWidth {
                 let p = SIMD3<Float>(startX - widthInc * Float(i), -depthHalf, startZ + heightInc * jf)
                 meshPositions.append(p)
-                
-//                normals.append(SIMD3<Float>(0, -1, 0))
                 
                 let uv = SIMD2<Float>(Float(i) / Float(edgeWidth - 1), 1 - uvy)
                 textureMap.append(uv)
@@ -311,9 +304,12 @@ extension MeshResource {
                     
                     indices.append(contentsOf: [tl,bl,tr,
                                                 tr,bl,br])
-                    materials.append(contentsOf: [0, 0])
                 }
             }
+        }
+        if splitFaces {
+            let count = (edgeWidth - 1) * (edgeHeight - 1)
+            materials.append(contentsOf: Array(repeating: 1, count: count * 4))
         }
         
         // +Z
@@ -325,8 +321,6 @@ extension MeshResource {
             for i in 0..<edgeWidth {
                 let p = SIMD3<Float>(startX + widthInc * Float(i), startY - depthInc * jf, heightHalf)
                 meshPositions.append(p)
-                
-//                normals.append(SIMD3<Float>(0, 0, 1))
                 
                 let uv = SIMD2<Float>(Float(i) / Float(edgeWidth - 1), 1 - uvy)
                 textureMap.append(uv)
@@ -341,7 +335,6 @@ extension MeshResource {
 
                     indices.append(contentsOf: [tl,bl,tr,
                                                 tr,bl,br])
-                    materials.append(contentsOf: [0, 0])
                 }
             }
         }
@@ -354,8 +347,6 @@ extension MeshResource {
             for i in 0..<edgeWidth {
                 let p = SIMD3<Float>(startX - widthInc * Float(i), startY - depthInc * jf, -heightHalf)
                 meshPositions.append(p)
-                
-//                normals.append(SIMD3<Float>(0, 0, -1))
                 
                 let uv = SIMD2<Float>(Float(i) / Float(edgeWidth - 1), 1 - uvy)
                 textureMap.append(uv)
@@ -370,9 +361,12 @@ extension MeshResource {
                     
                     indices.append(contentsOf: [tl,bl,tr,
                                                 tr,bl,br])
-                    materials.append(contentsOf: [0, 0])
                 }
             }
+        }
+        if splitFaces {
+            let count = (edgeWidth - 1) * (edgeDepth - 1)
+            materials.append(contentsOf: Array(repeating: 2, count: count * 4))
         }
         
         let innerWidth = width - radius * 2
