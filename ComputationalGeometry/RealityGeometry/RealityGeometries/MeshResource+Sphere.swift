@@ -136,4 +136,216 @@ extension MeshResource {
         descr.primitives = .triangles(indices)
         return try MeshResource.generate(from: [descr])
     }
+    
+    public static func generateCubeSphere(radius: Float, resolution: Int = 10, splitFaces: Bool = false) throws -> MeshResource {
+        var descr = MeshDescriptor()
+        var meshPositions: [SIMD3<Float>] = []
+        var indices: [UInt32] = []
+        var normals: [SIMD3<Float>] = []
+        var textureMap: [SIMD2<Float>] = []
+        var materials: [UInt32] = []
+        
+        
+        let edge = resolution > 2 ? resolution : 3
+        let edgeMinusOne = edge - 1
+        let edgeMinusOnef = Float(edgeMinusOne)
+        let edgeMinusOneSqr = edgeMinusOne * edgeMinusOne
+        
+        let edgeInc = 2 * radius / edgeMinusOnef
+        let facePointCount = edge * edge
+        
+        // +X
+        for j in 0..<edge {
+            let startY = radius
+            let startZ = radius
+            let jf = Float(j)
+            let uvy = jf / edgeMinusOnef
+            for i in 0..<edge {
+                let p = SIMD3<Float>(radius, startY - edgeInc * jf, startZ - edgeInc * Float(i))
+                meshPositions.append(p)
+                
+                let uv = SIMD2<Float>(Float(i) / edgeMinusOnef, 1 - uvy)
+                textureMap.append(uv)
+                
+                if j != edgeMinusOne && i != edgeMinusOne {
+                    let index = UInt32(i + j * edge)
+
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(edge)
+                    let br = bl + 1
+
+                    indices.append(contentsOf: [tl,bl,tr,
+                                                tr,bl,br])
+                }
+            }
+        }
+        // -X
+        for j in 0..<edge {
+            let startY = radius
+            let startZ = -radius
+            let jf = Float(j)
+            let uvy = jf / edgeMinusOnef
+            for i in 0..<edge {
+                let p = SIMD3<Float>(-radius, startY - edgeInc * jf, startZ + edgeInc * Float(i))
+                meshPositions.append(p)
+
+                let uv = SIMD2<Float>(Float(i) / edgeMinusOnef, 1 - uvy)
+                textureMap.append(uv)
+                
+                if j != edgeMinusOne && i != edgeMinusOne {
+                    let index = UInt32(i + j * edge + facePointCount)
+                    
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(edge)
+                    let br = bl + 1
+                    
+                    indices.append(contentsOf: [tl,bl,tr,
+                                                tr,bl,br])
+                }
+            }
+        }
+        if splitFaces {
+            materials.append(contentsOf: Array(repeating: 0, count: edgeMinusOneSqr * 4))
+        }
+        
+        // +Y
+        for j in 0..<edge {
+            let startX = -radius
+            let startZ = -radius
+            let jf = Float(j)
+            let uvy = jf / edgeMinusOnef
+            for i in 0..<edge {
+                let p = SIMD3<Float>(startX + edgeInc * Float(i), radius, startZ + edgeInc * jf)
+                meshPositions.append(p)
+
+                let uv = SIMD2<Float>(Float(i) / edgeMinusOnef, 1 - uvy)
+                textureMap.append(uv)
+                
+                if j != edgeMinusOne && i != edgeMinusOne {
+                    let index = UInt32(i + j * edge + facePointCount * 2)
+
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(edge)
+                    let br = bl + 1
+
+                    indices.append(contentsOf: [tl,bl,tr,
+                                                tr,bl,br])
+                }
+            }
+        }
+        // -Y
+        for j in 0..<edge {
+            let startX = radius
+            let startZ = -radius
+            let jf = Float(j)
+            let uvy = jf / edgeMinusOnef
+            for i in 0..<edge {
+                let p = SIMD3<Float>(startX - edgeInc * Float(i), -radius, startZ + edgeInc * jf)
+                meshPositions.append(p)
+                
+                let uv = SIMD2<Float>(Float(i) / edgeMinusOnef, 1 - uvy)
+                textureMap.append(uv)
+                
+                if j != edgeMinusOne && i != edgeMinusOne {
+                    let index = UInt32(i + j * edge + facePointCount * 3)
+                    
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(edge)
+                    let br = bl + 1
+                    
+                    indices.append(contentsOf: [tl,bl,tr,
+                                                tr,bl,br])
+                }
+            }
+        }
+        if splitFaces {
+            materials.append(contentsOf: Array(repeating: 1, count: edgeMinusOneSqr * 4))
+        }
+        
+        // +Z
+        for j in 0..<edge {
+            let startY = radius
+            let startX = -radius
+            let jf = Float(j)
+            let uvy = jf / edgeMinusOnef
+            for i in 0..<edge {
+                let p = SIMD3<Float>(startX + edgeInc * Float(i), startY - edgeInc * jf, radius)
+                meshPositions.append(p)
+                
+                let uv = SIMD2<Float>(Float(i) / edgeMinusOnef, 1 - uvy)
+                textureMap.append(uv)
+                
+                if j != edgeMinusOne && i != edgeMinusOne {
+                    let index = UInt32(i + j * edge + facePointCount * 4)
+
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(edge)
+                    let br = bl + 1
+
+                    indices.append(contentsOf: [tl,bl,tr,
+                                                tr,bl,br])
+                }
+            }
+        }
+        // -Z
+        for j in 0..<edge {
+            let startY = radius
+            let startX = radius
+            let jf = Float(j)
+            let uvy = jf / edgeMinusOnef
+            for i in 0..<edge {
+                let p = SIMD3<Float>(startX - edgeInc * Float(i), startY - edgeInc * jf, -radius)
+                meshPositions.append(p)
+                
+                let uv = SIMD2<Float>(Float(i) / edgeMinusOnef, 1 - uvy)
+                textureMap.append(uv)
+                
+                if j != edgeMinusOne && i != edgeMinusOne {
+                    let index = UInt32(i + j * edge + facePointCount * 5)
+                    
+                    let tl = index
+                    let tr = tl + 1
+                    let bl = index + UInt32(edge)
+                    let br = bl + 1
+                    
+                    indices.append(contentsOf: [tl,bl,tr,
+                                                tr,bl,br])
+                }
+            }
+        }
+        if splitFaces {
+            materials.append(contentsOf: Array(repeating: 2, count: edgeMinusOneSqr * 4))
+        }
+        
+        var roundPositions: [SIMD3<Float>] = []
+        for p in meshPositions {
+            let x2 = p.x * p.x
+            let y2 = p.y * p.y
+            let z2 = p.z * p.z
+            
+            let x = p.x * sqrtf(1 - (y2 + z2) / 2 + y2 * z2 / 3)
+            let y = p.y * sqrtf(1 - (x2 + z2) / 2 + x2 * z2 / 3)
+            let z = p.z * sqrtf(1 - (x2 + y2) / 2 + x2 * y2 / 3)
+            
+            let n = simd_normalize(SIMD3<Float>(x, y, z))
+            normals.append(n)
+            
+            roundPositions.append(n * radius)
+        }
+        meshPositions = roundPositions
+        
+        descr.positions = MeshBuffers.Positions(meshPositions)
+        descr.normals = MeshBuffers.Normals(normals)
+        descr.textureCoordinates = MeshBuffers.TextureCoordinates(textureMap)
+        descr.primitives = .triangles(indices)
+        if !materials.isEmpty {
+            descr.materials = MeshDescriptor.Materials.perFace(materials)
+        }
+        return try .generate(from: [descr])
+    }
 }
