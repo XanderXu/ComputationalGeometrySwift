@@ -324,18 +324,17 @@ extension MeshResource {
         
         var roundPositions: [SIMD3<Float>] = []
         for p in meshPositions {
-            let x2 = p.x * p.x
-            let y2 = p.y * p.y
-            let z2 = p.z * p.z
+            let n = simd_normalize(p)
+            let n2 = n * n
             
-            let x = p.x * sqrtf(1 - (y2 + z2) / 2 + y2 * z2 / 3)
-            let y = p.y * sqrtf(1 - (x2 + z2) / 2 + x2 * z2 / 3)
-            let z = p.z * sqrtf(1 - (x2 + y2) / 2 + x2 * y2 / 3)
+            let x = n.x * sqrtf(1 - (n2.y + n2.z) / 2 + n2.y * n2.z / 3)
+            let y = n.y * sqrtf(1 - (n2.x + n2.z) / 2 + n2.x * n2.z / 3)
+            let z = n.z * sqrtf(1 - (n2.x + n2.y) / 2 + n2.x * n2.y / 3)
             
-            let n = simd_normalize(SIMD3<Float>(x, y, z))
-            normals.append(n)
+            let newN = simd_normalize(SIMD3<Float>(x, y, z))
+            normals.append(newN)
             
-            roundPositions.append(n * radius)
+            roundPositions.append(newN * radius)
         }
         meshPositions = roundPositions
         
