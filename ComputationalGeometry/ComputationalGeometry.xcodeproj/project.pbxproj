@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,9 +20,6 @@
 		6C5BB7EE257A378300C36817 /* Sphere.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C5BB7ED257A378300C36817 /* Sphere.swift */; };
 		6C7C8B5E27BF3E9000107FD9 /* number.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6C7C8B5D27BF3E8F00107FD9 /* number.jpeg */; };
 		6C82DE5127F7F270004CE818 /* MeshResource+Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C82DE5027F7F270004CE818 /* MeshResource+Cube.swift */; };
-		6C8432F12812B19800E3F13C /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 6C8432F02812B19800E3F13C /* Collections */; };
-		6C8432F32812B19800E3F13C /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 6C8432F22812B19800E3F13C /* DequeModule */; };
-		6C8432F52812B19800E3F13C /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 6C8432F42812B19800E3F13C /* OrderedCollections */; };
 		6C93A41D2610A80900AFB4EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C93A41C2610A80900AFB4EC /* AppDelegate.swift */; };
 		6C93A41F2610A80900AFB4EC /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C93A41E2610A80900AFB4EC /* art.scnassets */; };
 		6C93A4212610A80900AFB4EC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C93A4202610A80900AFB4EC /* ViewController.swift */; };
@@ -165,9 +162,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C8432F12812B19800E3F13C /* Collections in Frameworks */,
-				6C8432F32812B19800E3F13C /* DequeModule in Frameworks */,
-				6C8432F52812B19800E3F13C /* OrderedCollections in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,9 +376,6 @@
 			);
 			name = ComputationalGeometry;
 			packageProductDependencies = (
-				6C8432F02812B19800E3F13C /* Collections */,
-				6C8432F22812B19800E3F13C /* DequeModule */,
-				6C8432F42812B19800E3F13C /* OrderedCollections */,
 			);
 			productName = Distance;
 			productReference = 6CDEC90A255C380700FBB946 /* ComputationalGeometry */;
@@ -480,7 +471,6 @@
 			);
 			mainGroup = 6CDEC901255C380700FBB946;
 			packageReferences = (
-				6C8432EF2812B19800E3F13C /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 6CDEC90B255C380700FBB946 /* Products */;
 			projectDirPath = "";
@@ -1103,35 +1093,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		6C8432EF2812B19800E3F13C /* XCRemoteSwiftPackageReference "swift-collections" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-collections.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		6C8432F02812B19800E3F13C /* Collections */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6C8432EF2812B19800E3F13C /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = Collections;
-		};
-		6C8432F22812B19800E3F13C /* DequeModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6C8432EF2812B19800E3F13C /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = DequeModule;
-		};
-		6C8432F42812B19800E3F13C /* OrderedCollections */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6C8432EF2812B19800E3F13C /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = OrderedCollections;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6CDEC902255C380700FBB946 /* Project object */;
 }
